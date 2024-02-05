@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home'
 import Galery from './screens/galery';
 import Reduction from './screens/Reductions'
-import SignUp from './screens'
+import SignUp from './screens/SignUp'
 import Profil from './screens/Profil';
 import SignUp from './screens/SignUp'
 
