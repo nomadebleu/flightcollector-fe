@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home'
-import Galery from './screens/Galery'
 import Reduction from './screens/Reductions'
 import SignUp from './screens'
 import Profil from './screens/Profil';
