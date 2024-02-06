@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Home() {
+export default function ProfilPerso() {
   return (
     <View>
       <LinearGradient
@@ -11,7 +11,7 @@ export default function Home() {
         end={[1, 0]} //Fin du dégradé
         style={styles.header}
       >
-        <Text>Reductions</Text>
+        <Text>ProfilPerso</Text>
       </LinearGradient>
     </View>
   );
