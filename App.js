@@ -8,7 +8,6 @@ import Galery from './screens/Galery';
 import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Profil from './screens/Profil';
-import Splash from './screens/Splash';
 import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
@@ -45,15 +44,8 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsReady(true);
-    }, 3000);
-  }, []);
-
-
+  
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
@@ -65,18 +57,13 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
+  
+  
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isReady ? (
-          <>
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="HomeStack" component={TabNavigator} />
-          </>
-        ) : (
-          <Stack.Screen name="Splash" component={Splash} />
-        )}
+            <Stack.Screen name="tabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

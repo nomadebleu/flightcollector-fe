@@ -12,7 +12,7 @@ import React from 'react'
 export default function Login({navigation}) {
   
   const handleSignUp = () => {
-    navigation.navigate('HomeStack');
+    navigation.navigate('tabNavigator');
   }
 
   return (
