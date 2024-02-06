@@ -1,10 +1,10 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function SignUp({navigation}) {
+export default function Login({navigation}) {
   
   const handleSignIn = () => {
-    navigation.navigate('Home');
+    navigation.navigate('HomeStack');
   }
 
   return (
