@@ -8,11 +8,29 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function Home() {
+export default function Home({ navigation }) {
+  const handleScan = () => {
+    navigation.navigate("Scan");
+  };
   return (
     <SafeAreaView style={styles.body}>
+      {/* hEADER */}
+      <LinearGradient
+        colors={["#80C9FF", "#012D83"]}
+        start={{
+          x: 0,
+          y: 0,
+        }}
+        end={{
+          x: 1,
+          y: 1,
+        }}
+        style={styles.header}
+      />
       {/* Logo */}
       <Image source={require("../assets/logo.png")} style={styles.image} />
       {/* Titles */}
@@ -27,13 +45,33 @@ export default function Home() {
           resizeMode="cover"
           style={styles.imageBack}
         >
+          {/* Input Scan Aircraft */}
           <View style={styles.containerInput}>
             <Text style={styles.legend}> Scan Aircraft</Text>
-            <TextInput style={styles.text}></TextInput>
+            <View style={styles.inputIcon}>
+              <TextInput style={styles.text}></TextInput>
+              <FontAwesome
+                name="camera"
+                size={25}
+                color="#002C82"
+                style={styles.camIcon}
+                onPress={() => handleScan()}
+              />
+            </View>
           </View>
+          {/* Input Scan Boarding Pass */}
           <View style={styles.containerInput}>
             <Text style={styles.legend}> Scan Boarding Pass</Text>
-            <TextInput style={styles.text}></TextInput>
+            <View style={styles.inputIcon}>
+              <TextInput style={styles.text}></TextInput>
+              <FontAwesome
+                name="camera"
+                size={25}
+                color="#002C82"
+                style={styles.camIcon}
+                onPress={() => handleScan()}
+              />
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -56,12 +94,16 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  header: {
+    width: "100%",
+    height: "10%",
+  },
   title: {
     fontFamily: "Farsan-Regular",
     fontSize: 28,
     color: "#002C82",
     fontWeight: "bold",
-    marginBottom: "5%",
+    marginBottom: "3%",
   },
   containerTitle: {
     width: "100%",
@@ -72,7 +114,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: "40%",
+    height: "37%",
     padding: "5%",
   },
   imageBack: {
@@ -141,5 +183,13 @@ const styles = StyleSheet.create({
     marginTop: 40,
     alignItems: "center",
     justifyContent: "space-around",
+  },
+  inputIcon: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  camIcon: {
+    padding: 10,
   },
 });
