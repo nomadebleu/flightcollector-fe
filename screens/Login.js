@@ -11,7 +11,7 @@ import React from "react";
 
 export default function Login({ navigation }) {
   const handleSignUp = () => {
-    navigation.navigate("tabNavigator");
+    navigation.navigate("tabNavigator", { screen: 'Profil' });//Pour arriver sur l'onglet Profil
   };
 
   return (
