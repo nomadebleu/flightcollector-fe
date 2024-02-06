@@ -9,6 +9,7 @@ import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Profil from './screens/Profil';
 import Splash from './screens/Splash';
+import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -51,6 +52,19 @@ export default function App() {
       setIsReady(true);
     }, 3000);
   }, []);
+
+
+  //Chargement de la font dans le composant racine
+  let [fontsLoaded] = useFonts({
+    'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
+    'Farsan-Regular': require('./assets/fonts/Farsan-Regular.ttf'),
+    'Cabin-Bold': require('./assets/fonts/Cabin-Bold.ttf'),
+    'Cabin-Regular': require('./assets/fonts/Cabin-Regular.ttf')
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
