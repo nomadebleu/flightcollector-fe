@@ -10,6 +10,7 @@ import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 //Import de FontAwesome en React Native
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Profil() {
   return (
@@ -76,8 +77,8 @@ export default function Profil() {
           place visited
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='plane'
+          <FontAwesome5
+            name='award'
             size={25}
           />{' '}
           Badges
