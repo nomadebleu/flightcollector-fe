@@ -110,20 +110,20 @@ export default function App() {
         <Stack.Screen
           name='Login'
           component={Login}
-        />
+        /> 
          <Stack.Screen
-          name='ProfilSignUp'
+         name='ProfilSignUp'
           component={ProfilSignUp}
         />
-         <Stack.Screen
+          <Stack.Screen
           name='TabNavigator'
           component={TabNavigator}
         />
         <Stack.Screen
           name='Scan'
           component={Scan}
-        />
-      </Stack.Navigator>
+        /> 
+     </Stack.Navigator>
     </NavigationContainer>
   );
 }

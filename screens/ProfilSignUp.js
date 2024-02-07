@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#002C82',
     borderColor: '#80C9FF',
-    borderWidth: '2px solid',
+    borderWidth: 2,
   },
   //Icone
   camera: {
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     height: 100,
 
     borderRadius: 50,
-    borderWidth: '2px solid',
+    borderWidth: 2,
     borderColor: '#002C82',
     backgroundColor: 'red',
   },
