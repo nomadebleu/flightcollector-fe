@@ -4,12 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//Import des screens concernés
 import Home from './screens/Home';
 import Gallery from './screens/Gallery';
 import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Scan from './screens/Scan';
+import ProfilSignUp from './screens/ProfilSignUp';
 import Profil from './screens/Profil';
+
 import { useFonts } from 'expo-font';
 
 import { Provider } from 'react-redux';
@@ -108,8 +111,12 @@ export default function App() {
           name='Login'
           component={Login}
         />
-        <Stack.Screen
-          name='tabNavigator'
+         <Stack.Screen
+          name='ProfilSignUp'
+          component={ProfilSignUp}
+        />
+         <Stack.Screen
+          name='TabNavigator'
           component={TabNavigator}
         />
         <Stack.Screen
