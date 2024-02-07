@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#002C82",
     borderColor: "#80C9FF",
-    borderWidth: "2px solid",
+    borderWidth: 2,
   },
   textBtnSignIn: {
     color: "#002C82",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#80C9FF",
     borderColor: "#002C82",
-    borderWidth: "2px solid",
+    borderWidth: 2,
   },
   textBtnWithout: {
     color: "#80C9FF",
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#FFFFFF",
     borderColor: "#80C9FF",
-    borderWidth:2,
+    borderWidth: 2,
   },
   //Forgotten
   forgotten: {
