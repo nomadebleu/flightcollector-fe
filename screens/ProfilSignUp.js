@@ -6,24 +6,31 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 //Utilisation du module d'expo pour les gradients
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ProfilSignUp({ navigation }) {
+  //States Inputs
+  const [formUser, setFormUser] = useState({
+    firstname: '',
+    lastname: '',
+    mail: '',
+    password: '',
+  });
 
-    //Fonction pour naviguer vers la Tab & Home
-    const handleNextHome = () => {
-      navigation.navigate('TabNavigator');
-    }
+  //Fonction pour naviguer vers la Tab & Home
+  const handleNextHome = () => {
+    navigation.navigate('TabNavigator');
+  };
 
   return (
     <SafeAreaView style={styles.body}>
       <LinearGradient
         colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
-        start={[0, 1]}//Début du dégradé suivant x,y
-        end={[1,0]} //Fin du dégradé
+        start={[0, 1]} //Début du dégradé suivant x,y
+        end={[1, 0]} //Fin du dégradé
         style={styles.header}
       ></LinearGradient>
       <View style={styles.pictureProfil}></View>
@@ -33,14 +40,32 @@ export default function ProfilSignUp({ navigation }) {
       {/* First Name */}
       <View style={styles.inputs}>
         <View style={styles.containerInput}>
-          <Text style={styles.legend}> FIRST NAME</Text>
+          <Text
+            style={styles.legend}
+            onChangeText={(value) =>
+              setFormUser({ ...formUser, firstname: value })
+            }
+            value={formUser.firstname}
+          >
+            {' '}
+            FIRST NAME
+          </Text>
           <TextInput style={styles.text}></TextInput>
         </View>
       </View>
       {/* Last Name */}
       <View style={styles.inputs}>
         <View style={styles.containerInput}>
-          <Text style={styles.legend}> LAST NAME</Text>
+          <Text
+            style={styles.legend}
+            onChangeText={(value) =>
+              setFormUser({ ...formUser, lastname: value })
+            }
+            value={formUser.lastname}
+          >
+            {' '}
+            LAST NAME
+          </Text>
           <TextInput style={styles.text}></TextInput>
         </View>
       </View>
@@ -49,13 +74,23 @@ export default function ProfilSignUp({ navigation }) {
       <View style={styles.inputs}>
         <View style={styles.containerInput}>
           <Text style={styles.legend}> Email address</Text>
-          <TextInput style={styles.text}></TextInput>
+          <TextInput
+            style={styles.text}
+            onChangeText={(value) => setFormUser({ ...formUser, mail: value })}
+            value={formUser.mail}
+          ></TextInput>
         </View>
 
         {/* Password */}
         <View style={styles.containerInput}>
           <Text style={styles.legend}> Password</Text>
-          <TextInput style={styles.text}></TextInput>
+          <TextInput
+            style={styles.text}
+            onChangeText={(value) =>
+              setFormUser({ ...formUser, password: value })
+            }
+            value={formUser.password}
+          ></TextInput>
         </View>
 
         <TouchableOpacity>
@@ -81,7 +116,7 @@ export default function ProfilSignUp({ navigation }) {
           name='camera'
           style={styles.camera}
           size={130}
-          onPress={()=>handleNextHome()}
+          onPress={() => handleNextHome()}
         />
       </View>
     </SafeAreaView>
