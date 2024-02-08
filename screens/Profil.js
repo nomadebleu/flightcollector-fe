@@ -5,7 +5,11 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 //Import de FontAwesome en React Native
@@ -13,6 +17,23 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Profil() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+      console.log(result);
+    } else {
+      alert("You did not select any image.");
+    }
+  };
+  console.log(selectedImage);
+
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -23,7 +44,29 @@ export default function Profil() {
         style={styles.header}
       ></LinearGradient>
       {/* Picture Profil */}
-      <View style={styles.pictureProfil}></View>
+      <View style={styles.containerPicture}>
+        {!selectedImage && (
+          <Image
+            style={styles.pictureProfil}
+            source={require("../assets/user.png")}
+          />
+        )}
+        {selectedImage && (
+          <Image
+            style={styles.pictureProfil}
+            source={{
+              uri: selectedImage,
+            }}
+          />
+        )}
+        <FontAwesome
+          name="plus-circle"
+          size={38}
+          color="#002C82"
+          style={styles.icon}
+          onPress={pickImageAsync}
+        />
+      </View>
       {/* Titles */}
       <Text style={styles.welcome}>Welcome back Anthony!</Text>
       {/* First Name */}
@@ -161,14 +204,26 @@ const styles = StyleSheet.create({
     color: "#002C82",
   },
   //Profil Picture
+  containerPicture: {
+    alignItems: "stretch",
+  },
   pictureProfil: {
     width: 100,
     height: 100,
-
+    flexDirection: "row",
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "#002C82",
-    backgroundColor: "red",
+    marginBottom: -21,
+  },
+  logo: {
+    padding: 0,
+    marginTop: -3,
+    zIndex: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    alignItems: "flex-end",
   },
   //Header
   header: {
