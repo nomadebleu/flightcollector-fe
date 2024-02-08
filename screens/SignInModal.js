@@ -10,8 +10,13 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
+import { useDispatch } from 'react-redux';
+import { login } from '../reducers/user';
 
-export default function SignInModal(props) {
+export default function SignInModal() {
+
+    //Utilisation du redux
+    const dispatch = useDispatch();
   //State de la Modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -26,6 +31,50 @@ export default function SignInModal(props) {
     navigation.navigate('TabNavigator');
   };
 
+  //Gestion des onChangeText
+  const handleChange = (name, value) => {
+    switch (name) {
+      case 'mail':
+        setMail(value);
+        break;
+      case 'password':
+        setPassword(value);
+        break;
+    }
+  };
+
+  //Connect du user
+const handleConnect = async () => {
+  try {
+    const response = await fetch('http://192.168.1.11:3000/signin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mail,
+        password,
+      }),
+    });
+
+    const userData = await response.json();
+
+    if (userData.result) {
+      console.log('UserData.result', userData.result);
+      dispatch(
+        login({
+          mail: userData.mail,
+          password: userData.password,
+          token: userData.token,
+        })
+      );
+      setModalVisible(false);
+      navigation.navigate('TabNavigator');//Navigation vers Home avec la Tab
+    } else {
+      console.error('Error during connection',userData.error);
+    }
+  } catch (error) {
+    console.error('Error during connection:', error);
+  }
+};
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -44,14 +93,16 @@ export default function SignInModal(props) {
               <FormInput
                 label='Email Address'
                 value={mail}
-                onChangeText={setMail}
+                name='mail'
+                onChangeText={handleChange}
               />
 
               {/* Password */}
               <FormInput
                 label='Password'
                 value={password}
-                onChangeText={setPassword}
+                name='password'
+                onChangeText={handleChange}
               />
               <View>
                 <TouchableOpacity>
@@ -62,8 +113,8 @@ export default function SignInModal(props) {
 
             <FormButton
               onPress={() => {
-                handleSignUp();
-                setModalVisible(!modalVisible);
+                handleConnect();
+              
               }}
               title='CONNECT'
               titleStyle={styles.textBtnSignIn}

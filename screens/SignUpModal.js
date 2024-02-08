@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { login } from '../reducers/user';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
 
+export default function SignUpModal() {
 
-export default function SignUpModal (props){
+  //Utilisation du redux
+  const dispatch = useDispatch();
+
   //State de la Modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -15,12 +20,63 @@ export default function SignUpModal (props){
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
-
   //Navigation lors de la connection
-  const handleSignUp = () => {
-    navigation.navigate('TabNavigator');
+  const navigation = useNavigation();
+  
+  //Gestion des onChangeText
+  const handleChange = (name, value) => {
+    switch (name) {
+      case 'firstname':
+        setFirstname(value);
+        break;
+      case 'lastname':
+        setLastname(value);
+        break;
+      case 'mail':
+        setMail(value);
+        break;
+      case 'password':
+        setPassword(value);
+        break;
+    }
   };
+
+//Register du user
+const handleSubmit = async () => {
+  try {
+    const response = await fetch('http://192.168.1.11:3000/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstname,
+        lastname,
+        mail,
+        password,
+      }),
+    });
+
+    const userData = await response.json();
+
+    if (userData.result) {
+      console.log('UserData.result', userData.result);
+      dispatch(
+        login({
+          firstname: userData.firstname,
+          lastname: userData.lastname,
+          mail: userData.mail,
+          password: userData.password,
+          token: userData.token,
+        })
+      );
+      setModalVisible(false);
+      navigation.navigate('TabNavigator');//Navigation vers Home avec la Tab
+    } else {
+      console.error('Error during register',userData.error);
+    }
+  } catch (error) {
+    console.error('Error during register:', error);
+  }
+};
 
   return (
     <View style={styles.centeredView}>
@@ -38,37 +94,40 @@ export default function SignUpModal (props){
             <View style={styles.inputs}>
               {/* FIRST NAME */}
               <FormInput
-                label='First Name'
-                value={firstname}
-                onChangeText={setFirstname}
+              label='First Name'
+              value={firstname}
+              name='firstname'
+              onChangeText={handleChange}
               />
 
               {/* LAST NAME */}
               <FormInput
-                label='Last Name'
-                value={lastname}
-                onChangeText={setLastname}
+              label='Last Name'
+              value={lastname}
+              name='lastname'
+              onChangeText={handleChange}
               />
 
               {/* Email address */}
               <FormInput
                 label='Email Address'
                 value={mail}
-                onChangeText={setMail}
+                name='mail'
+                onChangeText={handleChange}
               />
 
               {/* Password */}
               <FormInput
-                label='Password'
-                value={password}
-                onChangeText={setPassword}
+               label='Password'
+               value={password}
+               name='password'
+               onChangeText={handleChange}
               />
             </View>
 
             <FormButton
               onPress={() => {
-                handleSignUp();
-                setModalVisible(!modalVisible);
+                handleSubmit();
               }}
               title='REGISTER'
             />
@@ -81,7 +140,7 @@ export default function SignUpModal (props){
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -108,7 +167,4 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  
 });
-
-
