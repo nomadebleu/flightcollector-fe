@@ -21,6 +21,9 @@ export default function Scan() {
     })();
   }, []);
 
+  handleClose = () => {
+    navigation.navigate("Home");
+  };
   const takePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
     const formData = new FormData();
@@ -39,8 +42,8 @@ export default function Scan() {
       .then((data) => {
         console.log(data.result);
       });
-      // Naviguer vers MyPlane après avoir pris la photo
-      navigation.navigate('MyPlane')
+    // Naviguer vers MyPlane après avoir pris la photo
+    navigation.navigate("MyPlane");
   };
 
   if (!hasPermission || !isFocused) {
@@ -78,6 +81,14 @@ export default function Scan() {
             name="flash"
             size={25}
             color={flashMode === FlashMode.off ? "#ffffff" : "#e8be4b"}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <FontAwesome
+            name="close"
+            size={25}
+            color={"#ffffff"}
+            onPress={() => handleClose()}
           />
         </TouchableOpacity>
       </View>
