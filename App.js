@@ -10,7 +10,6 @@ import Gallery from './screens/Gallery';
 import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Scan from './screens/Scan';
-import ProfilSignUp from './screens/ProfilSignUp';
 import Profil from './screens/Profil';
 
 import { useFonts } from 'expo-font';
@@ -105,16 +104,13 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name='Login'
           component={Login}
         /> 
-         <Stack.Screen
-         name='ProfilSignUp'
-          component={ProfilSignUp}
-        />
           <Stack.Screen
           name='TabNavigator'
           component={TabNavigator}
@@ -125,6 +121,7 @@ export default function App() {
         /> 
      </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 const styles = StyleSheet.create({

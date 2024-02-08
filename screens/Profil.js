@@ -5,25 +5,68 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-} from 'react-native';
-import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
+  Image,
+  ImageBackground,
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
+import React from "react";
+import { LinearGradient } from "expo-linear-gradient";
 //Import de FontAwesome en React Native
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { FontAwesome5 } from '@expo/vector-icons';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Profil() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+      console.log(result);
+    } else {
+      alert("You did not select any image.");
+    }
+  };
+  console.log(selectedImage);
+
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <LinearGradient
-        colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
+        colors={["rgba(128, 201, 255, 1)", "rgba(1, 45, 131, 1)"]}
         start={[0, 1]} //Début du dégradé suivant x,y
         end={[1, 0]} //Fin du dégradé
         style={styles.header}
       ></LinearGradient>
       {/* Picture Profil */}
-      <View style={styles.pictureProfil}></View>
+      <View style={styles.containerPicture}>
+        {!selectedImage && (
+          <Image
+            style={styles.pictureProfil}
+            source={require("../assets/user.png")}
+          />
+        )}
+        {selectedImage && (
+          <Image
+            style={styles.pictureProfil}
+            source={{
+              uri: selectedImage,
+            }}
+          />
+        )}
+        <FontAwesome
+          name="plus-circle"
+          size={38}
+          color="#002C82"
+          style={styles.icon}
+          onPress={pickImageAsync}
+        />
+      </View>
       {/* Titles */}
       <Text style={styles.welcome}>Welcome back Anthony!</Text>
       {/* First Name */}
@@ -63,83 +106,67 @@ export default function Profil() {
       {/* Mini Flights */}
       <View style={styles.containerMiniInput}>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='star'
-            size={25}
-          />{' '}
-          starred flights
+          <FontAwesome name="star" size={25} /> starred flights
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='map-marker'
-            size={25}
-          />{' '}
-          place visited
+          <FontAwesome name="map-marker" size={25} /> place visited
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome5
-            name='award'
-            size={25}
-          />{' '}
-          Badges
+          <FontAwesome5 name="award" size={25} /> Badges
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='plane'
-            size={25}
-          />{' '}
-          Aircrafts saved
+          <FontAwesome name="plane" size={25} /> Aircrafts saved
         </TextInput>
       </View>
 
       {/* Places I've visited */}
       <View style={styles.containerInput}>
-          <Text style={styles.legend2}> PLACES I'VE VISITED</Text>
-          <TextInput style={styles.text}></TextInput>
-        </View>
-        {/* My badges */}
-        <View style={styles.containerInput}>
-          <Text style={styles.legend2}>MY BADGES</Text>
-          <TextInput style={styles.text}></TextInput>
-        </View>
-        {/* TOTAL POINTS */}
-        <View style={styles.containerInput}>
-          <Text style={styles.legend2}>TOTAL POINTS</Text>
-          <TextInput style={styles.text}></TextInput>
-        </View>
+        <Text style={styles.legend2}> PLACES I'VE VISITED</Text>
+        <TextInput style={styles.text}></TextInput>
+      </View>
+      {/* My badges */}
+      <View style={styles.containerInput}>
+        <Text style={styles.legend2}>MY BADGES</Text>
+        <TextInput style={styles.text}></TextInput>
+      </View>
+      {/* TOTAL POINTS */}
+      <View style={styles.containerInput}>
+        <Text style={styles.legend2}>TOTAL POINTS</Text>
+        <TextInput style={styles.text}></TextInput>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   // Inputs
-  body:{
-    alignItems:'center',
+  body: {
+    alignItems: "center",
   },
   legend: {
-    position: 'absolute',
+    position: "absolute",
     top: -10,
     left: 15,
 
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     paddingHorizontal: 5,
 
-    fontFamily: 'Cabin-Regular',
-    fontSize:12,
-    color: '#002C82',
+    fontFamily: "Cabin-Regular",
+    fontSize: 12,
+    color: "#002C82",
     zIndex: 1, // Pour que la legend soit au-dessus du TextInput
   },
   legend2: {
-    position: 'absolute',
+    position: "absolute",
     top: 2,
     left: 2,
 
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     paddingHorizontal: 5,
 
-    fontFamily: 'Cabin-Regular',
-    fontSize:12,
-    color: '#002C82',
+    fontFamily: "Cabin-Regular",
+    fontSize: 12,
+    color: "#002C82",
     zIndex: 1, // Pour que la legend soit au-dessus du TextInput
   },
   text: {
@@ -147,7 +174,7 @@ const styles = StyleSheet.create({
     height: 45,
 
     borderWidth: 1,
-    borderColor: '#002C82',
+    borderColor: "#002C82",
 
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -155,70 +182,82 @@ const styles = StyleSheet.create({
     zIndex: 0, // Pour que le TextInput soit en dessous du texte du label
   },
   containerInput: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
-    position: 'relative',
+    position: "relative",
   },
   //Forgotten
   forgotten: {
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 15,
-    color: '#002C82',
+    color: "#002C82",
 
-    position: 'absolute', //pour éviter qui gêne la répartition des 3 boutons
+    position: "absolute", //pour éviter qui gêne la répartition des 3 boutons
     marginTop: 10,
     marginLeft: 20,
   },
   //Titles
   welcome: {
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 32,
-    color: '#002C82',
+    color: "#002C82",
   },
   //Profil Picture
+  containerPicture: {
+    alignItems: "stretch",
+  },
   pictureProfil: {
     width: 100,
     height: 100,
-
+    flexDirection: "row",
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: '#002C82',
-    backgroundColor: 'red',
+    borderColor: "#002C82",
+    marginBottom: -21,
+  },
+  logo: {
+    padding: 0,
+    marginTop: -3,
+    zIndex: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    alignItems: "flex-end",
   },
   //Header
   header: {
-    width: '100%',
+    width: "100%",
     height: 100,
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
 
-    position: 'absolute',
+    position: "absolute",
     top: 0,
   },
   //MiniInputs
   containerMiniInput: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   miniInput: {
-    width: '40%',
+    width: "40%",
     height: 45,
 
-    textAlign: 'center',
-    textAlignVertical:'center',
+    textAlign: "center",
+    textAlignVertical: "center",
 
     margin: 10,
     borderWidth: 1,
-    borderColor: '#002C82',
-    backgroundColor: '#80C9FF',
+    borderColor: "#002C82",
+    backgroundColor: "#80C9FF",
     borderRadius: 5,
 
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 20,
-    color: '#002C82',
+    color: "#002C82",
   },
 });

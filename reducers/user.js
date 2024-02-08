@@ -1,29 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-  value: {
-    firstname: null,
-    lastname: null,
-    email: null,
-    pictureProfil: null,
-    password: null,
-    pointsTotal: null,
-    badges: [],
-    flights: [],
-    planes: [],
-  },
+  value:{},
 };
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
-    login: (state, action) => {
-      state.value.email = action.payload.email;
+    login: (state,action) => {
+      state.value.isConnected = true;
+      state.value.firstname = action.payload.firstname;
+      state.value.lastname = action.payload.lastname;
+      state.value.mail = action.payload.mail;
       state.value.password = action.payload.password;
-    },
+      state.value.token = action.payload.token;
+  },
     logout: (state) => {
-      state.value.email = null;
-      state.value.password = null;
+      state.value.isConnected = false;
+      state.value.mail = null;
+      state.value.token = null;
     },
   },
 });
