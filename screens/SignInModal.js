@@ -19,12 +19,45 @@ export default function SignInModal(props) {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
 
+  //Gestion des onChangeText
+  const handleChange = (name, value) => {
+    switch (name) {
+      case 'mail':
+        setMail(value);
+        break;
+      case 'password':
+        setPassword(value);
+        break;
+    }
+  };
+
   //Gestion Navigation
   const navigation = useNavigation();
 
   const handleSignUp = () => {
     navigation.navigate('TabNavigator');
   };
+
+// //Connexion au compte
+// const handleSubmit = async () => {
+//   try{
+//     const response = await fetch('http://localhost:3000/signin', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         mail, 
+//         password,
+//       }),
+//   });
+
+//   const userData = await response.json();
+
+//   if(userData.result) {
+//     console.log('User Date SignIn', userData);
+//     dispatch(login({mail:userData.mail, token:userData.token}))
+//   }
+  
+ 
 
   return (
     <View style={styles.centeredView}>
@@ -44,14 +77,16 @@ export default function SignInModal(props) {
               <FormInput
                 label='Email Address'
                 value={mail}
-                onChangeText={setMail}
+                name='mail'
+                onChangeText={handleChange}
               />
 
               {/* Password */}
               <FormInput
                 label='Password'
                 value={password}
-                onChangeText={setPassword}
+                name='password'
+                onChangeText={handleChange}
               />
               <View>
                 <TouchableOpacity>

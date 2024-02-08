@@ -2,13 +2,14 @@ import React from 'react';
 import { View, Text, TextInput,StyleSheet } from 'react-native';
 
 export default function FormInput(props) {
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{props.label}</Text>
       <TextInput
         style={styles.input}
-        onChangeText={props.onChangeText}
         value={props.value}
+        onChangeText={(value) => props.onChangeText(props.name, value)}
       ></TextInput>
     </View>
   );
