@@ -214,16 +214,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "#002C82",
-    marginBottom: -21,
-  },
-  logo: {
-    padding: 0,
-    marginTop: -3,
-    zIndex: 10,
-    marginBottom: 10,
-  },
-  icon: {
-    alignItems: "flex-end",
+    backgroundColor: "red",
   },
   //Header
   header: {
