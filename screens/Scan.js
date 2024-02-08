@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 export default function Scan() {
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
@@ -30,7 +31,7 @@ export default function Scan() {
       type: "image/jpeg",
     });
 
-    fetch("http://192.168.1.65:3000/upload", {
+    fetch("https://flightcollector-be.vercel.app/upload", {
       method: "POST",
       body: formData,
     })
@@ -38,6 +39,8 @@ export default function Scan() {
       .then((data) => {
         console.log(data.result);
       });
+      // Naviguer vers MyPlane après avoir pris la photo
+      navigation.navigate('MyPlane')
   };
 
   if (!hasPermission || !isFocused) {

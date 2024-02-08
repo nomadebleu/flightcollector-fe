@@ -11,6 +11,7 @@ import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Scan from './screens/Scan';
 import Profil from './screens/Profil';
+import MyPlane from './screens/MyPlane'
 
 import { useFonts } from 'expo-font';
 
@@ -118,7 +119,11 @@ export default function App() {
         <Stack.Screen
           name='Scan'
           component={Scan}
-        /> 
+        />
+        <Stack.Screen
+        name ='MyPlane'
+        component={MyPlane}
+        />
      </Stack.Navigator>
     </NavigationContainer>
     </Provider>

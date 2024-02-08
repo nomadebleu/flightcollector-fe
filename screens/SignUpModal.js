@@ -44,7 +44,7 @@ export default function SignUpModal() {
 //Register du user
 const handleSubmit = async () => {
   try {
-    const response = await fetch('http://192.168.1.11:3000/signup', {
+    const response = await fetch('https://flightcollector-be.vercel.app/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
