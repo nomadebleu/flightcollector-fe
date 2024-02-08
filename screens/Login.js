@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#FFFFFF',
     borderColor: '#80C9FF',
-    borderWidth: '2px solid',
+    borderWidth: 2,
   },
   //Titles
   welcome: {
