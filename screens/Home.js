@@ -18,9 +18,9 @@ export default function Home({ navigation }) {
   };
   return (
     <SafeAreaView style={styles.body}>
-       {/* Header */}
-       <LinearGradient
-        colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
+      {/* Header */}
+      <LinearGradient
+        colors={["rgba(128, 201, 255, 1)", "rgba(1, 45, 131, 1)"]}
         start={{
           x: 0,
           y: 0,
@@ -30,8 +30,7 @@ export default function Home({ navigation }) {
           y: 1,
         }}
         style={styles.header}
-      >
-      </LinearGradient>
+      ></LinearGradient>
       {/* Logo */}
       <Image source={require("../assets/logo.png")} style={styles.image} />
       {/* Titles */}
@@ -193,15 +192,15 @@ const styles = StyleSheet.create({
   camIcon: {
     padding: 10,
   },
-    //Header
-    header: {
-      width: '100%',
-      height: 100,
-  
-      alignItems: 'center',
-      justifyContent: 'center',
-  
-      position: 'absolute',
-      top: 0,
-    },
+  //Header
+  header: {
+    width: "100%",
+    height: 100,
+
+    alignItems: "center",
+    justifyContent: "center",
+
+    position: "absolute",
+    top: 0,
+  },
 });
