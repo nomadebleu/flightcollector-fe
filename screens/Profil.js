@@ -17,14 +17,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'react-native-vector-icons';
 //Redux
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { logout } from '../reducers/user';
 //Picker
 import * as ImagePicker from "expo-image-picker";
 
 export default function Profil() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
-  console.log(user);
+  const dispatch = useDispatch();
 
   //State des Inputs
   const [firstname, setFirstname] = useState('');
@@ -59,6 +60,11 @@ export default function Profil() {
     }
   };
   console.log(selectedImage);
+
+  //Logout
+  const handleLogOut = () => {
+    dispatch(logout());
+  };
 
   return (
     <SafeAreaView style={styles.body}>
@@ -261,7 +267,7 @@ const styles = StyleSheet.create({
   logout:{
     width:50,
     height:50,
-    
+    backgroundColor:'red',
     position:'absolute',
     right:2,
     alignItems:'center',
