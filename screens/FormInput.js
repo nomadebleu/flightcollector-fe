@@ -5,11 +5,12 @@ export default function FormInput(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{props.label}</Text>
+      <Text style={[styles.label,props.titleStyle]}>{props.label}</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input,props.formStyle]}
         value={props.value}
         onChangeText={(value) => props.onChangeText(props.name, value)}
+        editable={props.editable} // Rend le champ non modifiable
       ></TextInput>
     </View>
   );

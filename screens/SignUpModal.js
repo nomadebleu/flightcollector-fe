@@ -58,13 +58,12 @@ const handleSubmit = async () => {
     const userData = await response.json();
 
     if (userData.result) {
-      console.log('UserData.result', userData.result);
       dispatch(
         login({
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-          mail: userData.mail,
-          password: userData.password,
+          firstname: userData.userData.firstname,
+          lastname: userData.userData.lastname,
+          mail: userData.userData.mail,
+          password: userData.userData.password,
           token: userData.token,
         })
       );
