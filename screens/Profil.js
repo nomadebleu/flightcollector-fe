@@ -76,7 +76,6 @@ const handleLogOut = () => {
   navigation.navigate('Login');//Navigation vers Login
 };
 
-
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -260,7 +259,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 5,
     borderColor: '#002C82',
-    backgroundImage: 'url("../assets/user.png")',
   },
   //Icone +
   iconContainer:{
@@ -272,7 +270,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#002C82',
    
     borderRadius: 20,
- 
   },
   //LogOut
   logout:{
