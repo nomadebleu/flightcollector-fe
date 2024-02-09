@@ -6,10 +6,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  ImageBackground,
 } from 'react-native';
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
 import React, { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 //Import des composants
