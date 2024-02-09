@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +10,6 @@ import FormInput from './FormInput';
 import FormButton from './FormButton';
 
 export default function SignUpModal() {
-
   //Utilisation du redux
   const dispatch = useDispatch();
 
@@ -25,7 +24,7 @@ export default function SignUpModal() {
 
   //Navigation lors de la connection
   const navigation = useNavigation();
-  
+
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
@@ -44,41 +43,48 @@ export default function SignUpModal() {
     }
   };
 
-//Register du user
-const handleSubmit = async () => {
-  try {
-    const response = await fetch('https://flightcollector-be.vercel.app/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstname,
-        lastname,
-        mail,
-        password,
-      }),
-    });
-
-    const userData = await response.json();
-
-    if (userData.result) {
-      dispatch(
-        login({
-          firstname: userData.userData.firstname,
-          lastname: userData.userData.lastname,
-          mail: userData.userData.mail,
-          password: userData.userData.password,
-          token: userData.token,
-        })
+  //Register du user
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(
+        'https://flightcollector-be.vercel.app/signup',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstname,
+            lastname,
+            mail,
+            password,
+          }),
+        }
       );
-      setModalVisible(false);
-      navigation.navigate('TabNavigator');//Navigation vers Home avec la Tab
-    } else {
-      console.error('Error during register',userData.error);
+
+      const userData = await response.json();
+
+      if (userData.result) {
+        dispatch(
+          login({
+            firstname: userData.userData.firstname,
+            lastname: userData.userData.lastname,
+            mail: userData.userData.mail,
+            password: userData.userData.password,
+            token: userData.token,
+          })
+        );
+        setModalVisible(false);
+        setFirstname('');
+        setLastname('');
+        setMail('');
+        setPassword('');
+        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
+      } else {
+        console.error('Error during register', userData.error);
+      }
+    } catch (error) {
+      console.error('Error during register:', error);
     }
-  } catch (error) {
-    console.error('Error during register:', error);
-  }
-};
+  };
 
   return (
     <View style={styles.centeredView}>
@@ -96,18 +102,18 @@ const handleSubmit = async () => {
             <View style={styles.inputs}>
               {/* FIRST NAME */}
               <FormInput
-              label='First Name'
-              value={firstname}
-              name='firstname'
-              onChangeText={handleChange}
+                label='First Name'
+                value={firstname}
+                name='firstname'
+                onChangeText={handleChange}
               />
 
               {/* LAST NAME */}
               <FormInput
-              label='Last Name'
-              value={lastname}
-              name='lastname'
-              onChangeText={handleChange}
+                label='Last Name'
+                value={lastname}
+                name='lastname'
+                onChangeText={handleChange}
               />
 
               {/* Email address */}
@@ -120,10 +126,10 @@ const handleSubmit = async () => {
 
               {/* Password */}
               <FormInput
-               label='Password'
-               value={password}
-               name='password'
-               onChangeText={handleChange}
+                label='Password'
+                value={password}
+                name='password'
+                onChangeText={handleChange}
               />
             </View>
 

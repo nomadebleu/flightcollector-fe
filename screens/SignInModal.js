@@ -18,8 +18,9 @@ import { login } from '../reducers/user';
 
 export default function SignInModal() {
 
-    //Utilisation du redux
-    const dispatch = useDispatch();
+  //Utilisation du redux
+  const dispatch = useDispatch();
+
   //State de la Modal
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -29,10 +30,6 @@ export default function SignInModal() {
 
   //Gestion Navigation
   const navigation = useNavigation();
-
-  const handleSignUp = () => {
-    navigation.navigate('TabNavigator');
-  };
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
@@ -47,39 +44,45 @@ export default function SignInModal() {
   };
 
   //Connect du user
-const handleConnect = async () => {
-  try {
-    const response = await fetch('https://flightcollector-be.vercel.app/signin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        mail,
-        password,
-      }),
-    });
-
-    const userData = await response.json();
-
-    if (userData.result) {
-      console.log('UserData:', userData);
-      dispatch(
-        login({
-          firstname: userData.userData.firstname,
-          lastname: userData.userData.lastname,
-          mail: userData.userData.mail,
-          password: userData.userData.password,
-          token: userData.token,
-        })
+  const handleConnect = async () => {
+    try {
+      const response = await fetch(
+        'https://flightcollector-be.vercel.app/signin',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mail,
+            password,
+          }),
+        }
       );
-      setModalVisible(false);
-      navigation.navigate('TabNavigator');//Navigation vers Home avec la Tab
-    } else {
-      console.error('Error during connection',userData.error);
+
+      const userData = await response.json();
+
+      if (userData.result) {
+        console.log('UserData:', userData);
+        dispatch(
+          login({
+            firstname: userData.userData.firstname,
+            lastname: userData.userData.lastname,
+            mail: userData.userData.mail,
+            password: userData.userData.password,
+            token: userData.token,
+          })
+        );
+        setModalVisible(false);
+        setMail('');
+        setPassword('');
+        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
+
+      } else {
+        console.error('Error during connection', userData.error);
+      }
+    } catch (error) {
+      console.error('Error during connection:', error);
     }
-  } catch (error) {
-    console.error('Error during connection:', error);
-  }
-};
+  };
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -119,7 +122,6 @@ const handleConnect = async () => {
             <FormButton
               onPress={() => {
                 handleConnect();
-              
               }}
               title='CONNECT'
               titleStyle={styles.textBtnSignIn}

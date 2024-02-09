@@ -13,7 +13,7 @@ import Reduction from './screens/Reductions';
 import Login from './screens/Login';
 import Scan from './screens/Scan';
 import Profil from './screens/Profil';
-import MyPlane from './screens/MyPlane'
+import MyPlane from './screens/MyPlane';
 //Fonts
 import { useFonts } from 'expo-font';
 //Redux
@@ -21,14 +21,28 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
 
+//Redux Store
 const store = configureStore({
   reducer: { user },
 });
 
+//Définition des navigations (Nested)
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+//Tab Navigation
+const TabNavigator = ({ route }) => {
+  //State pour gérer l'affichage de la Tab
+  const [showTabBar, setShowTabBar] = useState(true);
+
+  useEffect(() => {
+    if (route.params?.hideTabBar) {
+      //Vérifie sir la params hideTabBar existe
+      setShowTabBar(false);
+    } else {
+      setShowTabBar(true);
+    }
+  }, [route.params]); //Déclenchement à chaque chgt de route
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -66,10 +80,11 @@ const TabNavigator = () => {
         tabBarActiveTintColor: '#FFFFFF',
         tabBarInactiveTintColor: '#FFFFFF',
         tabBarShowLabel: false,
-        headerShown: false, // Enlever les libellés par default de l'icone
+        headerShown: false, // Enleve les libellés par default de l'icone
         tabBarStyle: {
           // Styles de la barre tab
           height: 100,
+          display: showTabBar ? 'none' : 'flex', // Masquer ou Afficher la Tab
         },
       })}
     >
@@ -108,26 +123,26 @@ export default function App() {
 
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name='Login'
-          component={Login}
-        /> 
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
-          name='TabNavigator'
-          component={TabNavigator}
-        />
-        <Stack.Screen
-          name='Scan'
-          component={Scan}
-        />
-        <Stack.Screen
-        name ='MyPlane'
-        component={MyPlane}
-        />
-     </Stack.Navigator>
-    </NavigationContainer>
+            name='Login'
+            component={Login}
+          />
+          <Stack.Screen
+            name='TabNavigator'
+            component={TabNavigator}
+          />
+          <Stack.Screen
+            name='Scan'
+            component={Scan}
+          />
+          <Stack.Screen
+            name='MyPlane'
+            component={MyPlane}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }

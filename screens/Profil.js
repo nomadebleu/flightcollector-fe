@@ -17,14 +17,19 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'react-native-vector-icons';
 //Redux
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../reducers/user';
 import { useSelector,useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
 //Picker
 import * as ImagePicker from "expo-image-picker";
+//Navigation
+import { useNavigation } from '@react-navigation/native';
 
 export default function Profil() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
   const dispatch = useDispatch();
 
   //State des Inputs
@@ -32,6 +37,9 @@ export default function Profil() {
   const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+
+    //Gestion Navigation
+    const navigation = useNavigation();
 
   // Chargement des données utilisateur
   useEffect(() => {
@@ -61,10 +69,16 @@ export default function Profil() {
   };
   console.log(selectedImage);
 
-  //Logout
-  const handleLogOut = () => {
-    dispatch(logout());
-  };
+//Gestion LogOut
+const handleLogOut = () => {
+  dispatch(logout());
+  setFirstname('');
+  setLastname('');
+  setMail('');
+  setPassword('');
+  navigation.navigate('Login');//Navigation vers Login
+};
+
 
   return (
     <SafeAreaView style={styles.body}>
@@ -108,9 +122,9 @@ export default function Profil() {
         )}
 
         </View>
-        <View style={styles.logout}>
-        <Entypo name="log-out" size={30} color="#F1F1F1" />
-        </View>
+        <TouchableOpacity style={styles.logout} onPress={()=>handleLogOut()}>
+        <Entypo name="log-out" size={30} color="#F1F1F1"/>
+        </TouchableOpacity>
       
       </View>
       {/* Titles */}
@@ -267,7 +281,7 @@ const styles = StyleSheet.create({
   logout:{
     width:50,
     height:50,
-    backgroundColor:'red',
+
     position:'absolute',
     right:2,
     alignItems:'center',
