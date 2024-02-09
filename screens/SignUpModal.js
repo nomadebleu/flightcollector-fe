@@ -44,7 +44,7 @@ export default function SignUpModal() {
 //Register du user
 const handleSubmit = async () => {
   try {
-    const response = await fetch('http://192.168.1.11:3000/signup', {
+    const response = await fetch('https://flightcollector-be.vercel.app/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -58,13 +58,12 @@ const handleSubmit = async () => {
     const userData = await response.json();
 
     if (userData.result) {
-      console.log('UserData.result', userData.result);
       dispatch(
         login({
-          firstname: userData.firstname,
-          lastname: userData.lastname,
-          mail: userData.mail,
-          password: userData.password,
+          firstname: userData.userData.firstname,
+          lastname: userData.userData.lastname,
+          mail: userData.userData.mail,
+          password: userData.userData.password,
           token: userData.token,
         })
       );

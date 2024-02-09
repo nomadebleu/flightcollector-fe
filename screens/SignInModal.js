@@ -46,7 +46,7 @@ export default function SignInModal() {
   //Connect du user
 const handleConnect = async () => {
   try {
-    const response = await fetch('http://192.168.1.11:3000/signin', {
+    const response = await fetch('https://flightcollector-be.vercel.app/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -58,11 +58,13 @@ const handleConnect = async () => {
     const userData = await response.json();
 
     if (userData.result) {
-      console.log('UserData.result', userData.result);
+      console.log('UserData:', userData);
       dispatch(
         login({
-          mail: userData.mail,
-          password: userData.password,
+          firstname: userData.userData.firstname,
+          lastname: userData.userData.lastname,
+          mail: userData.userData.mail,
+          password: userData.userData.password,
           token: userData.token,
         })
       );
