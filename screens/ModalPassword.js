@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   Modal,
@@ -13,21 +13,19 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from './FormInput';
 import FormButton from './FormButton';
 //Redux
-import { useDispatch } from 'react-redux';
-import { login } from '../reducers/user';
+import { useSelector } from 'react-redux';
 
-export default function SignInModal() {
-
-  //Utilisation du redux
-  const dispatch = useDispatch();
+export default function ModalPassword(props) {
+  //Utilisation du Redux
+  const user = useSelector((state) => state.user.value);
 
   //State de la Modal
   const [modalVisible, setModalVisible] = useState(false);
 
   //State des Inputs
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [mail, setMail] = useState(user.mail);
+  const [password, setPassword] = useState(user.password);
+  const [newPassword, setNewPassword] = useState('');
   //Gestion Navigation
   const navigation = useNavigation();
 
@@ -40,51 +38,44 @@ export default function SignInModal() {
       case 'password':
         setPassword(value);
         break;
+      case 'newPassword':
+        setNewPassword(value);
+        break;
     }
   };
-
-  //Connect du user
-  const handleConnect = async () => {
+  //Submit
+  const handleSubmit = async () => {
     try {
       const response = await fetch(
-        'https://flightcollector-be.vercel.app/signin',
+        'https://flightcollector-be.vercel.app/users/password',
         {
-          method: 'POST',
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             mail,
             password,
+            newPassword,
           }),
         }
       );
 
-      const userData = await response.json();
-
-      if (userData.result) {
-        console.log('UserData:', userData);
-        dispatch(
-          login({
-            firstname: userData.userData.firstname,
-            lastname: userData.userData.lastname,
-            mail: userData.userData.mail,
-            password: userData.userData.password,
-            token: userData.token,
-          })
-        );
-        setModalVisible(false);
+      const newData = await response.json();
+      console.log('newData is :',newData);
+      if (newData.result) {
+       
         setMail('');
         setPassword('');
-        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
-
+        setNewPassword('');
+        navigation.navigate('Profil');
       } else {
-        console.error('Error during connection', userData.error);
+        console.error('Error during update', newData.error);
       }
     } catch (error) {
-      console.error('Error during connection:', error);
+      console.error('Error during update:', error);
     }
   };
   return (
-    <View style={styles.centeredView}>
+    <View style={[styles.centeredView, props.styleModal]}>
       <Modal
         animationType='fade'
         transparent={true}
@@ -96,6 +87,7 @@ export default function SignInModal() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Text style={styles.titleModal}>Change your password</Text>
             <View style={styles.inputs}>
               {/* Email address */}
               <FormInput
@@ -112,29 +104,30 @@ export default function SignInModal() {
                 name='password'
                 onChangeText={handleChange}
               />
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles.forgotten}>Forgotten password?</Text>
-                </TouchableOpacity>
-              </View>
+              {/* NewPassword */}
+              <FormInput
+              label='New Password'
+              value={newPassword}
+              name='newPassword'
+              onChangeText={handleChange}
+              />
             </View>
 
             <FormButton
               onPress={() => {
-                handleConnect();
+                handleSubmit();
               }}
-              title='CONNECT'
-              titleStyle={styles.textBtnSignIn}
-              formStyle={styles.buttonSignIn}
+              title='SUBMIT'
+              formStyle={styles.submit}
             />
           </View>
         </View>
       </Modal>
       <FormButton
         onPress={() => setModalVisible(true)}
-        title='SIGN IN'
-        titleStyle={styles.textBtnSignIn}
-        formStyle={styles.buttonSignIn}
+        title='Change your password ?'
+        titleStyle={styles.textChange}
+        formStyle={styles.formChange}
       />
     </View>
   );
@@ -148,7 +141,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '95%',
-    height: '40%',
+    height: '65%',
 
     backgroundColor: '#F1F1F1',
     borderRadius: 30,
@@ -165,32 +158,35 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  //Forgotten
-  forgotten: {
-    position: 'absolute',
-    right: 20,
-    bottom: 0,
-
+  //Change password
+  textChange: {
     fontFamily: 'Farsan-Regular',
     fontSize: 15,
     color: '#002C82',
+    letterSpacing: 0,
   },
-  //Btn Sign In
-  textBtnSignIn: {
+  formChange: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    width: 150,
+    height: 30,
+  },
+  //Submit
+  submit: {
+    width: 200,
+  },
+  titleModal: {
+    fontFamily: 'DancingScript-Regular',
+    fontSize: 30,
     color: '#002C82',
-    fontFamily: 'Cabin-Bold',
-    letterSpacing: 5,
-    fontSize: 20,
-  },
-  buttonSignIn: {
-    width: 345,
-    height: 55,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    borderRadius: 20,
-    backgroundColor: '#80C9FF',
-    borderColor: '#002C82',
-    borderWidth: 2,
+    paddingBottom: 30,
+    shadowColor: '#0092FF',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

@@ -11,6 +11,7 @@ export default function FormInput(props) {
         value={props.value}
         onChangeText={(value) => props.onChangeText(props.name, value)}
         editable={props.editable} // Rend le champ non modifiable
+        placeholder={props.placeholder ? props.placeholder : ''}//Conditionne la possibilité d'avoir un placeholder
       ></TextInput>
     </View>
   );
