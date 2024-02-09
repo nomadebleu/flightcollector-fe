@@ -84,7 +84,7 @@ const TabNavigator = ({ route }) => {
         tabBarStyle: {
           // Styles de la barre tab
           height: 100,
-          display: showTabBar ? 'none' : 'flex', // Masquer ou Afficher la Tab
+          // display: showTabBar ? 'none' : 'flex', // Masquer ou Afficher la Tab
         },
       })}
     >
