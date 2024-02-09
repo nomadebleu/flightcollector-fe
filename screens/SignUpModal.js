@@ -1,8 +1,11 @@
 import React, { useState} from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
+//Navigation
 import { useNavigation } from '@react-navigation/native';
+//Redux
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
+//Composants
 import FormInput from './FormInput';
 import FormButton from './FormButton';
 

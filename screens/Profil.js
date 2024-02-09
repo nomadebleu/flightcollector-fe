@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,15 +8,18 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import * as ImagePicker from "expo-image-picker";
-import React, { useState, useEffect } from 'react';
+//Gradient
 import { LinearGradient } from 'expo-linear-gradient';
-//Import des composants
+//Composants
 import FormInput from './FormInput';
-//Import de FontAwesome en React Native
+//Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo } from 'react-native-vector-icons';
+//Redux
 import { useSelector } from 'react-redux';
+//Picker
+import * as ImagePicker from "expo-image-picker";
 
 export default function Profil() {
   //Utilisation du Redux
@@ -28,8 +32,6 @@ export default function Profil() {
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
 
-
-
   // Chargement des données utilisateur
   useEffect(() => {
     setFirstname(user.firstname);
@@ -38,8 +40,10 @@ export default function Profil() {
     setPassword(user.password.length > 6 ? '******' : user.password.replace(/./g, '*'));//Remplace le password hashé par 6* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
+  //State Image Profil
   const [selectedImage, setSelectedImage] = useState(null);
 
+  //Gestion Picker
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -48,6 +52,7 @@ export default function Profil() {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+
       console.log(result);
     } else {
       alert("You did not select any image.");
@@ -65,29 +70,42 @@ export default function Profil() {
         style={styles.header}
       ></LinearGradient>
 
-      {/* Picture Profil */}
+      {/* Picture Profil & Log Out */}
       <View style={styles.containerPicture}>
+        <View>
+      
         {!selectedImage && (
           <Image
             style={styles.pictureProfil}
             source={require("../assets/user.png")}
           />
         )}
-        {selectedImage && (
+        {selectedImage && (//Ajoute la possibilité de cliquer sur l'image quand on l'a déjà
+          <TouchableOpacity onPress={pickImageAsync}>
           <Image
             style={styles.pictureProfil}
             source={{
               uri: selectedImage,
             }}
           />
+          </TouchableOpacity>
         )}
+        {!selectedImage && (//Supprime l'icone + lorsque le user à mis une photo
+        <View style={styles.iconContainer}>
         <FontAwesome
           name="plus-circle"
-          size={38}
-          color="#002C82"
-          style={styles.icon}
+          size={30}
+          color="#F1F1F1"
           onPress={pickImageAsync}
         />
+        </View>
+        )}
+
+        </View>
+        <View style={styles.logout}>
+        <Entypo name="log-out" size={30} color="#F1F1F1" />
+        </View>
+      
       </View>
       {/* Titles */}
       <Text style={styles.welcome}>{`Welcome back ${user.firstname}`}!</Text>
@@ -212,62 +230,41 @@ const styles = StyleSheet.create({
   },
   //Profil Picture
   containerPicture: {
-    alignItems: "stretch",
+    width:'100%',
+    height:100,
+
+    flexDirection:'row',
+    justifyContent:'center',
   },
   pictureProfil: {
     width: 100,
     height: 100,
-    flexDirection: "row",
+ 
     borderRadius: 50,
-    borderWidth: 2,
+    borderWidth: 5,
     borderColor: '#002C82',
-    backgroundColor: 'red',
+    backgroundImage: 'url("../assets/user.png")',
   },
-  // Inputs
-  legend: {
-    position: 'absolute',
-    top: 2,
-    left: 2,
-
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 5,
-
-    fontFamily: 'Cabin-Regular',
-    fontSize: 12,
-    color: '#002C82',
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
+  //Icone +
+  iconContainer:{
+    width: 35, // Largeur de l'icône
+    height: 35, // Hauteur de l'icône
+    justifyContent: 'center',
+    alignItems: 'center',
+    position:'absolute',
+    backgroundColor: '#002C82',
+   
+    borderRadius: 20,
+ 
   },
-  size: {
-    height: 42,
-  },
-  //Forgotten
-  forgotten: {
-    fontFamily: 'Farsan-Regular',
-    fontSize: 15,
-    color: '#002C82',
-
-    position: 'absolute', //pour éviter qui gêne la répartition des 3 boutons
-    marginTop: 10,
-    marginLeft: 20,
-  },
-  //Titles
-  welcome: {
-    fontFamily: "Farsan-Regular",
-    fontSize: 32,
-    color: '#002C82',
-  },
-  //Profil Picture
-  containerPicture: {
-    alignItems: "stretch",
-  },
-  pictureProfil: {
-    width: 100,
-    height: 100,
-    flexDirection: "row",
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: '#002C82',
-    backgroundColor: 'red',
+  //LogOut
+  logout:{
+    width:50,
+    height:50,
+    
+    position:'absolute',
+    right:2,
+    alignItems:'center',
   },
   // Inputs
   legend: {

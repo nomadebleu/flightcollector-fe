@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+//Camera
 import { Camera, CameraType, FlashMode } from "expo-camera";
+//Icones
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+//Navigation
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 export default function Scan() {

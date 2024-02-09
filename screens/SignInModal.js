@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+//Navigation
 import { useNavigation } from '@react-navigation/native';
+//Composants
 import FormInput from './FormInput';
 import FormButton from './FormButton';
+//Redux
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 

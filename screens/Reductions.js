@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+//Gradient
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Home() {

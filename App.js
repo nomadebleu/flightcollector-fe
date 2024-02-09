@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+//Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+//Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//Import des screens concernés
+//Composants
 import Home from './screens/Home';
 import Gallery from './screens/Gallery';
 import Reduction from './screens/Reductions';
@@ -12,9 +14,9 @@ import Login from './screens/Login';
 import Scan from './screens/Scan';
 import Profil from './screens/Profil';
 import MyPlane from './screens/MyPlane'
-
+//Fonts
 import { useFonts } from 'expo-font';
-
+//Redux
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';

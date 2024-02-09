@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-
 import React from "react";
+import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+//Composants
 import FormButton from "./FormButton";
 import SignUpModal from "./SignUpModal";
 import SignInModal from "./SignInModal";

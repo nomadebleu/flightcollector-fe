@@ -1,3 +1,4 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -8,8 +9,9 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+//Gradient
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+//Icones
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function Home({ navigation }) {

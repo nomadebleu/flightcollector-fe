@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput } from 'react-native';
 import React from 'react';
+//Gradient
 import { LinearGradient } from 'expo-linear-gradient';
+//Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function Gallery() {
