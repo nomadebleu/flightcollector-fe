@@ -50,8 +50,8 @@ export default function ProfilScreen() {
     setLastname(user.lastname);
     setMail(user.mail);
     setPassword(
-      user.password.length > 6 ? '******' : user.password.replace(/./g, '*')
-    ); //Remplace le password hashé par 6* car password demandé de 8 caractères
+      user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
+    ); //Remplace le password hashé par 8* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
   //Gestion Picker

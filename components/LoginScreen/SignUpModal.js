@@ -10,7 +10,7 @@ import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
 //Icones
 import Icon from 'react-native-vector-icons/EvilIcons';
-
+import { Entypo } from 'react-native-vector-icons';
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -26,9 +26,20 @@ export default function SignUpModal() {
   const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   //Navigation lors de la connection
   const navigation = useNavigation();
+
+  // Visibilité du password
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  //Close Modal
+  const handleCloseModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
@@ -51,19 +62,16 @@ export default function SignUpModal() {
   //Register du user
   const handleSubmit = async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/signup`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            firstname,
-            lastname,
-            mail,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          mail,
+          password,
+        }),
+      });
 
       const userData = await response.json();
 
@@ -90,10 +98,7 @@ export default function SignUpModal() {
       console.error('Error during register:', error);
     }
   };
-  //Close Modal
-  const handleCloseModal = () => {
-    setModalVisible(!modalVisible);
-  };
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -107,7 +112,7 @@ export default function SignUpModal() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <TouchableOpacity
+            <TouchableOpacity
               style={styles.icone}
               onPress={() => handleCloseModal()}
             >
@@ -143,12 +148,22 @@ export default function SignUpModal() {
               />
 
               {/* Password */}
-              <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
-              />
+              <View>
+                <FormInput
+                  label='Password'
+                  value={password}
+                  name='password'
+                  onChangeText={handleChange}
+                  secureTextEntry={!showPassword}//Pour cacher les caractères
+                />
+                <Entypo
+                  onPress={togglePasswordVisibility}
+                  name={showPassword ? 'eye' : 'eye-with-line'}
+                  size={30}
+                  color='#002C82'
+                  style={styles.eyeIcon}
+                />
+              </View>
             </View>
 
             <FormButton
@@ -193,9 +208,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-    //Icone
-    icone: {
-      width: '100%',
-      alignItems: 'flex-end',
-    },
+  //Icones
+  icone: {
+    width: '100%',
+    alignItems: 'flex-end',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
+  },
 });
