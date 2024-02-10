@@ -10,10 +10,15 @@ import {
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 //Composants
-import FormInput from './FormInput';
-import FormButton from './FormButton';
+import FormInput from '../components/shared/FormInput';
+import FormButton from '../components/shared/FormButton';
 //Redux
 import { useSelector } from 'react-redux';
+//Icones
+import Icon from 'react-native-vector-icons/EvilIcons';
+
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function ModalPassword(props) {
   //Utilisation du Redux
@@ -46,23 +51,18 @@ export default function ModalPassword(props) {
   //Submit
   const handleSubmit = async () => {
     try {
-      const response = await fetch(
-        'https://flightcollector-be.vercel.app/users/password',
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mail,
-            password,
-            newPassword,
-          }),
-        }
-      );
-
+      const response = await fetch(`${apiUrl}/users/password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mail,
+          newPassword,
+        }),
+      });
+      console.log('response', response);
       const newData = await response.json();
-      console.log('newData is :',newData);
+      console.log('newData is :', newData);
       if (newData.result) {
-       
         setMail('');
         setPassword('');
         setNewPassword('');
@@ -87,7 +87,15 @@ export default function ModalPassword(props) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <View style={styles.icone}>
+            <Icon
+              name='close'
+              size={30}
+              color='#002C82'
+            />
+            </View>
             <Text style={styles.titleModal}>Change your password</Text>
+
             <View style={styles.inputs}>
               {/* Email address */}
               <FormInput
@@ -98,18 +106,18 @@ export default function ModalPassword(props) {
               />
 
               {/* Password */}
-              <FormInput
+              {/* <FormInput
                 label='Password'
                 value={password}
                 name='password'
                 onChangeText={handleChange}
-              />
+              /> */}
               {/* NewPassword */}
               <FormInput
-              label='New Password'
-              value={newPassword}
-              name='newPassword'
-              onChangeText={handleChange}
+                label='New Password'
+                value={newPassword}
+                name='newPassword'
+                onChangeText={handleChange}
               />
             </View>
 
@@ -145,7 +153,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#F1F1F1',
     borderRadius: 30,
-    padding: 35,
+    padding: 20,
 
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -188,5 +196,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+  },
+  //Icone
+  icone:{
+    width:'100%',
+    alignItems:'flex-end',
+    position:'absolute',
+    top:20,
   },
 });

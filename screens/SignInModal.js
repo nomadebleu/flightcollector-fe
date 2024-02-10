@@ -10,8 +10,8 @@ import {
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 //Composants
-import FormInput from './FormInput';
-import FormButton from './FormButton';
+import FormInput from '../components/shared/FormInput';
+import FormButton from '../components/shared/FormButton';
 //Redux
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';

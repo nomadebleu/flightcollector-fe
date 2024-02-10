@@ -109,6 +109,7 @@ const TabNavigator = ({ route }) => {
 };
 
 export default function App() {
+  console.log('porcess.env:',process.env.EXPO_PUBLIC_API_URL);
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),

@@ -11,12 +11,13 @@ import {
 //Gradient
 import { LinearGradient } from 'expo-linear-gradient';
 //Composants
-import FormInput from './FormInput';
+import FormInput from '../components/shared/FormInput';
 import ModalPassword from './ModalPassword';
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'react-native-vector-icons';
+
 //Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
@@ -39,6 +40,9 @@ export default function Profil() {
   //State isClicked
   const [isCliked, setIsCLicked] = useState(false);
 
+   //State Image Profil
+   const [selectedImage, setSelectedImage] = useState(null);
+
   //Gestion Navigation
   const navigation = useNavigation();
 
@@ -52,8 +56,7 @@ export default function Profil() {
     ); //Remplace le password hashé par 6* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
-  //State Image Profil
-  const [selectedImage, setSelectedImage] = useState(null);
+ 
 
   //Gestion Picker
   const pickImageAsync = async () => {

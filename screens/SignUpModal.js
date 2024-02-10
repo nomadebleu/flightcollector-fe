@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 //Composants
-import FormInput from './FormInput';
-import FormButton from './FormButton';
+import FormInput from '../components/shared/FormInput';
+import FormButton from '../components/shared/FormButton';
 
 export default function SignUpModal() {
   //Utilisation du redux
