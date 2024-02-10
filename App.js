@@ -28,7 +28,7 @@ import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
 //Redux & Redux Persist
 const reducers = combineReducers({ user });
-const persistConfig = { key: 'flightCollector', storage };
+const persistConfig = { key: 'flightCollector', AsyncStorage };
 
 const store = configureStore({
   reducer: persistReducer(persistConfig, reducers),
