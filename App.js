@@ -18,13 +18,24 @@ import MyPlaneScreen from './screens/MyPlaneScreen';
 import { useFonts } from 'expo-font';
 //Redux
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+//Redux Persist
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
-//Redux Store
+//Redux & Redux Persist
+const reducers = combineReducers({ user });
+const persistConfig = { key: 'flightCollector', storage };
+
 const store = configureStore({
-  reducer: { user },
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
+const persistor = persistStore(store);
 
 //Définition des navigations (Nested)
 const Stack = createNativeStackNavigator();
@@ -109,7 +120,7 @@ const TabNavigator = ({ route }) => {
 };
 
 export default function App() {
-  console.log('process.env:',process.env.EXPO_PUBLIC_API_URL);
+  console.log('process.env:', process.env.EXPO_PUBLIC_API_URL);
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
@@ -123,28 +134,30 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name='Login'
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            name='TabNavigator'
-            component={TabNavigator}
-          />
-          <Stack.Screen
-            name='Scan'
-            component={ScanScreen}
-          />
-          <Stack.Screen
-            name='MyPlane'
-            component={MyPlaneScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <PersistGate persistor={persistor}>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name='Login'
+              component={LoginScreen}
+            />
+            <Stack.Screen
+              name='TabNavigator'
+              component={TabNavigator}
+            />
+            <Stack.Screen
+              name='Scan'
+              component={ScanScreen}
+            />
+            <Stack.Screen
+              name='MyPlane'
+              component={MyPlaneScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    </PersistGate>
   );
 }
 const styles = StyleSheet.create({

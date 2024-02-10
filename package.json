@@ -4,7 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "NODE_ENV=test npx expo start",
-    "tunnel":"npx expo start --tunnel",
+    "tunnel": "npx expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
@@ -35,7 +35,8 @@
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
     "react-native-vector-icons": "^10.0.3",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
