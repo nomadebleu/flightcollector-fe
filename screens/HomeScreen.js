@@ -36,6 +36,12 @@ export default function HomeScreen({ navigation }) {
         break;
     }
   };
+    //Gestion LogOut
+    const handleLogOut = () => {
+      dispatch(logout());
+      navigation.navigate('Login'); //Navigation vers Login
+    };
+
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
