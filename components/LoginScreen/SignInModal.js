@@ -76,10 +76,11 @@ export default function SignInModal() {
             token: userData.token,
           })
         );
-        setModalVisible(false);
+        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
         setMail('');
         setPassword('');
-        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
+        setModalVisible(!modalVisible);
+        
 
       } else {
         console.error('Error during connection', userData.error);

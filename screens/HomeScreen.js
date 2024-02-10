@@ -12,15 +12,33 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Entypo } from 'react-native-vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+//Redux
+import { useDispatch } from 'react-redux';
+import { logout } from '../reducers/user';
+//Navigation
+import { useNavigation } from '@react-navigation/native';
 //Composants
 import Header from '../components/shared/Header';
 import FormInput from '../components/shared/FormInput';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
   //State des Inputs
   const [boardingPass, setBoardingPass] = useState('');
   const [aircraft, setAircraft] = useState('');
 
+  //Utilisation du Redux
+  const dispatch = useDispatch();
+
+  //Gestion Navigation
+  const navigation = useNavigation();
+
+  //Gestion LogOut
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.navigate('Login');
+  };
+
+  //Gestion du Scan
   const handleScan = () => {
     navigation.navigate('Scan');
   };
@@ -36,20 +54,16 @@ export default function HomeScreen({ navigation }) {
         break;
     }
   };
-    //Gestion LogOut
-    const handleLogOut = () => {
-      dispatch(logout());
-      navigation.navigate('Login'); //Navigation vers Login
-    };
 
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <Header />
       {/* Logout */}
+
       <TouchableOpacity
+        onPress={handleLogout}
         style={styles.logout}
-        onPress={() => handleLogOut()}
       >
         <Entypo
           name='log-out'
@@ -139,6 +153,7 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex:-1,//car sinon il cache le logout et celui ci ne fonctionne pas
   },
   image: {
     width: '80%',
@@ -194,10 +209,9 @@ const styles = StyleSheet.create({
   logout: {
     width: 50,
     height: 50,
-
+  
     position: 'absolute',
     top: 50,
     right: 2,
-    alignItems: '',
   },
 });
