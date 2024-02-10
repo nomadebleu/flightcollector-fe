@@ -5,7 +5,9 @@ export default function FormInput(props) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.containerLabel}>
       <Text style={[styles.label,props.titleStyle]}>{props.label}</Text>
+      </View>
       <TextInput
         style={[styles.input,props.formStyle]}
         value={props.value}
@@ -24,17 +26,20 @@ const styles = StyleSheet.create({
 
     marginBottom: 20,
   },
-  label: {
+  containerLabel:{
     position: 'absolute',
     top: -10,
     left: 35,
 
     backgroundColor: '#F1F1F1',
     paddingHorizontal: 5,
+    borderRadius:5,
+    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
+  },
 
+  label: {
     fontFamily: 'Cabin-Regular',
     color: '#002C82',
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
   },
   input: {
     width: 345,

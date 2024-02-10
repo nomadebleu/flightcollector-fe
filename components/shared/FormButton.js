@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 
 export default function FormButton(props) {
-  
   //State Cliked pour le button
   const [isClicked, setIsClicked] = useState(false);
 
@@ -22,7 +21,11 @@ export default function FormButton(props) {
           handleClick();
           props.onPress();
         }}
-        style={[styles.btn, props.formStyle, isClicked && styles.btnClicked]} // Condition pr chger en vert
+        style={[
+          styles.btn,
+          props.formStyle,
+          isClicked && styles.btnClicked,// Applique styles.btnClicked si isClicked est vrai
+        ]}
         activeOpacity={0.8}
       >
         <Text

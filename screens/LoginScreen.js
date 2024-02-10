@@ -2,12 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native';
 //Composants
 import FormButton from '../components/shared/FormButton';
-import SignUpModal from './SignUpModal';
-import SignInModal from './SignInModal';
+import SignUpModal from '../components/LoginScreen/SignUpModal';
+import SignInModal from '../components/LoginScreen/SignInModal';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 
-export default function SignUp() {
+export default function LoginScreen() {
   //Gestion Navigation
   const navigation = useNavigation();
 

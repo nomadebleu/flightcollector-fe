@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
-import { Alert, Modal, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
+//Composants
+import FormInput from '../shared/FormInput';
+import FormButton from '../shared/FormButton';
 //Redux
 import { useDispatch } from 'react-redux';
-import { login } from '../reducers/user';
-//Composants
-import FormInput from '../components/shared/FormInput';
-import FormButton from '../components/shared/FormButton';
+import { login } from '../../reducers/user';
+//Icones
+import Icon from 'react-native-vector-icons/EvilIcons';
 
-export default function SignUpModal() {
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+export default function SignInModal() {
+
   //Utilisation du redux
   const dispatch = useDispatch();
 
@@ -17,23 +30,15 @@ export default function SignUpModal() {
   const [modalVisible, setModalVisible] = useState(false);
 
   //State des Inputs
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
 
-  //Navigation lors de la connection
+  //Gestion Navigation
   const navigation = useNavigation();
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
-      case 'firstname':
-        setFirstname(value);
-        break;
-      case 'lastname':
-        setLastname(value);
-        break;
       case 'mail':
         setMail(value);
         break;
@@ -43,17 +48,15 @@ export default function SignUpModal() {
     }
   };
 
-  //Register du user
-  const handleSubmit = async () => {
+  //Connect du user
+  const handleConnect = async () => {
     try {
       const response = await fetch(
-        'https://flightcollector-be.vercel.app/signup',
+        `${apiUrl}/signin`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            firstname,
-            lastname,
             mail,
             password,
           }),
@@ -63,6 +66,7 @@ export default function SignUpModal() {
       const userData = await response.json();
 
       if (userData.result) {
+        console.log('UserData:', userData);
         dispatch(
           login({
             firstname: userData.userData.firstname,
@@ -73,23 +77,25 @@ export default function SignUpModal() {
           })
         );
         setModalVisible(false);
-        setFirstname('');
-        setLastname('');
         setMail('');
         setPassword('');
         navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
+
       } else {
-        console.error('Error during register', userData.error);
+        console.error('Error during connection', userData.error);
       }
     } catch (error) {
-      console.error('Error during register:', error);
+      console.error('Error during connection:', error);
     }
   };
-
+    //Close Modal
+    const handleCloseModal = () => {
+      setModalVisible(!modalVisible);
+    };
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType='slide'
+        animationType='fade'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -99,23 +105,17 @@ export default function SignUpModal() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+          <TouchableOpacity
+              style={styles.icone}
+              onPress={() => handleCloseModal()}
+            >
+              <Icon
+                name='close'
+                size={30}
+                color='#002C82'
+              />
+            </TouchableOpacity>
             <View style={styles.inputs}>
-              {/* FIRST NAME */}
-              <FormInput
-                label='First Name'
-                value={firstname}
-                name='firstname'
-                onChangeText={handleChange}
-              />
-
-              {/* LAST NAME */}
-              <FormInput
-                label='Last Name'
-                value={lastname}
-                name='lastname'
-                onChangeText={handleChange}
-              />
-
               {/* Email address */}
               <FormInput
                 label='Email Address'
@@ -131,26 +131,36 @@ export default function SignUpModal() {
                 name='password'
                 onChangeText={handleChange}
               />
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.forgotten}>Forgotten password?</Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             <FormButton
               onPress={() => {
-                handleSubmit();
+                handleConnect();
               }}
-              title='REGISTER'
+              title='CONNECT'
+              titleStyle={styles.textBtnSignIn}
+              formStyle={styles.buttonSignIn}
             />
           </View>
         </View>
       </Modal>
       <FormButton
         onPress={() => setModalVisible(true)}
-        title='SIGN UP'
+        title='SIGN IN'
+        titleStyle={styles.textBtnSignIn}
+        formStyle={styles.buttonSignIn}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  //Modal
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -158,11 +168,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '95%',
-    height: '55%',
+    height: '45%',
 
     backgroundColor: '#F1F1F1',
     borderRadius: 30,
-    padding: 35,
+    padding: 20,
 
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -175,4 +185,46 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  //Forgotten Password
+  forgotten: {
+    position: 'absolute',
+    right: 20,
+    bottom: 0,
+
+    fontFamily: 'Farsan-Regular',
+    fontSize: 15,
+    color: '#002C82',
+  },
+  //Btn Sign In
+  textBtnSignIn: {
+    color: '#002C82',
+    fontFamily: 'Cabin-Bold',
+    letterSpacing: 5,
+    fontSize: 20,
+  },
+  buttonSignIn: {
+    width: 345,
+    height: 55,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: 20,
+    backgroundColor: '#80C9FF',
+    borderColor: '#002C82',
+    borderWidth: 2,
+  },
+    //Icone
+    icone: {
+      width: '100%',
+      alignItems: 'flex-end',
+     position:'absolute',
+     top:20,
+    },
+    //Inputs
+    inputs:{
+    
+      width:'100%',
+      height:'60%',
+      justifyContent:'flex-end',
+    },
 });

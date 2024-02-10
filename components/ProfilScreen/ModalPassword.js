@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Modal,
@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-//Navigation
-import { useNavigation } from '@react-navigation/native';
 //Composants
-import FormInput from '../components/shared/FormInput';
-import FormButton from '../components/shared/FormButton';
+import FormInput from '../shared/FormInput';
+import FormButton from '../shared/FormButton';
 //Redux
 import { useSelector } from 'react-redux';
 //Icones
@@ -29,19 +27,13 @@ export default function ModalPassword(props) {
 
   //State des Inputs
   const [mail, setMail] = useState(user.mail);
-  const [password, setPassword] = useState(user.password);
   const [newPassword, setNewPassword] = useState('');
-  //Gestion Navigation
-  const navigation = useNavigation();
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
       case 'mail':
         setMail(value);
-        break;
-      case 'password':
-        setPassword(value);
         break;
       case 'newPassword':
         setNewPassword(value);
@@ -63,10 +55,8 @@ export default function ModalPassword(props) {
       const newData = await response.json();
       console.log('newData is :', newData);
       if (newData.result) {
-        setMail('');
-        setPassword('');
         setNewPassword('');
-        navigation.navigate('Profil');
+        setModalVisible(!modalVisible);
       } else {
         console.error('Error during update', newData.error);
       }
@@ -74,6 +64,11 @@ export default function ModalPassword(props) {
       console.error('Error during update:', error);
     }
   };
+  //Close Modal
+  const handleCloseModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <View style={[styles.centeredView, props.styleModal]}>
       <Modal
@@ -87,13 +82,17 @@ export default function ModalPassword(props) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.icone}>
-            <Icon
-              name='close'
-              size={30}
-              color='#002C82'
-            />
-            </View>
+            <TouchableOpacity
+              style={styles.icone}
+              onPress={() => handleCloseModal()}
+            >
+              <Icon
+                name='close'
+                size={30}
+                color='#002C82'
+              />
+            </TouchableOpacity>
+
             <Text style={styles.titleModal}>Change your password</Text>
 
             <View style={styles.inputs}>
@@ -103,21 +102,15 @@ export default function ModalPassword(props) {
                 value={mail}
                 name='mail'
                 onChangeText={handleChange}
+                editable={false}
               />
-
-              {/* Password */}
-              {/* <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
-              /> */}
-              {/* NewPassword */}
+              {/* New Password */}
               <FormInput
                 label='New Password'
                 value={newPassword}
                 name='newPassword'
                 onChangeText={handleChange}
+                placeholder='Please, enter your new password'
               />
             </View>
 
@@ -131,12 +124,12 @@ export default function ModalPassword(props) {
           </View>
         </View>
       </Modal>
-      <FormButton
+      <TouchableOpacity
         onPress={() => setModalVisible(true)}
-        title='Change your password ?'
-        titleStyle={styles.textChange}
-        formStyle={styles.formChange}
-      />
+        style={styles.formChange}
+      >
+        <Text style={styles.textChange}>Change your password ?</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -149,7 +142,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '95%',
-    height: '65%',
+    height: '50%',
 
     backgroundColor: '#F1F1F1',
     borderRadius: 30,
@@ -174,18 +167,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   formChange: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
     width: 150,
     height: 30,
-  },
-  //Submit
-  submit: {
-    width: 200,
+
+    alignItems: 'center',
+    paddingTop: 5,
   },
   titleModal: {
     fontFamily: 'DancingScript-Regular',
-    fontSize: 30,
+    fontSize: 40,
+    textAlign: 'center',
     color: '#002C82',
     paddingBottom: 30,
     shadowColor: '#0092FF',
@@ -197,11 +188,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  //Submit
+  submit: {
+    width: 200,
+  },
   //Icone
-  icone:{
-    width:'100%',
-    alignItems:'flex-end',
-    position:'absolute',
-    top:20,
+  icone: {
+    width: '100%',
+    alignItems: 'flex-end',
   },
 });

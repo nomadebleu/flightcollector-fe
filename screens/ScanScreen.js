@@ -7,7 +7,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 //Navigation
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-export default function Scan() {
+export default function ScanScreen() {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 

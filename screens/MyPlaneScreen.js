@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Modal, Button, Image } from "react-native";
 
-export default function MyPlane() {
+export default function MyPlaneScreen() {
     const [showModal, setShowModal] = useState(true);
     const [badge, setBadge] = useState(null);
 

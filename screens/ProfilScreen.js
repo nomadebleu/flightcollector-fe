@@ -8,16 +8,14 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-//Gradient
-import { LinearGradient } from 'expo-linear-gradient';
 //Composants
 import FormInput from '../components/shared/FormInput';
-import ModalPassword from './ModalPassword';
+import ModalPassword from '../components/ProfilScreen/ModalPassword';
+import Header from '../components/shared/Header';
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'react-native-vector-icons';
-
 //Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
@@ -26,7 +24,7 @@ import * as ImagePicker from 'expo-image-picker';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 
-export default function Profil() {
+export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -40,8 +38,8 @@ export default function Profil() {
   //State isClicked
   const [isCliked, setIsCLicked] = useState(false);
 
-   //State Image Profil
-   const [selectedImage, setSelectedImage] = useState(null);
+  //State Image Profil
+  const [selectedImage, setSelectedImage] = useState(null);
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -55,8 +53,6 @@ export default function Profil() {
       user.password.length > 6 ? '******' : user.password.replace(/./g, '*')
     ); //Remplace le password hashé par 6* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
-
- 
 
   //Gestion Picker
   const pickImageAsync = async () => {
@@ -94,12 +90,7 @@ export default function Profil() {
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
-      <LinearGradient
-        colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
-        start={[0, 1]} //Début du dégradé suivant x,y
-        end={[1, 0]} //Fin du dégradé
-        style={styles.header}
-      ></LinearGradient>
+      <Header/>
 
       {/* Picture Profil & Log Out */}
       <View style={styles.containerPicture}>
@@ -131,6 +122,7 @@ export default function Profil() {
             </View>
           )}
         </View>
+
         <TouchableOpacity
           style={styles.logout}
           onPress={() => handleLogOut()}
@@ -172,8 +164,8 @@ export default function Profil() {
           editable={false}
         />
 
-          {/* Password */}
-          <View>
+        {/* Password */}
+        <View>
           <FormInput
             label='Password'
             value={password}
@@ -182,10 +174,8 @@ export default function Profil() {
             editable={false}
           />
           <ModalPassword styleModal={styles.modal} />
-          </View>
+        </View>
       </View>
-
-    
 
       {/* Mini Flights */}
       <View style={styles.containerMiniInput}>
@@ -245,18 +235,7 @@ export default function Profil() {
 const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
-    justifyContent:'center',    
-  },
-  //Header
-  header: {
-    width: '100%',
-    height: 100,
-
-    alignItems: 'center',
     justifyContent: 'center',
-
-    position: 'absolute',
-    top: 0,
   },
   //Titles
   welcome: {
@@ -341,9 +320,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#002C82',
   },
-  modal:{
-    position:'absolute',
-    right:0,
-    top:40,
+  modal: {
+    position: 'absolute',
+    right: 0,
+    top: 40,
   },
 });
