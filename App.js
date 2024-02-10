@@ -6,14 +6,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//Screens
-import HomeScreen from './screens/HomeScreen';
-import GalleryScreen from './screens/GalleryScreen';
-import ReductionScreen from './screens/ReductionsScreen';
-import LoginScreen from './screens/LoginScreen';
-import ScanScreen from './screens/ScanScreen';
-import ProfilScreen from './screens/ProfilScreen';
-import MyPlaneScreen from './screens/MyPlaneScreen';
+//Composants
+import Home from './screens/Home';
+import Gallery from './screens/Gallery';
+import Reduction from './screens/Reductions';
+import Login from './screens/Login';
+import Scan from './screens/Scan';
+import Profil from './screens/Profil';
+import MyPlane from './screens/MyPlane';
 //Fonts
 import { useFonts } from 'expo-font';
 //Redux
@@ -90,26 +90,25 @@ const TabNavigator = ({ route }) => {
     >
       <Tab.Screen
         name='Home'
-        component={HomeScreen}
+        component={Home}
       />
       <Tab.Screen
         name='Profil'
-        component={ProfilScreen}
+        component={Profil}
       />
       <Tab.Screen
         name='Gallery'
-        component={GalleryScreen}
+        component={Gallery}
       />
       <Tab.Screen
         name='Reduction'
-        component={ReductionScreen}
+        component={Reduction}
       />
     </Tab.Navigator>
   );
 };
 
 export default function App() {
-  console.log('process.env:',process.env.EXPO_PUBLIC_API_URL);
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
@@ -128,7 +127,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name='Login'
-            component={LoginScreen}
+            component={Login}
           />
           <Stack.Screen
             name='TabNavigator'
@@ -136,11 +135,11 @@ export default function App() {
           />
           <Stack.Screen
             name='Scan'
-            component={ScanScreen}
+            component={Scan}
           />
           <Stack.Screen
             name='MyPlane'
-            component={MyPlaneScreen}
+            component={MyPlane}
           />
         </Stack.Navigator>
       </NavigationContainer>
