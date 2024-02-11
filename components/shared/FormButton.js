@@ -11,7 +11,7 @@ export default function FormButton(props) {
     //Retour à l'initial après 1s
     setTimeout(() => {
       setIsClicked(false);
-    }, 1000);
+    }, 100);
   };
 
   return (

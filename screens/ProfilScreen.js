@@ -72,7 +72,7 @@ export default function ProfilScreen() {
     }
   };
   console.log(selectedImage);
-  console.log(typeof points)
+
   //Gestion LogOut
   const handleLogOut = () => {
     dispatch(logout());
