@@ -13,13 +13,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Entypo } from 'react-native-vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 //Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../reducers/user';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 //Composants
 import Header from '../components/shared/Header';
 import FormInput from '../components/shared/FormInput';
+import FormButton from '../components/shared/FormButton';
 
 export default function HomeScreen() {
   //State des Inputs
@@ -28,6 +29,7 @@ export default function HomeScreen() {
 
   //Utilisation du Redux
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -138,6 +140,17 @@ export default function HomeScreen() {
           </View>
         </ImageBackground>
       </View>
+      {!user.isConnected ?
+      (
+        <View style={styles.createAccount}>
+        <Text style={styles.title}>Create an account</Text>
+        <FormButton
+          title='SIGN UP'
+          formStyle={styles.signup}
+        />
+      </View>
+      ):<View></View>
+      }
     </SafeAreaView>
   );
 }
@@ -153,7 +166,7 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex:-1,//car sinon il cache le logout et celui ci ne fonctionne pas
+    zIndex: -1, //car sinon il cache le logout et celui ci ne fonctionne pas
   },
   image: {
     width: '80%',
@@ -209,9 +222,20 @@ const styles = StyleSheet.create({
   logout: {
     width: 50,
     height: 50,
-  
+
     position: 'absolute',
     top: 50,
     right: 2,
+  },
+  //Create Account
+  createAccount: {
+    width: '100%',
+    height: '20%',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signup: {
+    width: 200,
   },
 });

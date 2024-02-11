@@ -10,6 +10,7 @@ import {
 //Composants
 import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
+import PasswordInput from '../shared/PasswordInput';
 //Redux
 import { useSelector } from 'react-redux';
 //Icones
@@ -18,7 +19,7 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-export default function ModalPassword(props) {
+export default function PasswordModal(props) {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
 
@@ -105,13 +106,13 @@ export default function ModalPassword(props) {
                 editable={false}
               />
               {/* New Password */}
-              <FormInput
-                label='New Password'
-                value={newPassword}
-                name='newPassword'
-                onChangeText={handleChange}
-                placeholder='Please, enter your new password'
+              <PasswordInput
+              label='New Password'
+              value={newPassword}
+              name='newPassword'
+              onChangeText={handleChange}
               />
+
             </View>
 
             <FormButton

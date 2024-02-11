@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 //Composants
 import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
+import PasswordInput from '../shared/PasswordInput';
 //Redux
 import { useDispatch } from 'react-redux';
 import { login } from '../../reducers/user';
@@ -126,12 +127,12 @@ export default function SignInModal() {
               />
 
               {/* Password */}
-              <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
-              />
+              <PasswordInput
+              label='Password'
+              value={password}
+              name='password'
+              onChangeText={handleChange}/>
+             
               <View>
                 <TouchableOpacity>
                   <Text style={styles.forgotten}>Forgotten password?</Text>

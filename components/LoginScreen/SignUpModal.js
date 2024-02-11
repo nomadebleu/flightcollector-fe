@@ -8,6 +8,7 @@ import { login } from '../../reducers/user';
 //Composants
 import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
+import PasswordInput from '../shared/PasswordInput';
 //Icones
 import Icon from 'react-native-vector-icons/EvilIcons';
 import { Entypo } from 'react-native-vector-icons';
@@ -26,15 +27,9 @@ export default function SignUpModal() {
   const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   //Navigation lors de la connection
   const navigation = useNavigation();
-
-  // Visibilité du password
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   //Close Modal
   const handleCloseModal = () => {
@@ -148,22 +143,12 @@ export default function SignUpModal() {
               />
 
               {/* Password */}
-              <View>
-                <FormInput
-                  label='Password'
-                  value={password}
-                  name='password'
-                  onChangeText={handleChange}
-                  secureTextEntry={!showPassword}//Pour cacher les caractères
-                />
-                <Entypo
-                  onPress={togglePasswordVisibility}
-                  name={showPassword ? 'eye' : 'eye-with-line'}
-                  size={30}
-                  color='#002C82'
-                  style={styles.eyeIcon}
-                />
-              </View>
+              <PasswordInput
+              label='Password'
+              value={password}
+              name='password'
+              onChangeText={handleChange}
+              />
             </View>
 
             <FormButton
@@ -212,10 +197,5 @@ const styles = StyleSheet.create({
   icone: {
     width: '100%',
     alignItems: 'flex-end',
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 10,
-    top: 15,
   },
 });
