@@ -21,6 +21,7 @@ import { useNavigation } from '@react-navigation/native';
 import Header from '../components/shared/Header';
 import FormInput from '../components/shared/FormInput';
 import FormButton from '../components/shared/FormButton';
+import SignUpModal from '../components/LoginScreen/SignUpModal';
 
 export default function HomeScreen() {
   //State des Inputs
@@ -144,10 +145,7 @@ export default function HomeScreen() {
       (
         <View style={styles.createAccount}>
         <Text style={styles.title}>Create an account</Text>
-        <FormButton
-          title='SIGN UP'
-          formStyle={styles.signup}
-        />
+        <SignUpModal/>
       </View>
       ):<View></View>
       }
