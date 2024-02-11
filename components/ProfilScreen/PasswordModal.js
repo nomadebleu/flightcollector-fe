@@ -81,47 +81,48 @@ export default function PasswordModal(props) {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <TouchableOpacity
-              style={styles.icone}
-              onPress={() => handleCloseModal()}
-            >
-              <Icon
-                name='close'
-                size={30}
-                color='#002C82'
-              />
-            </TouchableOpacity>
+        <View style={styles.modalBackground}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableOpacity
+                style={styles.icone}
+                onPress={() => handleCloseModal()}
+              >
+                <Icon
+                  name='close'
+                  size={30}
+                  color='#002C82'
+                />
+              </TouchableOpacity>
 
-            <Text style={styles.titleModal}>Change your password</Text>
+              <Text style={styles.titleModal}>Change your password</Text>
 
-            <View style={styles.inputs}>
-              {/* Email address */}
-              <FormInput
-                label='Email Address'
-                value={mail}
-                name='mail'
-                onChangeText={handleChange}
-                editable={false}
-              />
-              {/* New Password */}
-              <PasswordInput
-              label='New Password'
-              value={newPassword}
-              name='newPassword'
-              onChangeText={handleChange}
-              />
+              <View style={styles.inputs}>
+                {/* Email address */}
+                <FormInput
+                  label='Email Address'
+                  value={mail}
+                  name='mail'
+                  onChangeText={handleChange}
+                  editable={false}
+                />
+                {/* New Password */}
+                <PasswordInput
+                  label='New Password'
+                  value={newPassword}
+                  name='newPassword'
+                  onChangeText={handleChange}
+                />
+              </View>
 
+              <FormButton
+                onPress={() => {
+                  handleSubmit();
+                }}
+                title='SUBMIT'
+                formStyle={styles.size}
+              />
             </View>
-
-            <FormButton
-              onPress={() => {
-                handleSubmit();
-              }}
-              title='SUBMIT'
-              formStyle={styles.size}
-            />
           </View>
         </View>
       </Modal>
@@ -160,6 +161,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 146, 255, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   //Change password
   textChange: {
     fontFamily: 'Farsan-Regular',
@@ -195,7 +202,7 @@ const styles = StyleSheet.create({
   },
   //Icone
   icone: {
-    width: '100%',
+    width: 340,
     alignItems: 'flex-end',
   },
 });
