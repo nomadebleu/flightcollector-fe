@@ -71,6 +71,7 @@ export default function SignInModal() {
             mail: userData.userData.mail,
             password: userData.userData.password,
             token: userData.token,
+            totalPoints:userData.userData.totalPoints
           })
         );
         navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab

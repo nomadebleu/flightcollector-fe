@@ -77,6 +77,7 @@ export default function SignUpModal() {
             mail: userData.userData.mail,
             password: userData.userData.password,
             token: userData.token,
+            totalPoints:userData.userData.totalPoints
           })
         );
         setModalVisible(false);

@@ -34,6 +34,7 @@ export default function ProfilScreen() {
   const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
+  const [points, setPoints] = useState('');
 
   //State isClicked
   const [isCliked, setIsCLicked] = useState(false);
@@ -49,6 +50,7 @@ export default function ProfilScreen() {
     setFirstname(user.firstname);
     setLastname(user.lastname);
     setMail(user.mail);
+    setPoints(user.totalPoints);
     setPassword(
       user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
@@ -70,7 +72,7 @@ export default function ProfilScreen() {
     }
   };
   console.log(selectedImage);
-
+  console.log(typeof points)
   //Gestion LogOut
   const handleLogOut = () => {
     dispatch(logout());
@@ -225,8 +227,11 @@ export default function ProfilScreen() {
       {/* TOTAL POINTS */}
       <FormInput
         label='TOTAL POINTS'
+        value={points.toLocaleString()}
+        name='totalPoints'
+        editable={false}
         titleStyle={styles.legend}
-        formStyle={styles.size}
+        formStyle={styles.points}
       />
     </SafeAreaView>
   );
@@ -295,6 +300,15 @@ const styles = StyleSheet.create({
   },
   size: {
     height: 42,
+
+  },
+  points:{
+    height: 42,
+    fontSize:16, 
+    textAlign:"center",
+    padding:10,
+    fontWeight:'bold',
+    color:'#002C82',
   },
   //MiniInputs
   containerMiniInput: {
