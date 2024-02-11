@@ -120,7 +120,7 @@ export default function PasswordModal(props) {
                 handleSubmit();
               }}
               title='SUBMIT'
-              formStyle={styles.submit}
+              formStyle={styles.size}
             />
           </View>
         </View>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   //Submit
-  submit: {
+  size: {
     width: 200,
   },
   //Icone

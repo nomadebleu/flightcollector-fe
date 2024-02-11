@@ -20,7 +20,6 @@ import { useNavigation } from '@react-navigation/native';
 //Composants
 import Header from '../components/shared/Header';
 import FormInput from '../components/shared/FormInput';
-import FormButton from '../components/shared/FormButton';
 import SignUpModal from '../components/LoginScreen/SignUpModal';
 
 export default function HomeScreen() {
@@ -63,18 +62,20 @@ export default function HomeScreen() {
       {/* Header */}
       <Header />
       {/* Logout */}
-
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={styles.logout}
-      >
-        <Entypo
-          name='log-out'
-          size={30}
-          color='#F1F1F1'
-        />
-      </TouchableOpacity>
-
+      {user.isConnected ? (
+        <TouchableOpacity
+          onPress={handleLogout}
+          style={styles.logout}
+        >
+          <Entypo
+            name='log-out'
+            size={30}
+            color='#F1F1F1'
+          />
+        </TouchableOpacity>
+      ) : (
+        <View></View>
+      )}
       {/* Logo & titles*/}
       <View style={styles.containerImage}>
         <Image
@@ -141,14 +142,14 @@ export default function HomeScreen() {
           </View>
         </ImageBackground>
       </View>
-      {!user.isConnected ?
-      (
+      {!user.isConnected ? (
         <View style={styles.createAccount}>
-        <Text style={styles.title}>Create an account</Text>
-        <SignUpModal/>
-      </View>
-      ):<View></View>
-      }
+          <Text style={styles.title}>Create an account</Text>
+          <SignUpModal />
+        </View>
+      ) : (
+        <View></View>
+      )}
     </SafeAreaView>
   );
 }
@@ -232,6 +233,8 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'center',
+
+    marginTop:20,
   },
   signup: {
     width: 200,

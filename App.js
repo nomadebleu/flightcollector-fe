@@ -17,13 +17,14 @@ import MyPlaneScreen from './screens/MyPlaneScreen';
 //Fonts
 import { useFonts } from 'expo-font';
 //Redux
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import user from './reducers/user';
+
 //Redux Persist
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Redux & Redux Persist
 const reducers = combineReducers({ user });
@@ -41,18 +42,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 //Tab Navigation
-const TabNavigator = ({ route }) => {
-  //State pour gérer l'affichage de la Tab
-  const [showTabBar, setShowTabBar] = useState(true);
-
-  useEffect(() => {
-    if (route.params?.hideTabBar) {
-      //Vérifie sir la params hideTabBar existe
-      setShowTabBar(false);
-    } else {
-      setShowTabBar(true);
-    }
-  }, [route.params]); //Déclenchement à chaque chgt de route
+const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -94,7 +84,6 @@ const TabNavigator = ({ route }) => {
         tabBarStyle: {
           // Styles de la barre tab
           height: 100,
-          // display: showTabBar ? 'none' : 'flex', // Masquer ou Afficher la Tab
         },
       })}
     >
@@ -120,6 +109,7 @@ const TabNavigator = ({ route }) => {
 
 export default function App() {
   console.log('process.env:', process.env.EXPO_PUBLIC_API_URL);
+
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
@@ -141,9 +131,15 @@ export default function App() {
               name='Login'
               component={LoginScreen}
             />
-            <Stack.Screen
+              <Stack.Screen
               name='TabNavigator'
               component={TabNavigator}
+              options={{ gestureEnabled: false }}//Bloque le slide arrière
+            />
+             <Stack.Screen
+              name='Home'
+              component={HomeScreen}
+              options={{ gestureEnabled: true }}
             />
             <Stack.Screen
               name='Scan'

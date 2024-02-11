@@ -11,7 +11,6 @@ import FormButton from '../shared/FormButton';
 import PasswordInput from '../shared/PasswordInput';
 //Icones
 import Icon from 'react-native-vector-icons/EvilIcons';
-import { Entypo } from 'react-native-vector-icons';
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -97,7 +96,7 @@ export default function SignUpModal() {
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType='slide'
+        animationType='fade'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -105,6 +104,7 @@ export default function SignUpModal() {
           setModalVisible(!modalVisible);
         }}
       >
+         <View style={styles.modalBackground}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TouchableOpacity
@@ -156,13 +156,16 @@ export default function SignUpModal() {
                 handleSubmit();
               }}
               title='REGISTER'
+              formStyle={styles.size}
             />
           </View>
+        </View>
         </View>
       </Modal>
       <FormButton
         onPress={() => setModalVisible(true)}
         title='SIGN UP'
+        
       />
     </View>
   );
@@ -184,7 +187,7 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowColor: '#0092FF',
+    shadowColor: '#002C82',
     shadowOffset: {
       width: 2,
       height: 2,
@@ -193,9 +196,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 146, 255, 0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+//Register
+size: {
+  width: 200,
+},
   //Icones
   icone: {
-    width: '100%',
+    width: 340,
     alignItems: 'flex-end',
   },
 });
