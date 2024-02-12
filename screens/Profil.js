@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,23 +7,23 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-} from 'react-native';
+} from "react-native";
 //Gradient
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 //Composants
-import FormInput from './FormInput';
-import ModalPassword from './ModalPassword';
+import FormInput from "./FormInput";
+import ModalPassword from "./ModalPassword";
 //Icones
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Entypo } from 'react-native-vector-icons';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from "react-native-vector-icons";
 //Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../reducers/user';
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../reducers/user";
 //Picker
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 //Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 export default function Profil() {
   //Utilisation du Redux
@@ -31,10 +31,10 @@ export default function Profil() {
   const dispatch = useDispatch();
 
   //State des Inputs
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
 
   //State isClicked
   const [isCliked, setIsCLicked] = useState(false);
@@ -48,7 +48,7 @@ export default function Profil() {
     setLastname(user.lastname);
     setMail(user.mail);
     setPassword(
-      user.password.length > 6 ? '******' : user.password.replace(/./g, '*')
+      user.password.length > 6 ? "******" : user.password.replace(/./g, "*")
     ); //Remplace le password hashé par 6* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
@@ -67,7 +67,7 @@ export default function Profil() {
 
       console.log(result);
     } else {
-      alert('You did not select any image.');
+      alert("You did not select any image.");
     }
   };
   console.log(selectedImage);
@@ -75,11 +75,11 @@ export default function Profil() {
   //Gestion LogOut
   const handleLogOut = () => {
     dispatch(logout());
-    setFirstname('');
-    setLastname('');
-    setMail('');
-    setPassword('');
-    navigation.navigate('Login'); //Navigation vers Login
+    setFirstname("");
+    setLastname("");
+    setMail("");
+    setPassword("");
+    navigation.navigate("Login"); //Navigation vers Login
   };
 
   //Gestion Change your password
@@ -92,7 +92,7 @@ export default function Profil() {
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <LinearGradient
-        colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
+        colors={["rgba(128, 201, 255, 1)", "rgba(1, 45, 131, 1)"]}
         start={[0, 1]} //Début du dégradé suivant x,y
         end={[1, 0]} //Fin du dégradé
         style={styles.header}
@@ -104,7 +104,7 @@ export default function Profil() {
           {!selectedImage && (
             <Image
               style={styles.pictureProfil}
-              source={require('../assets/user.png')}
+              source={require("../assets/user.png")}
             />
           )}
           {selectedImage && ( //Ajoute la possibilité de cliquer sur l'image quand on l'a déjà
@@ -120,23 +120,16 @@ export default function Profil() {
           {!selectedImage && ( //Supprime l'icone + lorsque le user à mis une photo
             <View style={styles.iconContainer}>
               <FontAwesome
-                name='plus-circle'
+                name="plus-circle"
                 size={30}
-                color='#F1F1F1'
+                color="#F1F1F1"
                 onPress={pickImageAsync}
               />
             </View>
           )}
         </View>
-        <TouchableOpacity
-          style={styles.logout}
-          onPress={() => handleLogOut()}
-        >
-          <Entypo
-            name='log-out'
-            size={30}
-            color='#F1F1F1'
-          />
+        <TouchableOpacity style={styles.logout} onPress={() => handleLogOut()}>
+          <Entypo name="log-out" size={25} color="#F1F1F1" />
         </TouchableOpacity>
       </View>
       {/* Titles */}
@@ -144,75 +137,57 @@ export default function Profil() {
       <View style={styles.inputs}>
         {/* FIRST NAME */}
         <FormInput
-          label='First Name'
+          label="First Name"
           value={firstname}
-          name='firstname'
+          name="firstname"
           formStyle={styles.size}
           editable={false}
         />
 
         {/* LAST NAME */}
         <FormInput
-          label='Last Name'
+          label="Last Name"
           value={lastname}
-          name='lastname'
+          name="lastname"
           formStyle={styles.size}
           editable={false}
         />
 
         {/* Email address */}
         <FormInput
-          label='Email Address'
+          label="Email Address"
           value={mail}
-          name='mail'
+          name="mail"
           formStyle={styles.size}
           editable={false}
         />
 
-          {/* Password */}
-          <View>
+        {/* Password */}
+        <View>
           <FormInput
-            label='Password'
+            label="Password"
             value={password}
-            name='password'
+            name="password"
             formStyle={styles.size}
             editable={false}
           />
           <ModalPassword styleModal={styles.modal} />
-          </View>
+        </View>
       </View>
-
-    
 
       {/* Mini Flights */}
       <View style={styles.containerMiniInput}>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='star'
-            size={25}
-          />{' '}
-          starred flights
+          <FontAwesome name="star" size={25} /> starred flights
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='map-marker'
-            size={25}
-          />{' '}
-          place visited
+          <FontAwesome name="map-marker" size={25} /> place visited
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome5
-            name='award'
-            size={25}
-          />{' '}
-          Badges
+          <FontAwesome5 name="award" size={25} /> Badges
         </TextInput>
         <TextInput style={styles.miniInput}>
-          <FontAwesome
-            name='plane'
-            size={25}
-          />{' '}
-          Aircrafts saved
+          <FontAwesome name="plane" size={25} /> Aircrafts saved
         </TextInput>
       </View>
 
@@ -224,14 +199,14 @@ export default function Profil() {
       />
       {/* My badges */}
       <FormInput
-        label='MY BADGES'
+        label="MY BADGES"
         titleStyle={styles.legend}
         formStyle={styles.size}
       />
 
       {/* TOTAL POINTS */}
       <FormInput
-        label='TOTAL POINTS'
+        label="TOTAL POINTS"
         titleStyle={styles.legend}
         formStyle={styles.size}
       />
@@ -241,33 +216,33 @@ export default function Profil() {
 
 const styles = StyleSheet.create({
   body: {
-    alignItems: 'center',
-    justifyContent:'center',    
+    alignItems: "center",
+    justifyContent: "center",
   },
   //Header
   header: {
-    width: '100%',
+    width: "100%",
     height: 100,
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
 
-    position: 'absolute',
+    position: "absolute",
     top: 0,
   },
   //Titles
   welcome: {
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 32,
-    color: '#002C82',
+    color: "#002C82",
   },
   //Profil Picture
   containerPicture: {
-    width: '100%',
+    width: "100%",
     height: 100,
 
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   pictureProfil: {
     width: 100,
@@ -275,16 +250,16 @@ const styles = StyleSheet.create({
 
     borderRadius: 50,
     borderWidth: 5,
-    borderColor: '#002C82',
+    borderColor: "#002C82",
   },
   //Icone +
   iconContainer: {
     width: 35, // Largeur de l'icône
     height: 35, // Hauteur de l'icône
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    backgroundColor: '#002C82',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    backgroundColor: "#002C82",
 
     borderRadius: 20,
   },
@@ -293,22 +268,22 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
 
-    position: 'absolute',
+    position: "absolute",
     right: 2,
-    alignItems: 'center',
+    alignItems: "center",
   },
   // Inputs
   legend: {
-    position: 'absolute',
+    position: "absolute",
     top: 2,
     left: 2,
 
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     paddingHorizontal: 5,
 
-    fontFamily: 'Cabin-Regular',
+    fontFamily: "Cabin-Regular",
     fontSize: 12,
-    color: '#002C82',
+    color: "#002C82",
     zIndex: 1, // Pour que la legend soit au-dessus du TextInput
   },
   size: {
@@ -316,31 +291,31 @@ const styles = StyleSheet.create({
   },
   //MiniInputs
   containerMiniInput: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
   },
   miniInput: {
-    width: '40%',
+    width: "40%",
     height: 45,
 
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    textAlign: "center",
+    textAlignVertical: "center",
 
     margin: 10,
     borderWidth: 1,
-    borderColor: '#002C82',
-    backgroundColor: '#80C9FF',
+    borderColor: "#002C82",
+    backgroundColor: "#80C9FF",
     borderRadius: 5,
 
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 20,
-    color: '#002C82',
+    color: "#002C82",
   },
-  modal:{
-    position:'absolute',
-    right:0,
-    top:40,
+  modal: {
+    position: "absolute",
+    right: 0,
+    top: 40,
   },
 });

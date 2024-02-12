@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Alert,
   Modal,
@@ -6,18 +6,19 @@ import {
   View,
   TouchableOpacity,
   Text,
-} from 'react-native';
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 //Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 //Composants
-import FormInput from './FormInput';
-import FormButton from './FormButton';
+import FormInput from "./FormInput";
+import FormButton from "./FormButton";
 //Redux
-import { useDispatch } from 'react-redux';
-import { login } from '../reducers/user';
+import { useDispatch } from "react-redux";
+import { login } from "../reducers/user";
 
 export default function SignInModal() {
-
   //Utilisation du redux
   const dispatch = useDispatch();
 
@@ -25,8 +26,8 @@ export default function SignInModal() {
   const [modalVisible, setModalVisible] = useState(false);
 
   //State des Inputs
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -34,10 +35,10 @@ export default function SignInModal() {
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
-      case 'mail':
+      case "mail":
         setMail(value);
         break;
-      case 'password':
+      case "password":
         setPassword(value);
         break;
     }
@@ -47,10 +48,10 @@ export default function SignInModal() {
   const handleConnect = async () => {
     try {
       const response = await fetch(
-        'https://flightcollector-be.vercel.app/signin',
+        "https://flightcollector-be.vercel.app/signin",
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             mail,
             password,
@@ -61,7 +62,7 @@ export default function SignInModal() {
       const userData = await response.json();
 
       if (userData.result) {
-        console.log('UserData:', userData);
+        console.log("UserData:", userData);
         dispatch(
           login({
             firstname: userData.userData.firstname,
@@ -72,70 +73,74 @@ export default function SignInModal() {
           })
         );
         setModalVisible(false);
-        setMail('');
-        setPassword('');
-        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
-
+        setMail("");
+        setPassword("");
+        navigation.navigate("TabNavigator"); //Navigation vers Home avec la Tab
       } else {
-        console.error('Error during connection', userData.error);
+        console.error("Error during connection", userData.error);
       }
     } catch (error) {
-      console.error('Error during connection:', error);
+      console.error("Error during connection:", error);
     }
   };
   return (
     <View style={styles.centeredView}>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.inputs}>
-              {/* Email address */}
-              <FormInput
-                label='Email Address'
-                value={mail}
-                name='mail'
-                onChangeText={handleChange}
-              />
+      <View>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={styles.modalView}
+            >
+              <View style={styles.inputs}>
+                {/* Email address */}
+                <FormInput
+                  label="Email Address"
+                  value={mail}
+                  name="mail"
+                  onChangeText={handleChange}
+                />
 
-              {/* Password */}
-              <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
-              />
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles.forgotten}>Forgotten password?</Text>
-                </TouchableOpacity>
+                {/* Password */}
+                <FormInput
+                  label="Password"
+                  value={password}
+                  name="password"
+                  onChangeText={handleChange}
+                />
+                <View>
+                  <TouchableOpacity>
+                    <Text style={styles.forgotten}>Forgotten password?</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
 
-            <FormButton
-              onPress={() => {
-                handleConnect();
-              }}
-              title='CONNECT'
-              titleStyle={styles.textBtnSignIn}
-              formStyle={styles.buttonSignIn}
-            />
+              <FormButton
+                onPress={() => {
+                  handleConnect();
+                }}
+                title="CONNECT"
+                titleStyle={styles.textBtnSignIn}
+                formStyle={styles.buttonSignIn}
+              />
+            </KeyboardAvoidingView>
           </View>
-        </View>
-      </Modal>
-      <FormButton
-        onPress={() => setModalVisible(true)}
-        title='SIGN IN'
-        titleStyle={styles.textBtnSignIn}
-        formStyle={styles.buttonSignIn}
-      />
+        </Modal>
+        <FormButton
+          onPress={() => setModalVisible(true)}
+          title="SIGN IN"
+          titleStyle={styles.textBtnSignIn}
+          formStyle={styles.buttonSignIn}
+        />
+      </View>
     </View>
   );
 }
@@ -143,20 +148,21 @@ export default function SignInModal() {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
   },
   modalView: {
-    width: '95%',
-    height: '40%',
+    width: "95%",
+    height: "40%",
 
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     borderRadius: 30,
     padding: 35,
 
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    shadowColor: '#0092FF',
+    justifyContent: "space-around",
+    alignItems: "center",
+    shadowColor: "#0092FF",
     shadowOffset: {
       width: 2,
       height: 2,
@@ -167,30 +173,30 @@ const styles = StyleSheet.create({
   },
   //Forgotten
   forgotten: {
-    position: 'absolute',
+    position: "absolute",
     right: 20,
     bottom: 0,
 
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 15,
-    color: '#002C82',
+    color: "#002C82",
   },
   //Btn Sign In
   textBtnSignIn: {
-    color: '#002C82',
-    fontFamily: 'Cabin-Bold',
+    color: "#002C82",
+    fontFamily: "Cabin-Bold",
     letterSpacing: 5,
     fontSize: 20,
   },
   buttonSignIn: {
     width: 345,
     height: 55,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
     borderRadius: 20,
-    backgroundColor: '#80C9FF',
-    borderColor: '#002C82',
+    backgroundColor: "#80C9FF",
+    borderColor: "#002C82",
     borderWidth: 2,
   },
 });

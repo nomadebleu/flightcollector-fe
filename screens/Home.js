@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,14 +9,29 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import { Entypo } from "react-native-vector-icons";
 //Gradient
 import { LinearGradient } from "expo-linear-gradient";
 //Icones
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+//Redux
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../reducers/user";
 
 export default function Home({ navigation }) {
+  //Utilisation du Redux
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+  const isLogged = user.isConnected;
+  console.log(isLogged);
+  //Gestion Scan
   const handleScan = () => {
-    navigation.navigate("Scan");
+    navigation.navigate("Scan"); //Navigation vers Scan
+  };
+  //Gestion LogOut
+  const handleLogOut = () => {
+    dispatch(logout());
+    navigation.navigate("Login"); //Navigation vers Login
   };
   return (
     <SafeAreaView style={styles.body}>
@@ -33,6 +48,18 @@ export default function Home({ navigation }) {
         }}
         style={styles.header}
       ></LinearGradient>
+      {/* Log Out */}
+      <TouchableOpacity
+        style={styles.containerHeader}
+        onPress={() => handleLogOut()}
+      >
+        <Entypo
+          style={styles.logout}
+          name="log-out"
+          size={25}
+          color="#F1F1F1"
+        />
+      </TouchableOpacity>
       {/* Logo */}
       <Image source={require("../assets/logo.png")} style={styles.image} />
       {/* Titles */}
@@ -78,16 +105,18 @@ export default function Home({ navigation }) {
         </ImageBackground>
       </View>
       {/* USE WITHOUT ACCOUNT */}
-      <View style={styles.containerSignIn}>
-        <Text style={styles.title}>Create an account</Text>
-        <TouchableOpacity
-          onPress={() => handleSignUp()}
-          style={styles.buttonSignIn}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.textBtnSignIn}>SIGN IN</Text>
-        </TouchableOpacity>
-      </View>
+      {!isLogged && (
+        <View style={styles.containerSignIn}>
+          <Text style={styles.title}>Create an account</Text>
+          <TouchableOpacity
+            onPress={() => handleSignUp()}
+            style={styles.buttonSignIn}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.textBtnSignIn}>SIGN UP</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -117,7 +146,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "37%",
-    padding: "5%",
+    marginTop: -45,
   },
   imageBack: {
     width: "98%",
@@ -204,5 +233,21 @@ const styles = StyleSheet.create({
 
     position: "absolute",
     top: 0,
+  },
+  //LogOut
+  logout: {
+    width: 50,
+    height: 50,
+
+    position: "absolute",
+    right: 2,
+    alignItems: "center",
+  },
+  containerHeader: {
+    width: "100%",
+    height: 100,
+
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
