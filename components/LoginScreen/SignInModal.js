@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Alert,
   Modal,
@@ -6,23 +6,23 @@ import {
   View,
   TouchableOpacity,
   Text,
-} from 'react-native';
+} from "react-native";
 //Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 //Composants
-import FormInput from '../shared/FormInput';
-import FormButton from '../shared/FormButton';
+import FormInput from "../shared/FormInput";
+import FormButton from "../shared/FormButton";
+import PasswordInput from "../shared/PasswordInput";
 //Redux
-import { useDispatch } from 'react-redux';
-import { login } from '../../reducers/user';
+import { useDispatch } from "react-redux";
+import { login } from "../../reducers/user";
 //Icones
-import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon from "react-native-vector-icons/EvilIcons";
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function SignInModal() {
-
   //Utilisation du redux
   const dispatch = useDispatch();
 
@@ -30,8 +30,8 @@ export default function SignInModal() {
   const [modalVisible, setModalVisible] = useState(false);
 
   //State des Inputs
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -39,10 +39,10 @@ export default function SignInModal() {
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
-      case 'mail':
+      case "mail":
         setMail(value);
         break;
-      case 'password':
+      case "password":
         setPassword(value);
         break;
     }
@@ -51,22 +51,19 @@ export default function SignInModal() {
   //Connect du user
   const handleConnect = async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/signin`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mail,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mail,
+          password,
+        }),
+      });
 
       const userData = await response.json();
 
       if (userData.result) {
-        console.log('UserData:', userData);
+        console.log("UserData:", userData);
         dispatch(
           login({
             firstname: userData.userData.firstname,
@@ -74,84 +71,82 @@ export default function SignInModal() {
             mail: userData.userData.mail,
             password: userData.userData.password,
             token: userData.token,
+            totalPoints: userData.userData.totalPoints,
           })
         );
-        setModalVisible(false);
-        setMail('');
-        setPassword('');
-        navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
-
+        navigation.navigate("TabNavigator"); //Navigation vers Home avec la Tab
+        setMail("");
+        setPassword("");
+        setModalVisible(!modalVisible);
       } else {
-        console.error('Error during connection', userData.error);
+        console.error("Error during connection", userData.error);
       }
     } catch (error) {
-      console.error('Error during connection:', error);
+      console.error("Error during connection:", error);
     }
   };
-    //Close Modal
-    const handleCloseModal = () => {
-      setModalVisible(!modalVisible);
-    };
+  //Close Modal
+  const handleCloseModal = () => {
+    setModalVisible(!modalVisible);
+  };
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType='fade'
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          <TouchableOpacity
-              style={styles.icone}
-              onPress={() => handleCloseModal()}
-            >
-              <Icon
-                name='close'
-                size={30}
-                color='#002C82'
-              />
-            </TouchableOpacity>
-            <View style={styles.inputs}>
-              {/* Email address */}
-              <FormInput
-                label='Email Address'
-                value={mail}
-                name='mail'
-                onChangeText={handleChange}
-              />
+        <View style={styles.modalBackground}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableOpacity
+                style={styles.icone}
+                onPress={() => handleCloseModal()}
+              >
+                <Icon name="close" size={30} color="#002C82" />
+              </TouchableOpacity>
+              <View style={styles.inputs}>
+                {/* Email address */}
+                <FormInput
+                  label="Email Address"
+                  value={mail}
+                  name="mail"
+                  onChangeText={handleChange}
+                />
 
-              {/* Password */}
-              <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
-              />
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles.forgotten}>Forgotten password?</Text>
-                </TouchableOpacity>
+                {/* Password */}
+                <PasswordInput
+                  label="Password"
+                  value={password}
+                  name="password"
+                  onChangeText={handleChange}
+                />
+
+                <View>
+                  <TouchableOpacity>
+                    <Text style={styles.forgotten}>Forgotten password?</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
 
-            <FormButton
-              onPress={() => {
-                handleConnect();
-              }}
-              title='CONNECT'
-              titleStyle={styles.textBtnSignIn}
-              formStyle={styles.buttonSignIn}
-            />
+              <FormButton
+                onPress={() => {
+                  handleConnect();
+                }}
+                title="CONNECT"
+                formStyle={styles.size}
+              />
+            </View>
           </View>
         </View>
       </Modal>
       <FormButton
         onPress={() => setModalVisible(true)}
-        title='SIGN IN'
+        title="SIGN IN"
         titleStyle={styles.textBtnSignIn}
         formStyle={styles.buttonSignIn}
       />
@@ -163,20 +158,20 @@ const styles = StyleSheet.create({
   //Modal
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalView: {
-    width: '95%',
-    height: '45%',
+    width: "95%",
+    height: "45%",
 
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
     borderRadius: 30,
     padding: 20,
 
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    shadowColor: '#0092FF',
+    justifyContent: "space-around",
+    alignItems: "center",
+    shadowColor: "#002C82",
     shadowOffset: {
       width: 2,
       height: 2,
@@ -185,46 +180,55 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 146, 255, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   //Forgotten Password
   forgotten: {
-    position: 'absolute',
+    position: "absolute",
     right: 20,
     bottom: 0,
 
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 15,
-    color: '#002C82',
+    color: "#002C82",
   },
-  //Btn Sign In
+  //Sign In
   textBtnSignIn: {
-    color: '#002C82',
-    fontFamily: 'Cabin-Bold',
+    color: "#002C82",
+    fontFamily: "Cabin-Bold",
     letterSpacing: 5,
     fontSize: 20,
   },
   buttonSignIn: {
     width: 345,
     height: 55,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
     borderRadius: 20,
-    backgroundColor: '#80C9FF',
-    borderColor: '#002C82',
+    backgroundColor: "#80C9FF",
+    borderColor: "#002C82",
     borderWidth: 2,
   },
-    //Icone
-    icone: {
-      width: '100%',
-      alignItems: 'flex-end',
-     position:'absolute',
-     top:20,
-    },
-    //Inputs
-    inputs:{
-    
-      width:'100%',
-      height:'60%',
-      justifyContent:'flex-end',
-    },
+  //Connect
+  size: {
+    width: 200,
+  },
+  //Icone
+  icone: {
+    width: "100%",
+    alignItems: "flex-end",
+    position: "absolute",
+    top: 20,
+  },
+  //Inputs
+  inputs: {
+    width: "100%",
+    height: "60%",
+    justifyContent: "flex-end",
+  },
 });

@@ -8,9 +8,9 @@ import { login } from '../../reducers/user';
 //Composants
 import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
+import PasswordInput from '../shared/PasswordInput';
 //Icones
 import Icon from 'react-native-vector-icons/EvilIcons';
-
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -29,6 +29,11 @@ export default function SignUpModal() {
 
   //Navigation lors de la connection
   const navigation = useNavigation();
+
+  //Close Modal
+  const handleCloseModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
@@ -51,19 +56,16 @@ export default function SignUpModal() {
   //Register du user
   const handleSubmit = async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/signup`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            firstname,
-            lastname,
-            mail,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          mail,
+          password,
+        }),
+      });
 
       const userData = await response.json();
 
@@ -75,6 +77,7 @@ export default function SignUpModal() {
             mail: userData.userData.mail,
             password: userData.userData.password,
             token: userData.token,
+            totalPoints:userData.userData.totalPoints
           })
         );
         setModalVisible(false);
@@ -90,14 +93,11 @@ export default function SignUpModal() {
       console.error('Error during register:', error);
     }
   };
-  //Close Modal
-  const handleCloseModal = () => {
-    setModalVisible(!modalVisible);
-  };
+
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType='slide'
+        animationType='fade'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -105,9 +105,10 @@ export default function SignUpModal() {
           setModalVisible(!modalVisible);
         }}
       >
+         <View style={styles.modalBackground}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <TouchableOpacity
+            <TouchableOpacity
               style={styles.icone}
               onPress={() => handleCloseModal()}
             >
@@ -143,11 +144,11 @@ export default function SignUpModal() {
               />
 
               {/* Password */}
-              <FormInput
-                label='Password'
-                value={password}
-                name='password'
-                onChangeText={handleChange}
+              <PasswordInput
+              label='Password'
+              value={password}
+              name='password'
+              onChangeText={handleChange}
               />
             </View>
 
@@ -156,13 +157,16 @@ export default function SignUpModal() {
                 handleSubmit();
               }}
               title='REGISTER'
+              formStyle={styles.size}
             />
           </View>
+        </View>
         </View>
       </Modal>
       <FormButton
         onPress={() => setModalVisible(true)}
         title='SIGN UP'
+        
       />
     </View>
   );
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-around',
     alignItems: 'center',
-    shadowColor: '#0092FF',
+    shadowColor: '#002C82',
     shadowOffset: {
       width: 2,
       height: 2,
@@ -193,9 +197,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-    //Icone
-    icone: {
-      width: '100%',
-      alignItems: 'flex-end',
-    },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 146, 255, 0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+//Register
+size: {
+  width: 200,
+},
+  //Icones
+  icone: {
+    width: 340,
+    alignItems: 'flex-end',
+  },
 });

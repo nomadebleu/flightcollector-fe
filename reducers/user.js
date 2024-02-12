@@ -21,6 +21,7 @@ export const userSlice = createSlice({
       state.value.mail = action.payload.mail;
       state.value.password = action.payload.password;
       state.value.token = action.payload.token;
+      state.value.totalPoints = action.payload.totalPoints;
   },
     logout: (state) => {
       state.value.isConnected = false;

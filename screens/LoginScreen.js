@@ -12,10 +12,7 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleWithout = () => {
-    navigation.navigate('TabNavigator', {
-      screen: 'TabNavigator',//Obligé de préciser sinon ca ne fonctionne pas
-      params: { hideTabBar: true }, //définition de params pour gérer l'affichage de la tab
-    });
+    navigation.navigate('Home');
   };
 
   return (

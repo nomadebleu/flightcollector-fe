@@ -12,15 +12,35 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Entypo } from 'react-native-vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+//Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../reducers/user';
+//Navigation
+import { useNavigation } from '@react-navigation/native';
 //Composants
 import Header from '../components/shared/Header';
 import FormInput from '../components/shared/FormInput';
+import SignUpModal from '../components/LoginScreen/SignUpModal';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
   //State des Inputs
   const [boardingPass, setBoardingPass] = useState('');
   const [aircraft, setAircraft] = useState('');
 
+  //Utilisation du Redux
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
+  //Gestion Navigation
+  const navigation = useNavigation();
+
+  //Gestion LogOut
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.navigate('Login');
+  };
+
+  //Gestion du Scan
   const handleScan = () => {
     navigation.navigate('Scan');
   };
@@ -36,28 +56,26 @@ export default function HomeScreen({ navigation }) {
         break;
     }
   };
-    //Gestion LogOut
-    const handleLogOut = () => {
-      dispatch(logout());
-      navigation.navigate('Login'); //Navigation vers Login
-    };
 
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <Header />
       {/* Logout */}
-      <TouchableOpacity
-        style={styles.logout}
-        onPress={() => handleLogOut()}
-      >
-        <Entypo
-          name='log-out'
-          size={30}
-          color='#F1F1F1'
-        />
-      </TouchableOpacity>
-
+      {user.isConnected ? (
+        <TouchableOpacity
+          onPress={handleLogout}
+          style={styles.logout}
+        >
+          <Entypo
+            name='log-out'
+            size={30}
+            color='#F1F1F1'
+          />
+        </TouchableOpacity>
+      ) : (
+        <View></View>
+      )}
       {/* Logo & titles*/}
       <View style={styles.containerImage}>
         <Image
@@ -124,6 +142,14 @@ export default function HomeScreen({ navigation }) {
           </View>
         </ImageBackground>
       </View>
+      {!user.isConnected ? (
+        <View style={styles.createAccount}>
+          <Text style={styles.title}>Create an account</Text>
+          <SignUpModal />
+        </View>
+      ) : (
+        <View></View>
+      )}
     </SafeAreaView>
   );
 }
@@ -139,6 +165,7 @@ const styles = StyleSheet.create({
     height: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: -1, //car sinon il cache le logout et celui ci ne fonctionne pas
   },
   image: {
     width: '80%',
@@ -198,6 +225,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     right: 2,
-    alignItems: '',
+  },
+  //Create Account
+  createAccount: {
+    width: '100%',
+    height: '20%',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    marginTop:20,
+  },
+  signup: {
+    width: 200,
   },
 });
