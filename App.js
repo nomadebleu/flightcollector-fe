@@ -77,8 +77,8 @@ const TabNavigator = () => {
             </View>
           );
         },
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#FFFFFF',
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#fff',
         tabBarShowLabel: false,
         headerShown: false, // Enleve les libellés par default de l'icone
         tabBarStyle: {
@@ -103,6 +103,7 @@ const TabNavigator = () => {
         name='Reduction'
         component={ReductionScreen}
       />
+      
     </Tab.Navigator>
   );
 };
@@ -126,6 +127,7 @@ export default function App() {
     <PersistGate persistor={persistor}>
       <Provider store={store}>
         <NavigationContainer>
+       
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
               name='Login'
@@ -144,6 +146,7 @@ export default function App() {
             <Stack.Screen
               name='Scan'
               component={ScanScreen}
+              options={{ gestureEnabled: false }}
             />
             <Stack.Screen
               name='MyPlane'

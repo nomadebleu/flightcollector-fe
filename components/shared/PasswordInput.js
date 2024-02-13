@@ -21,6 +21,7 @@ export default function PasswordInput(props) {
      name={props.name}
      onChangeText={props.onChangeText}
      secureTextEntry={!showPassword}//Pour cacher les caractères
+     placeholder={props.placeholder}
    />
    <Entypo
      onPress={togglePasswordVisibility}
@@ -39,4 +40,5 @@ const styles = StyleSheet.create({
         right: 10,
         top: 15,
       },
+    
 })

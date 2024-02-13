@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput,StyleSheet } from 'react-native';
 
 export default function FormInput(props) {
-
+console.log('placeholder:',props.placeholder)
   return (
     <View style={styles.container}>
       <View style={styles.containerLabel}>
