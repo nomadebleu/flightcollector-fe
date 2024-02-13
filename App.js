@@ -5,17 +5,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 //Icones
-<<<<<<< HEAD
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-//Composants
-import Home from './screens/Home';
-import Gallery from './screens/Gallery';
-import Reduction from './screens/Reductions';
-import Login from './screens/Login';
-import Scan from './screens/Scan';
-import Profil from './screens/Profil';
-import MyPlane from './screens/MyPlane';
-=======
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //Screens
 import HomeScreen from "./screens/HomeScreen";
@@ -26,7 +15,6 @@ import ScanScreen from "./screens/ScanScreen";
 import PassScreen from "./screens/PassScreen";
 import ProfilScreen from "./screens/ProfilScreen";
 import MyPlaneScreen from "./screens/MyPlaneScreen";
->>>>>>> f8d5d12e9957e7d5ae352d16d3c837ce35a67f27
 //Fonts
 import { useFonts } from "expo-font";
 //Redux
@@ -96,39 +84,17 @@ const TabNavigator = () => {
         },
       })}
     >
-<<<<<<< HEAD
-      <Tab.Screen
-        name='Home'
-        component={Home}
-      />
-      <Tab.Screen
-        name='Profil'
-        component={Profil}
-      />
-      <Tab.Screen
-        name='Gallery'
-        component={Gallery}
-      />
-      <Tab.Screen
-        name='Reduction'
-        component={Reduction}
-      />
-=======
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profil" component={ProfilScreen} />
       <Tab.Screen name="Gallery" component={GalleryScreen} />
       <Tab.Screen name="Reduction" component={ReductionScreen} />
->>>>>>> f8d5d12e9957e7d5ae352d16d3c837ce35a67f27
     </Tab.Navigator>
   );
 };
 
 export default function App() {
-<<<<<<< HEAD
-=======
   console.log("process.env:", process.env.EXPO_PUBLIC_API_URL);
 
->>>>>>> f8d5d12e9957e7d5ae352d16d3c837ce35a67f27
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     "DancingScript-Regular": require("./assets/fonts/DancingScript-Regular.ttf"),
