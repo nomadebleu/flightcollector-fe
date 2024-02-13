@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,25 +7,25 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
-} from 'react-native';
+} from "react-native";
 //Icones
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Entypo } from 'react-native-vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Entypo } from "react-native-vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 //Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../reducers/user';
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../reducers/user";
 //Navigation
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 //Composants
-import Header from '../components/shared/Header';
-import FormInput from '../components/shared/FormInput';
-import SignUpModal from '../components/LoginScreen/SignUpModal';
+import Header from "../components/shared/Header";
+import FormInput from "../components/shared/FormInput";
+import SignUpModal from "../components/LoginScreen/SignUpModal";
 
 export default function HomeScreen() {
   //State des Inputs
-  const [boardingPass, setBoardingPass] = useState('');
-  const [aircraft, setAircraft] = useState('');
+  const [boardingPass, setBoardingPass] = useState("");
+  const [aircraft, setAircraft] = useState("");
 
   //Utilisation du Redux
   const dispatch = useDispatch();
@@ -37,21 +37,25 @@ export default function HomeScreen() {
   //Gestion LogOut
   const handleLogout = () => {
     dispatch(logout());
-    navigation.navigate('Login');
+    navigation.navigate("Login");
   };
 
-  //Gestion du Scan
+  //Gestion du Scan Aicraft
   const handleScan = () => {
-    navigation.navigate('Scan');
+    navigation.navigate("Scan");
+  };
+  //Gestion du Scan Aicraft
+  const handlePass = () => {
+    navigation.navigate("Pass");
   };
 
   //Gestion des onChangeText
   const handleChange = (name, value) => {
     switch (name) {
-      case 'boardingPass':
+      case "boardingPass":
         setBoardingPass(value);
         break;
-      case 'aircraft':
+      case "aircraft":
         setAircraft(value);
         break;
     }
@@ -63,15 +67,8 @@ export default function HomeScreen() {
       <Header />
       {/* Logout */}
       {user.isConnected ? (
-        <TouchableOpacity
-          onPress={handleLogout}
-          style={styles.logout}
-        >
-          <Entypo
-            name='log-out'
-            size={30}
-            color='#F1F1F1'
-          />
+        <TouchableOpacity onPress={handleLogout} style={styles.logout}>
+          <Entypo name="log-out" size={30} color="#F1F1F1" />
         </TouchableOpacity>
       ) : (
         <View></View>
@@ -79,7 +76,7 @@ export default function HomeScreen() {
       {/* Logo & titles*/}
       <View style={styles.containerImage}>
         <Image
-          source={require('../assets/Flight Collector Logo.png')}
+          source={require("../assets/Flight Collector Logo.png")}
           style={styles.image}
         />
         <Text style={styles.title}>Hi Collector!</Text>
@@ -89,29 +86,25 @@ export default function HomeScreen() {
       {/* Scan Aircraft & scan BoardingPass */}
       <View style={styles.containerScans}>
         <ImageBackground
-          source={require('../assets/trajetsAvion.png')}
+          source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
           {/* Scan Aircraft */}
           <View style={styles.scan}>
             <FormInput
-              label='Scan Aircraft'
+              label="Scan Aircraft"
               value={aircraft}
-              name='aircraft'
+              name="aircraft"
               onChangeText={handleChange}
               formStyle={styles.input}
             />
             <View style={styles.icones}>
-              <AntDesign
-                name='checkcircle'
-                size={25}
-                color='#80C9FF'
-              />
+              <AntDesign name="checkcircle" size={25} color="#80C9FF" />
               <Text style={styles.title}>or</Text>
               <FontAwesome
-                name='camera'
+                name="camera"
                 size={25}
-                color='#80C9FF'
+                color="#80C9FF"
                 onPress={() => handleScan()}
               />
             </View>
@@ -119,24 +112,20 @@ export default function HomeScreen() {
           {/*Scan Boarding Pass */}
           <View style={styles.scan}>
             <FormInput
-              label='Scan Boarding Pass'
+              label="Scan Boarding Pass"
               value={boardingPass}
-              name='boardingPass'
+              name="boardingPass"
               onChangeText={handleChange}
               formStyle={styles.input}
             />
             <View style={styles.icones}>
-              <AntDesign
-                name='checkcircle'
-                size={25}
-                color='#002C82'
-              />
+              <AntDesign name="checkcircle" size={25} color="#002C82" />
               <Text style={styles.title}>or</Text>
               <FontAwesome
-                name='camera'
+                name="camera"
                 size={25}
-                color='#002C82'
-                onPress={() => handleScan()}
+                color="#002C82"
+                onPress={() => handlePass()}
               />
             </View>
           </View>
@@ -157,84 +146,84 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   //Logo Flight Collector & titles
   containerImage: {
-    width: '100%',
-    height: '50%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "50%",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: -1, //car sinon il cache le logout et celui ci ne fonctionne pas
   },
   image: {
-    width: '80%',
-    height: '50%',
+    width: "80%",
+    height: "50%",
     marginTop: 50,
   },
   title: {
-    fontFamily: 'Farsan-Regular',
+    fontFamily: "Farsan-Regular",
     fontSize: 28,
-    color: '#002C82',
-    fontWeight: 'bold',
-    marginBottom: '3%',
+    color: "#002C82",
+    fontWeight: "bold",
+    marginBottom: "3%",
   },
   //Scans
   containerScans: {
     width: 370,
     height: 190,
 
-    overflow: 'hidden', //pour voir le border radius
+    overflow: "hidden", //pour voir le border radius
     borderRadius: 12,
     borderWidth: 0.5,
-    borderColor: '#002C82',
+    borderColor: "#002C82",
   },
   imageBack: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   //Inputs
   scan: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   input: {
     width: 250,
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
   },
   icones: {
     width: 90,
     height: 55,
 
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     borderWidth: 1,
-    borderColor: '#002C82',
+    borderColor: "#002C82",
     borderRadius: 5,
     marginLeft: 10,
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
   },
   //LogOut
   logout: {
     width: 50,
     height: 50,
 
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     right: 2,
   },
   //Create Account
   createAccount: {
-    width: '100%',
-    height: '20%',
+    width: "100%",
+    height: "20%",
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
 
-    marginTop:20,
+    marginTop: 20,
   },
   signup: {
     width: 200,

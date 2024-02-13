@@ -18,7 +18,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "react-native-vector-icons";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../reducers/user";
+import { logout, addPhoto } from "../reducers/user";
 //Picker
 import * as ImagePicker from "expo-image-picker";
 //Navigation
@@ -62,10 +62,25 @@ export default function ProfilScreen() {
       allowsEditing: true,
       quality: 1,
     });
+    const formData = new FormData();
+    console.log(result);
+    formData.append("photoFromFront", {
+      uri: result?.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+    fetch("http://192.168.1.65:3000/users/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        data.result && dispatch(addPhoto(data.url));
+      });
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
-
       console.log(result);
     } else {
       alert("You did not select any image.");
