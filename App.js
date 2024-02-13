@@ -74,8 +74,8 @@ const TabNavigator = () => {
             </View>
           );
         },
-        tabBarActiveTintColor: "#FFFFFF",
-        tabBarInactiveTintColor: "#FFFFFF",
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#fff",
         tabBarShowLabel: false,
         headerShown: false, // Enleve les libellés par default de l'icone
         tabBarStyle: {
@@ -84,6 +84,23 @@ const TabNavigator = () => {
         },
       })}
     >
+      <Tab.Screen
+        name='Home'
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        name='Profil'
+        component={ProfilScreen}
+      />
+      <Tab.Screen
+        name='Gallery'
+        component={GalleryScreen}
+      />
+      <Tab.Screen
+        name='Reduction'
+        component={ReductionScreen}
+      />
+      
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Profil" component={ProfilScreen} />
       <Tab.Screen name="Gallery" component={GalleryScreen} />
@@ -111,6 +128,7 @@ export default function App() {
     <PersistGate persistor={persistor}>
       <Provider store={store}>
         <NavigationContainer>
+       
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen
@@ -123,9 +141,15 @@ export default function App() {
               component={HomeScreen}
               options={{ gestureEnabled: true }}
             />
-            <Stack.Screen name="Scan" component={ScanScreen} />
-            <Stack.Screen name="Pass" component={PassScreen} />
-            <Stack.Screen name="MyPlane" component={MyPlaneScreen} />
+            <Stack.Screen
+              name='Scan'
+              component={ScanScreen}
+              options={{ gestureEnabled: false }}
+            />
+            <Stack.Screen
+              name='MyPlane'
+              component={MyPlaneScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

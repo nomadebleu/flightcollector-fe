@@ -141,6 +141,7 @@ export default function SignUpModal() {
                 value={mail}
                 name='mail'
                 onChangeText={handleChange}
+               
               />
 
               {/* Password */}
@@ -149,6 +150,8 @@ export default function SignUpModal() {
               value={password}
               name='password'
               onChangeText={handleChange}
+              placeholder='8 caracters mini. with M/1/!'
+             
               />
             </View>
 
