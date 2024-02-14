@@ -39,7 +39,7 @@ export default function HomeScreen() {
   const handleScan = () => {
     navigation.navigate("Scan");
   };
-  //Gestion du Scan Aicraft
+  //Gestion du Boarding Pass
   const handlePass = () => {
     navigation.navigate("Pass");
   };
@@ -93,7 +93,7 @@ export default function HomeScreen() {
                 name='camera'
                 size={30}
                 color='#002C82'
-                onPress={() => handleScan()}
+                onPress={() => handlePass()}
               />
             </View>
           </View>

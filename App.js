@@ -28,15 +28,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Redux & Redux Persist
-const reducers = combineReducers({ user,badge });
-const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
+// const reducers = combineReducers({ user,badge });
+// const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
 
 const store = configureStore({
-  reducer: persistReducer(persistConfig, reducers),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  reducer:{user,badge},
 });
-const persistor = persistStore(store);
+
 
 //Définition des navigations (Nested)
 const Stack = createNativeStackNavigator();
@@ -125,7 +123,6 @@ export default function App() {
   }
 
   return (
-    <PersistGate persistor={persistor}>
       <Provider store={store}>
         <NavigationContainer>
        
@@ -156,7 +153,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
-    </PersistGate>
+   
   );
 }
 const styles = StyleSheet.create({
