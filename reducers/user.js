@@ -8,10 +8,11 @@ const initialState = {
     password: null,
     token: null,
     profilPhoto: null,
-    totalPoints: 0,
+    totalPoints:0,
     badges: null,
     flights: null,
     planes: null,
+    _id:null,
   },
 };
 
@@ -19,7 +20,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    login: (state, action) => {
+    login: (state,action) => {
       state.value = { ...state.value, ...action.payload, isConnected: true };
       // Correspond à : state.value.planes = action.payload.planes;
     },
