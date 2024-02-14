@@ -9,19 +9,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 //Icones
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Entypo } from 'react-native-vector-icons';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Entypo } from "react-native-vector-icons";
 //Redux
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../reducers/user";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 //Composants
-import Header from '../components/shared/Header';
-import SignUpModal from '../components/LoginScreen/SignUpModal';
+import Header from "../components/shared/Header";
+import SignUpModal from "../components/LoginScreen/SignUpModal";
 
 export default function HomeScreen() {
-
   //Utilisation du Redux
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
@@ -78,9 +77,9 @@ export default function HomeScreen() {
             <View style={styles.icones}>
               <Text style={styles.label}>Scan Aircraft</Text>
               <FontAwesome
-                name='camera'
+                name="camera"
                 size={30}
-                color='#80C9FF'
+                color="#80C9FF"
                 onPress={() => handleScan()}
               />
             </View>
@@ -90,10 +89,10 @@ export default function HomeScreen() {
             <View style={styles.icones}>
               <Text style={styles.label}>Scan Boarding Pass</Text>
               <FontAwesome
-                name='camera'
+                name="camera"
                 size={30}
-                color='#002C82'
-                onPress={() => handleScan()}
+                color="#002C82"
+                onPress={() => handlePass()}
               />
             </View>
           </View>
@@ -154,18 +153,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   label: {
-    fontFamily: 'Cabin-Regular',
-    color: '#002C82',
+    fontFamily: "Cabin-Regular",
+    color: "#002C82",
     fontSize: 20,
   },
   label: {
-    fontFamily: 'Cabin-Regular',
-    color: '#002C82',
+    fontFamily: "Cabin-Regular",
+    color: "#002C82",
     fontSize: 20,
   },
   //Inputs
   scan: {
-    margin:10,
+    margin: 10,
   },
   input: {
     width: 250,
@@ -175,14 +174,14 @@ const styles = StyleSheet.create({
     width: 300,
     height: 55,
 
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: 1,
     borderColor: "#002C82",
     borderRadius: 5,
     padding: 10,
-    backgroundColor: '#F1F1F1',
+    backgroundColor: "#F1F1F1",
   },
   //LogOut
   logout: {
