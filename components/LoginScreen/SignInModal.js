@@ -67,12 +67,15 @@ export default function SignInModal(props) {
         console.log('UserData:', userData);
         dispatch(
           login({
-            firstname: userData.userData.firstname,
-            lastname: userData.userData.lastname,
-            mail: userData.userData.mail,
-            password: userData.userData.password,
-            token: userData.token,
-            totalPoints:userData.userData.totalPoints
+            firstname: userData.data.firstname,
+            lastname: userData.data.lastname,
+            mail: userData.data.mail,
+            password: userData.data.password,
+            token: userData.data.token,
+            totalPoints:userData.data.totalPoints,
+            badges:userData.data.badges,
+            flights:userData.data.flights,
+            planes:userData.data.planes,
           })
         );
         navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
