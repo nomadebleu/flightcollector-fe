@@ -8,6 +8,10 @@ const initialState = {
     password: null,
     token: null,
     profilPhoto: null,
+    totalPoints: 0,
+    badges: null,
+    flights: null,
+    planes: null,
   },
 };
 
@@ -24,6 +28,10 @@ export const userSlice = createSlice({
       state.value.token = action.payload.token;
       state.value.totalPoints = action.payload.totalPoints;
     },
+    login: (state,action) => {
+      state.value = { ...state.value, ...action.payload, isConnected: true };
+      // Correspond à : state.value.planes = action.payload.planes;
+  },
     logout: (state) => {
       state.value.isConnected = false;
       state.value.mail = null;

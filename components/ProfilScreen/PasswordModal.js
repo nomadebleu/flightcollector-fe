@@ -112,6 +112,7 @@ export default function PasswordModal(props) {
                   value={newPassword}
                   name='newPassword'
                   onChangeText={handleChange}
+                  placeholder='8 caracters mini. with M/1/!'
                 />
               </View>
 
