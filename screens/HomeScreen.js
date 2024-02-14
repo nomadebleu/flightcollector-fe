@@ -9,23 +9,18 @@ import {
   TouchableOpacity,
 } from "react-native";
 //Icones
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Entypo } from "react-native-vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Entypo } from 'react-native-vector-icons';
 //Redux
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../reducers/user";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 //Composants
-import Header from "../components/shared/Header";
-import FormInput from "../components/shared/FormInput";
-import SignUpModal from "../components/LoginScreen/SignUpModal";
+import Header from '../components/shared/Header';
+import SignUpModal from '../components/LoginScreen/SignUpModal';
 
 export default function HomeScreen() {
-  //State des Inputs
-  const [boardingPass, setBoardingPass] = useState("");
-  const [aircraft, setAircraft] = useState("");
 
   //Utilisation du Redux
   const dispatch = useDispatch();
@@ -49,18 +44,6 @@ export default function HomeScreen() {
     navigation.navigate("Pass");
   };
 
-  //Gestion des onChangeText
-  const handleChange = (name, value) => {
-    switch (name) {
-      case "boardingPass":
-        setBoardingPass(value);
-        break;
-      case "aircraft":
-        setAircraft(value);
-        break;
-    }
-  };
-
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -73,6 +56,7 @@ export default function HomeScreen() {
       ) : (
         <View></View>
       )}
+
       {/* Logo & titles*/}
       <View style={styles.containerImage}>
         <Image
@@ -91,41 +75,25 @@ export default function HomeScreen() {
         >
           {/* Scan Aircraft */}
           <View style={styles.scan}>
-            <FormInput
-              label="Scan Aircraft"
-              value={aircraft}
-              name="aircraft"
-              onChangeText={handleChange}
-              formStyle={styles.input}
-            />
             <View style={styles.icones}>
-              <AntDesign name="checkcircle" size={25} color="#80C9FF" />
-              <Text style={styles.title}>or</Text>
+              <Text style={styles.label}>Scan Aircraft</Text>
               <FontAwesome
-                name="camera"
-                size={25}
-                color="#80C9FF"
+                name='camera'
+                size={30}
+                color='#80C9FF'
                 onPress={() => handleScan()}
               />
             </View>
           </View>
           {/*Scan Boarding Pass */}
           <View style={styles.scan}>
-            <FormInput
-              label="Scan Boarding Pass"
-              value={boardingPass}
-              name="boardingPass"
-              onChangeText={handleChange}
-              formStyle={styles.input}
-            />
             <View style={styles.icones}>
-              <AntDesign name="checkcircle" size={25} color="#002C82" />
-              <Text style={styles.title}>or</Text>
+              <Text style={styles.label}>Scan Boarding Pass</Text>
               <FontAwesome
-                name="camera"
-                size={25}
-                color="#002C82"
-                onPress={() => handlePass()}
+                name='camera'
+                size={30}
+                color='#002C82'
+                onPress={() => handleScan()}
               />
             </View>
           </View>
@@ -185,26 +153,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  label: {
+    fontFamily: 'Cabin-Regular',
+    color: '#002C82',
+    fontSize: 20,
+  },
+  label: {
+    fontFamily: 'Cabin-Regular',
+    color: '#002C82',
+    fontSize: 20,
+  },
   //Inputs
   scan: {
-    flexDirection: "row",
+    margin:10,
   },
   input: {
     width: 250,
     backgroundColor: "#F1F1F1",
   },
   icones: {
-    width: 90,
+    width: 300,
     height: 55,
 
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: "#002C82",
     borderRadius: 5,
-    marginLeft: 10,
-    backgroundColor: "#F1F1F1",
+    padding: 10,
+    backgroundColor: '#F1F1F1',
   },
   //LogOut
   logout: {

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//Composant
+import Header from '../components/shared/Header';
+//Icones
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Reduction() {
   const [totalPoints, setTotalPoints] = useState(null);
@@ -29,25 +33,16 @@ export default function Reduction() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['rgba(128, 201, 255, 1)', 'rgba(1, 45, 131, 1)']}
-        start={[0, 1]} //Début du dégradé suivant x,y
-        end={[1, 0]} //Fin du dégradé
-        style={styles.header}
-      >
-        <Text style={styles.title}>Reductions</Text>
-      </LinearGradient>
+      {/* Header */}
+      <Header title='Reductions'/>
+      
       <View style={styles.iconContainer}>
-        <FontAwesome style={styles.icon} name="trophy" size={30} color="gold" />
+        <FontAwesome5 name='medal'style={styles.icon}size={30} color='#06D6A0'/>
+       
         {totalPoints !== null && <Text style={styles.points}>{totalPoints} points</Text>}
         <Text style={styles.soon}>Soon Reduction</Text>
       </View>
-      <LinearGradient
-        colors={['rgba(128, 201, 255, 0.5)', 'rgba(1, 45, 131, 0.5)']}
-        start={[0, 1]}
-        end={[1, 0]}
-        style={styles.reductionsContainer}
-      >
+    
         <View style={styles.reduction}>
         <Text style={[styles.text, { color: 'yellow' }]}>20%</Text>
           <FontAwesome name='star' size={30} color='gold'  />
@@ -63,7 +58,7 @@ export default function Reduction() {
           <FontAwesome name='star' size={30} color='green'  style={styles.star}/>
           <Text style={styles.text}>5000 Points</Text>
         </View>
-      </LinearGradient>
+     
       <View style={styles.dollar}>
         <FontAwesome name='dollar' size={50} color='green'/>
         <Text style={styles.text}>No usable reduction yet</Text>
@@ -115,7 +110,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 150,
-    color: 'gold',
   },
   points: {
     marginTop: 10,
