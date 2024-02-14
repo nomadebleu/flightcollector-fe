@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Modal,
@@ -16,10 +16,21 @@ import Badge from './Badge';
 //Icones
 import Icon from 'react-native-vector-icons/EvilIcons';
 import { FontAwesome5 } from '@expo/vector-icons';
+//Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { addBadge } from '../../reducers/badge';
+
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function BadgeModal() {
+  //Utilisation du Redux
+  const dispatch = useDispatch();
+  const badge = useSelector((state) => state.badge.value);
+  const user = useSelector((state) => state.user.value);
+  console.log('badge:', badge);
+  console.log('user:',user)
+
   //State de la Modal
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -33,7 +44,7 @@ export default function BadgeModal() {
 
   //Data Provisoire
   const badgesUser = [
-    { picture: 'https://emojicdn.elk.sh/🤩' },
+    { picture: 'https://emojicdn.elk.sh/😊' },
     { picture: 'https://emojicdn.elk.sh/🥵' },
     { picture: 'https://emojicdn.elk.sh/🥶' },
     { picture: 'https://emojicdn.elk.sh/🥶' },
@@ -48,8 +59,38 @@ export default function BadgeModal() {
     { picture: 'https://emojicdn.elk.sh/🤩' },
     { picture: 'https://emojicdn.elk.sh/🥵' },
     { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🥶' }
+    { picture: 'https://emojicdn.elk.sh/🥶' },
   ];
+
+//Pour récupérer le badge Discover
+useEffect(() => {
+  const getDiscover = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/badges/65c25ff23511d200c07c0a95`);
+      const data = await response.json();
+
+      console.log('Les données sont :', data);
+
+      // Envoie des éléments dans le REDUX
+      dispatch(
+        addBadge({
+          picture: data.picture,
+          name: data.name,
+          description: data.description,
+          points: data.points,
+        })
+      );
+    } catch (error) {
+      console.error(
+        'Erreur lors de la récupération des données du badge :',
+        error
+      );
+    }
+  };
+
+  getDiscover(); 
+
+}, []);
 
   return (
     <View style={styles.centeredView}>
@@ -92,22 +133,21 @@ export default function BadgeModal() {
                 />
                 <View style={styles.circle}></View>
                 <Image
-                  source={{ uri: 'https://emojicdn.elk.sh/😊' }}
+                  source={{ uri: badge[0].picture }}
                   style={styles.emoticonMaster}
                 />
               </View>
 
               {/* Text */}
               <Text style={styles.title}>
-                Congratulations, you win the "Discovery Badge" 
+                {`Congratulations, you win the "${badge[0].name} Badge" `}
               </Text>
 
               {/* Points */}
-              <Text><Text style={styles.boldText}>500</Text><Text style={styles.points}>points</Text></Text>
-
-
-
-
+              <Text>
+                <Text style={styles.boldText}>{badge[0].points}</Text>
+                <Text style={styles.points}>points</Text>
+              </Text>
 
               {/* Bagdes à débloquer */}
               <View style={styles.awards}>
@@ -125,10 +165,10 @@ export default function BadgeModal() {
                       />
                     </View>
                   )}
-                  keyExtractor={(item,index) => index.toString()}
+                  keyExtractor={(item, index) => index.toString()}
                   numColumns={5} // Nombre de badges par ligne
                 />
-                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -181,23 +221,23 @@ const styles = StyleSheet.create({
     color: '#002C82',
     fontWeight: 'bold',
     marginBottom: '3%',
-    marginTop:'5%',
+    marginTop: '5%',
   },
-  boldText:{
-    fontWeight:'bold',
+  boldText: {
+    fontWeight: 'bold',
     color: '#002C82',
     fontSize: 28,
   },
-  points:{
+  points: {
     fontFamily: 'Farsan-Regular',
     color: '#002C82',
     fontSize: 22,
   },
   //Awards
   awards: {
-    width:300,
-    height:300,
-    marginTop:'5%',
+    width: 300,
+    height: 300,
+    marginTop: '5%',
   },
   //Master Badge
   iconContainer: {
@@ -232,11 +272,10 @@ const styles = StyleSheet.create({
   badgeWon: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    margin:15,
+    margin: 15,
   },
-  emoticon:{
-    width:25,
-    height:25,
-    
+  emoticon: {
+    width: 25,
+    height: 25,
   },
 });

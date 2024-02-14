@@ -19,6 +19,7 @@ import { useFonts } from 'expo-font';
 //Redux
 import { Provider, useSelector } from 'react-redux';
 import user from './reducers/user';
+import badge from './reducers/badge';
 
 //Redux Persist
 import { persistStore, persistReducer } from 'redux-persist';
@@ -27,7 +28,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Redux & Redux Persist
-const reducers = combineReducers({ user });
+const reducers = combineReducers({ user,badge });
 const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
 
 const store = configureStore({
