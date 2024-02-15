@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,15 +6,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-} from "react-native";
+  ScrollView,
+} from 'react-native';
 //Composants
-import Header from "../components/shared/Header";
-import Flight from "../components/MyPlaneScreen/Flight";
-import Plane from "../components/MyPlaneScreen/Plane";
-import Services from "../components/MyPlaneScreen/Services";
-import BadgeModal from "../components/MyPlaneScreen/BadgeModal";
-import MapView from "react-native-maps";
-
+import Header from '../components/shared/Header';
+import Flight from '../components/MyPlaneScreen/Flight';
+import Plane from '../components/MyPlaneScreen/Plane';
+import Services from '../components/MyPlaneScreen/Services';
+import BadgeModal from '../components/MyPlaneScreen/BadgeModal';
+import MapView from 'react-native-maps';
 //Icones
 import { FontAwesome5 } from "@expo/vector-icons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -31,9 +31,18 @@ const Tab = createMaterialTopTabNavigator();
 export default function MyPlaneScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const serviceMovie = useSelector((state) => state.services.value);
+  console.log('movieRedux in MyPlaneScreen is :', serviceMovie);
 
   //State pour suivre l'onglet actif
-  const [activeTab, setActiveTab] = useState("Services");
+  const [activeTab, setActiveTab] = useState('Flight');
+
+  //Pour récupérer les éléments du film selectionné & les utiliser ici
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  const handleSelectedMovie = (movie) => {
+    setSelectedMovie(movie);
+  };
 
   // Création d'une fonction pour personnaliser le onPress de la Tab & la navigation
   function CustomTabBar({ state, descriptors, navigation }) {
@@ -103,9 +112,11 @@ export default function MyPlaneScreen() {
 
       <View style={styles.blocImage}>
         {/* Bloc Amovible */}
-        {activeTab === "Flight" && <FlightBlock />}
-        {activeTab === "Plane" && <PlaneBlock />}
-        {activeTab === "Services" && <ServicesBlock />}
+        {activeTab === 'Flight' && <FlightBlock />}
+        {activeTab === 'Plane' && <PlaneBlock />}
+        {activeTab === 'Services' && <ServicesBlock movie={serviceMovie} />}
+
+        {/* Transmission des données du film sélectionné */}
       </View>
 
       {/* Iata */}
@@ -178,12 +189,20 @@ const PlaneBlock = () => (
   </View>
 );
 
-const ServicesBlock = () => (
+const ServicesBlock = (props) => (
   <>
-    <View style={styles.poster}></View>
-    <View style={styles.movie}>
-      <View style={styles.title}></View>
-      <View style={styles.desc}></View>
+    <Image
+      source={{ uri: `https://image.tmdb.org/t/p/w500${props.movie.poster}` }}
+      style={styles.poster}
+    />
+
+    <View style={styles.movieContainer}>
+    <ScrollView horizontal={true}style={styles.titleContainer}>
+        <Text style={styles.titleText}>{props.movie.title}</Text>
+      </ScrollView>
+      <ScrollView style={styles.descContainer}>
+        <Text style={styles.descText}>{props.movie.description}</Text>
+      </ScrollView>
     </View>
   </>
 );
@@ -215,8 +234,9 @@ const styles = StyleSheet.create({
     width: "95%",
     height: "20%",
     marginTop: 20,
-    justifyContent: "space-around",
-    alignItems: "center",
+
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   blocIata: {
     width: "60%",
@@ -246,17 +266,9 @@ const styles = StyleSheet.create({
     fontSize: 35,
   },
   //Movie
-  poster: {
-    width: "40%",
-    height: "100%",
-    backgroundColor: "red",
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10,
-  },
-  movie: {
-    backgroundColor: "pink",
-    width: "60%",
-    height: "100%",
+  movieContainer: {
+    width: '60%',
+    height: '100%',
 
     borderLeftWidth: 1,
     borderStyle: "solid",
@@ -264,24 +276,47 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     borderTopRightRadius: 10,
   },
-  desc: {
-    backgroundColor: "green",
-    width: "100%",
-    height: "70%",
-    borderBottomRightRadius: 10,
-  },
-  title: {
-    backgroundColor: "violet",
-    width: "100%",
-    height: "30%",
+  poster: {
+    width: '40%',
+    height: '100%',
 
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+  },
+  descContainer: {
+    width: '100%',
+    height: '70%',
+    
+    paddingLeft:10,
+    paddingRight:10,
+    paddingTop:10,
+  },
+  descText:{
+    fontFamily:'Cabin-Regular',
+    color:'#002C82',
+    textAlign:'center',
+  },
+  titleContainer: {
+    width: '100%',
+    height: '30%',
+
+    borderColor:'#002C82',
+    borderBottomWidth:1,
     borderTopRightRadius: 10,
+    borderBottomRightRadius:50,
+  },
+  titleText:{
+    fontFamily:'Farsan-Regular',
+    fontSize:25,
+    color:'#002C82',
+
+    paddingTop:10,
   },
   mapContainer: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
     borderRadius: 10,
-    overflow: "hidden", //Pour voir le radius
+    overflow: 'hidden', //Pour voir le radius
   },
   map: {
     flex: 1,

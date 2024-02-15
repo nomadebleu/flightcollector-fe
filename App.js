@@ -18,9 +18,10 @@ import MyPlaneScreen from "./screens/MyPlaneScreen";
 //Fonts
 import { useFonts } from "expo-font";
 //Redux
-import { Provider, useSelector } from "react-redux";
+import { Provider} from "react-redux";
 import user from "./reducers/user";
 import badge from "./reducers/badge";
+import services from './reducers/services';
 
 //Redux Persist
 import { persistStore, persistReducer } from "redux-persist";
@@ -33,7 +34,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
 
 const store = configureStore({
-  reducer:{user,badge},
+  reducer:{user,badge,services},
 });
 
 
