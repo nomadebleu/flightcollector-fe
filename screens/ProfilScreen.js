@@ -412,9 +412,8 @@ const styles = StyleSheet.create({
     borderColor: '#002C82',
 
     marginBottom: 20,
-    paddingHorizontal: 10,
     borderRadius: 5,
-  },
+},
   titleEmoticon: {
     fontFamily: 'Cabin-Regular',
     fontSize: 12,

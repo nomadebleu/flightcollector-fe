@@ -3,11 +3,35 @@ import React, {useState, useEffect} from 'react'
 //Composants
 import ListInput from './ListInput'
 
+//Local address
+// const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function Services() {
 
   //State Reset de la List
   const [resetList, setResetList] = useState(false);
+  const [dataMovies,setDataMovies] =useState(null);
+
+
+  //Chargement des movies
+  useEffect(()=>{
+    fetchMovies()
+  },[])
+
+  const fetchMovies = async() => {
+    try{
+      const response = await fetch('https://flightcollector-be.vercel.app/flights/movies');
+      const data = await response.json();
+      if (!data){
+        console.log('No movies')
+        return
+      }
+      setDataMovies(data.movies)
+      console.log(dataMovies)
+    }catch(error) {
+      console.error('Error during Fetch:', error);
+    }
+  };
 
   return (
     <View style={styles.onglet}>
