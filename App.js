@@ -92,7 +92,6 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-  console.log("process.env:", process.env.EXPO_PUBLIC_API_URL);
 
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
