@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import {
   Alert,
   Modal,
@@ -17,8 +17,7 @@ import Badge from './Badge';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import { FontAwesome5 } from '@expo/vector-icons';
 //Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { addBadge } from '../../reducers/badge';
+import { useSelector } from 'react-redux';
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -107,7 +106,7 @@ export default function BadgeModal() {
               {/* Text */}
               <View  style={styles.blocText}>
               <Text style={styles.title}>
-                {`Congratulations, you win the "${user.badges[0].name} Badge" `}
+                {`Congratulations, you win the "${user.badges[0]} Badge" `}
               </Text>
               </View>
               <View  style={styles.blocText}>
