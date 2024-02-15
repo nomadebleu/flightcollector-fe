@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
-  const [scannedData, setScannedData] = useState(null);
+  const [scannedData, setScannedData] = useState("");
   const navigation = useNavigation();
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
@@ -18,12 +18,16 @@ export default function App() {
       setHasPermission(status === "granted");
     })();
   }, []);
-
+  function extractData(data) {
+    const pattern = /\b\d{4}\b/;
+    const match = data.match(pattern);
+    return match ? match[0] : null;
+  }
   const handleScan = ({ data }) => {
     if (!scannedData) {
-      setScannedData(data);
-      console.log(data);
+      setScannedData(extractData(data));
     }
+    console.log(scannedData);
   };
 
   const handleReset = () => {
