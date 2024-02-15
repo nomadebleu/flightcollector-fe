@@ -29,7 +29,7 @@ export const userSlice = createSlice({
       state.value.token = null;
     },
     addPhoto: (state, action) => {
-      state.value.photos.push(action.payload);
+      state.value.photos = action.payload;
     },
   },
 });

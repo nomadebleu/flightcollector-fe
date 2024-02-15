@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
-import MapView from 'react-native-maps';
+import MapView from "react-native-maps";
 
 export default function Flight() {
   return (
@@ -17,7 +17,7 @@ export default function Flight() {
             longitudeDelta: 0.01,
           }}
         />
-         <Text>Flight</Text>
+        <Text>Flight</Text>
       </View>
     </View>
   );
@@ -25,7 +25,7 @@ export default function Flight() {
 
 const styles = StyleSheet.create({
   onglet: {
-    backgroundColor: '#06D6A0',
+    backgroundColor: "#75bbf4",
     flex: 1,
   },
 });
