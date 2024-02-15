@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import {
   Alert,
   Modal,
@@ -17,18 +17,15 @@ import Badge from './Badge';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import { FontAwesome5 } from '@expo/vector-icons';
 //Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { addBadge } from '../../reducers/badge';
+import { useSelector } from 'react-redux';
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function BadgeModal() {
-  //Utilisation du Redux
-  const dispatch = useDispatch();
-  const badge = useSelector((state) => state.badge.value);
+
+  //Redux du user
   const user = useSelector((state) => state.user.value);
-  console.log('badge:', badge);
   console.log('user:',user)
 
   //State de la Modal
@@ -38,60 +35,28 @@ export default function BadgeModal() {
   const navigation = useNavigation();
 
   //Close Modal
-  const handleCloseModal = () => {
-    setModalVisible(!modalVisible);
-  };
-
-  //Data Provisoire
-  const badgesUser = [
-    { picture: 'https://emojicdn.elk.sh/😊' },
-    { picture: 'https://emojicdn.elk.sh/🥵' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🤩' },
-    { picture: 'https://emojicdn.elk.sh/🥵' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🤩' },
-    { picture: 'https://emojicdn.elk.sh/🥵' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🤩' },
-    { picture: 'https://emojicdn.elk.sh/🥵' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-    { picture: 'https://emojicdn.elk.sh/🥶' },
-  ];
-
-//Pour récupérer le badge Discover
-useEffect(() => {
-  const getDiscover = async () => {
+  const handleCloseModal = async () => {
     try {
-      const response = await fetch(`${apiUrl}/badges/65c25ff23511d200c07c0a95`);
+      const response = await fetch(`${apiUrl}/users/addPoints`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId:user._id,
+          pointsToAdd:user.badges[0].points,
+        }),
+      });
+      console.log('response', response);
       const data = await response.json();
-
-      console.log('Les données sont :', data);
-
-      // Envoie des éléments dans le REDUX
-      dispatch(
-        addBadge({
-          picture: data.picture,
-          name: data.name,
-          description: data.description,
-          points: data.points,
-        })
-      );
+      console.log('Data is :', data);
+      if (data.result) {
+        setModalVisible(!modalVisible);
+      } else {
+        console.error('Error during update');
+      }
     } catch (error) {
-      console.error(
-        'Erreur lors de la récupération des données du badge :',
-        error
-      );
+      console.error('Error during update:', error);
     }
   };
-
-  getDiscover(); 
-
-}, []);
-
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -107,7 +72,7 @@ useEffect(() => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
-                style={styles.icone}
+                style={styles.iconeClose}
                 onPress={() => handleCloseModal()}
               >
                 <Icon
@@ -121,38 +86,49 @@ useEffect(() => {
               <View style={styles.iconContainer}>
                 <FontAwesome5
                   name='award'
-                  size={300}
+                  size={200}
                   color='#002C82'
                   style={styles.icon}
                 />
                 <FontAwesome5
                   name='award'
-                  size={280}
+                  size={180}
                   color='#FFCA0C'
                   style={[styles.icon, styles.overlayIcon]}
                 />
                 <View style={styles.circle}></View>
                 <Image
-                  source={{ uri: badge[0].picture }}
+                  source={{ uri:user.badges[0].picture}}
                   style={styles.emoticonMaster}
                 />
               </View>
 
               {/* Text */}
+              <View  style={styles.blocText}>
               <Text style={styles.title}>
-                {`Congratulations, you win the "${badge[0].name} Badge" `}
+                {`Congratulations, you win the "${user.badges[0]} Badge" `}
               </Text>
+              </View>
+              <View  style={styles.blocText}>
+              <Text style={styles.desc}>
+               {user.badges[0].description}
+              </Text>
+              </View>
+              
 
               {/* Points */}
-              <Text>
-                <Text style={styles.boldText}>{badge[0].points}</Text>
+              <View  style={[styles.blocText,{flexDirection:'row',alignItems:'flex-end',gap:5}]}>
+                <Text style={styles.boldText}>{user.badges[0].points}</Text>
+                
                 <Text style={styles.points}>points</Text>
-              </Text>
+              
+               
+              </View>
 
               {/* Bagdes à débloquer */}
               <View style={styles.awards}>
                 <FlatList
-                  data={badgesUser}
+                  data={user.badges}
                   renderItem={({ item }) => (
                     <View style={styles.badgeWon}>
                       <Image
@@ -191,7 +167,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 20,
 
-    justifyContent: 'space-around',
     alignItems: 'center',
     shadowColor: '#002C82',
     shadowOffset: {
@@ -208,8 +183,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  //Icones
-  icone: {
+  //Icones Close
+  iconeClose: {
     width: 340,
     alignItems: 'flex-end',
   },
@@ -220,11 +195,12 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#002C82',
     fontWeight: 'bold',
+
     marginBottom: '3%',
     marginTop: '5%',
   },
   boldText: {
-    fontWeight: 'bold',
+    fontFamily: 'Cabin-Bold',
     color: '#002C82',
     fontSize: 28,
   },
@@ -233,11 +209,20 @@ const styles = StyleSheet.create({
     color: '#002C82',
     fontSize: 22,
   },
+  blocText:{
+    margin:5,
+  },
+  desc:{
+    fontFamily: 'Cabin-Regular',
+    color: '#002C82',
+    fontSize: 16,
+    textAlign:'center',
+  },
   //Awards
   awards: {
     width: 300,
     height: 300,
-    marginTop: '5%',
+  
   },
   //Master Badge
   iconContainer: {
@@ -248,26 +233,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    position: 'absolute',
+    position:'absolute',
+   top:-12,
+
   },
   overlayIcon: {
-    top: 7,
-    left: 45,
+    top: -6,
+    left: 82,
   },
   emoticonMaster: {
-    width: 110,
-    height: 110,
+    width: 90,
+    height: 90,
 
     position: 'absolute',
-    top: 50,
+    top: 10,
   },
   circle: {
-    width: 110,
-    height: 110,
+    width: 90,
+    height: 90,
     backgroundColor: '#002C82',
     borderRadius: 55,
     position: 'absolute',
-    top: 50,
+    top: 10,
   },
   badgeWon: {
     flexDirection: 'row',

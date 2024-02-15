@@ -75,6 +75,7 @@ export default function SignInModal(props) {
             badges:userData.data.badges,
             flights:userData.data.flights,
             planes:userData.data.planes,
+            _id:userData.data._id,
           })
         );
         navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab

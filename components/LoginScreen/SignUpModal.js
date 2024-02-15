@@ -72,12 +72,16 @@ export default function SignUpModal() {
       if (userData.result) {
         dispatch(
           login({
-            firstname: userData.userData.firstname,
-            lastname: userData.userData.lastname,
-            mail: userData.userData.mail,
-            password: userData.userData.password,
-            token: userData.token,
-            totalPoints:userData.userData.totalPoints
+            firstname: userData.data.firstname,
+            lastname: userData.data.lastname,
+            mail: userData.data.mail,
+            password: userData.data.password,
+            token: userData.data.token,
+            totalPoints:userData.data.totalPoints,
+            badges:userData.data.badges,
+            flights:userData.data.flights,
+            planes:userData.data.planes,
+            _id:userData.data._id,
           })
         );
         setModalVisible(false);

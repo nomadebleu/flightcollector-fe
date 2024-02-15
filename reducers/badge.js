@@ -9,7 +9,13 @@ export const badgeSlice = createSlice({
   reducers: {
     addBadge: (state, action) => {
       console.log('addBadge:', action.payload);
-      state.value.push(action.payload);
+      state.value.push({
+        picture: action.payload.picture,
+        name: action.payload.name,
+        description: action.payload.description,
+        points: action.payload.points,
+      });
+      // state.value=[];
     },
   },
 });
