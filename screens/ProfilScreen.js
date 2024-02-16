@@ -11,6 +11,7 @@ import {
 import FormInput from '../components/shared/FormInput';
 import PasswordModal from '../components/ProfilScreen/PasswordModal';
 import Header from '../components/shared/Header';
+import FlagComponent from '../components/ProfilScreen/Flag';
 
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -27,8 +28,10 @@ import { useNavigation } from '@react-navigation/native';
 export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
-  console.log('userRedux:', user);
   const dispatch = useDispatch();
+
+  //LocalHost
+  const urlBE = process.env.EXPO_PUBLIC_API_URL;
 
   //State des Inputs
   const [firstname, setFirstname] = useState('');
@@ -51,6 +54,8 @@ export default function ProfilScreen() {
     setMail(user.mail);
     setPoints(user.totalPoints);
     setBadges(user.badges);
+  
+
     if (user.badges && user.badges.length > 0) {
       // Affichage des pictures des badges
       const badgesImages = user.badges.map((badge, index) => {
@@ -60,6 +65,7 @@ export default function ProfilScreen() {
             source={{ uri: badge.picture }}
             style={styles.emoticon}
           />
+
         );
       });
 
@@ -69,6 +75,8 @@ export default function ProfilScreen() {
       user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
+
+ 
 
   //Gestion Picker
   const pickImageAsync = async () => {
@@ -255,13 +263,18 @@ export default function ProfilScreen() {
       </View>
 
       {/* Places I've visited */}
-      <View>
-        <FormInput
-          label={`PLACE I'VE VISITED`}
-          titleStyle={styles.legend}
-          formStyle={styles.points}
-        />
+      <View style={styles.blocEmoticon}>
+        <View style={styles.containerTitle}>
+          <Text style={styles.titleEmoticon}>PLACES I'VE VISITED</Text>
+          <View style={styles.flagContainer}>
+          <FlagComponent />
+          </View>
+        </View>
       </View>
+      <View>
+      </View>
+
+
 
       {/* My badges */}
       <View style={styles.blocEmoticon}>
@@ -406,8 +419,8 @@ const styles = StyleSheet.create({
     width: 345,
     height: 42,
 
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#002C82',
 
@@ -428,5 +441,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 5,
     zIndex: 1, // Pour que la legend soit au-dessus du TextInput
+  },
+  //Flags
+  flagContainer: {
+    flexDirection: 'row', // Pour aligner les drapeaux horizontalement
+  },
+  flagItem: {
+    marginRight: 10,
+  },
+  flagImage: {
+    width: 30,
+    height: 30,
+    
   },
 });
