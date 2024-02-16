@@ -3,30 +3,42 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
-  const [scannedData, setScannedData] = useState(null);
+  const [scannedData, setScannedData] = useState("");
   const navigation = useNavigation();
+  //Utilisation du Redux
+  const user = useSelector((state) => state.user.value);
+
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     })();
   }, []);
-
+  function extractData(data) {
+    const pattern = /\b\d{4}\b/;
+    const match = data.match(pattern);
+    return match ? match[0] : null;
+  }
   const handleScan = ({ data }) => {
     if (!scannedData) {
-      setScannedData(data);
-      console.log(data);
+      setScannedData(extractData(data));
     }
+    console.log(scannedData);
   };
 
   const handleReset = () => {
     setScannedData(null);
   };
   handleClose = () => {
-    navigation.navigate("Home");
+    if (user.isConnected) {
+      navigation.navigate("TabNavigator");
+    } else {
+      navigation.navigate("Home");
+    }
   };
 
   if (!hasPermission) {

@@ -9,17 +9,18 @@ import {
 } from 'react-native';
 //Icones
 import { FontAwesome5 } from '@expo/vector-icons';
+//Redux
+import { useDispatch } from 'react-redux';
+import {addMovie} from '../../reducers/services';
+
 
 export default function ListInput(props) {
   //States
   const [inputValue, setInputValue] = useState('');
   const [showList, setShowList] = useState(false);
-  const [data, setData] = useState(
-    Array.from(Array(20).keys()).map((item) => `Item ${item + 1}`)
-  ); //Permet de créer un tableau d'entrée de 20.
-
   const [selectedItem, setSelectedItem] = useState(null); //pour suivre l'item selectionné
-
+  //Redux
+  const dispatch = useDispatch();
 
   //Gestion de la remise à 0 de la liste
   useEffect(() => {
@@ -36,9 +37,10 @@ export default function ListInput(props) {
 
   //Select Item
   const handleSelectItem = (item) => {
-    setInputValue(item);
-    setSelectedItem(item)
+    setInputValue(item.title);
+    setSelectedItem(item.title)
     setShowList(false);
+    dispatch(addMovie(item));
   };
 
   return (
@@ -70,10 +72,10 @@ export default function ListInput(props) {
       </View>
       {showList && (
         <FlatList
-          data={data}
+          data={props.movies}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleSelectItem(item)}>
-              <Text style={styles.listItem}>{item}</Text>
+              <Text style={styles.listItem}>{item.title}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -109,9 +111,14 @@ const styles = StyleSheet.create({
     padding: 10,
     color:'#002C82',
     fontFamily:'Cabin-Regular',
-    backgroundColor:'red',
-    justifyContent:'center',
+    
     width:'85%',
+    
+    borderWidth:1,
+    borderColor:'#002C82',
+    borderRadius:10,
+    margin:2,
+
   },
   selectedInput:{
     backgroundColor:'#002C82',
