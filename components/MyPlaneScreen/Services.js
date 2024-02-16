@@ -54,7 +54,7 @@ export default function Services(props) {
 
 const styles = StyleSheet.create({
   onglet: {
-    backgroundColor: '#06D6A0',
+    backgroundColor: '#75bbf4',
     flex: 1,
   },
   title: {

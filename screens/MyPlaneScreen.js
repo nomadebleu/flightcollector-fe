@@ -6,15 +6,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  ScrollView,
 } from 'react-native';
 //Composants
 import Header from '../components/shared/Header';
 import Flight from '../components/MyPlaneScreen/Flight';
 import Plane from '../components/MyPlaneScreen/Plane';
 import Services from '../components/MyPlaneScreen/Services';
-import BadgeModal from '../components/MyPlaneScreen/BadgeModal';
-import MapView from 'react-native-maps';
+import ServicesBlock from "../components/MyPlaneScreen/BlocksImage/ServicesBlock";
+import PlaneBlock from "../components/MyPlaneScreen/BlocksImage/PlaneBlock";
+import FlightBlock from "../components/MyPlaneScreen/BlocksImage/FlightBlock";
 //Icones
 import { FontAwesome5 } from "@expo/vector-icons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -29,6 +29,7 @@ import { NavigationContainer } from "@react-navigation/native";
 const Tab = createMaterialTopTabNavigator();
 
 export default function MyPlaneScreen() {
+
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const serviceMovie = useSelector((state) => state.services.value);
@@ -36,13 +37,6 @@ export default function MyPlaneScreen() {
 
   //State pour suivre l'onglet actif
   const [activeTab, setActiveTab] = useState('Flight');
-
-  //Pour récupérer les éléments du film selectionné & les utiliser ici
-  const [selectedMovie, setSelectedMovie] = useState(null);
-
-  const handleSelectedMovie = (movie) => {
-    setSelectedMovie(movie);
-  };
 
   // Création d'une fonction pour personnaliser le onPress de la Tab & la navigation
   function CustomTabBar({ state, descriptors, navigation }) {
@@ -168,44 +162,6 @@ export default function MyPlaneScreen() {
   );
 }
 
-//Les Blocs Image
-const FlightBlock = () => (
-  <View style={styles.mapContainer}>
-    <MapView
-      style={styles.map}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0,
-        longitudeDelta: 0.01,
-      }}
-    />
-  </View>
-);
-
-const PlaneBlock = () => (
-  <View style={styles.planeContainer}>
-    <Image source={require("../assets/planes/A220.jpg")} style={styles.plane} />
-  </View>
-);
-
-const ServicesBlock = (props) => (
-  <>
-    <Image
-      source={{ uri: `https://image.tmdb.org/t/p/w500${props.movie.poster}` }}
-      style={styles.poster}
-    />
-
-    <View style={styles.movieContainer}>
-    <ScrollView horizontal={true}style={styles.titleContainer}>
-        <Text style={styles.titleText}>{props.movie.title}</Text>
-      </ScrollView>
-      <ScrollView style={styles.descContainer}>
-        <Text style={styles.descText}>{props.movie.description}</Text>
-      </ScrollView>
-    </View>
-  </>
-);
 const styles = StyleSheet.create({
   body: {
     flex: 1,
@@ -264,73 +220,5 @@ const styles = StyleSheet.create({
   iata: {
     fontFamily: "Cabin-Bold",
     fontSize: 35,
-  },
-  //Movie
-  movieContainer: {
-    width: '60%',
-    height: '100%',
-
-    borderLeftWidth: 1,
-    borderStyle: "solid",
-    borderColor: "#002C82",
-    borderBottomRightRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  poster: {
-    width: '40%',
-    height: '100%',
-
-    borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10,
-  },
-  descContainer: {
-    width: '100%',
-    height: '70%',
-    
-    paddingLeft:10,
-    paddingRight:10,
-    paddingTop:10,
-  },
-  descText:{
-    fontFamily:'Cabin-Regular',
-    color:'#002C82',
-    textAlign:'center',
-  },
-  titleContainer: {
-    width: '100%',
-    height: '30%',
-
-    borderColor:'#002C82',
-    borderBottomWidth:1,
-    borderTopRightRadius: 10,
-    borderBottomRightRadius:50,
-  },
-  titleText:{
-    fontFamily:'Farsan-Regular',
-    fontSize:25,
-    color:'#002C82',
-
-    paddingTop:10,
-  },
-  mapContainer: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    overflow: 'hidden', //Pour voir le radius
-  },
-  map: {
-    flex: 1,
-  },
-  planeContainer: {
-    width: "100%",
-    height: "100%",
-    alignItems: "stretch",
-    borderRadius: 10,
-    overflow: "hidden", //Pour voir le radius
-  },
-  plane: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
   },
 });
