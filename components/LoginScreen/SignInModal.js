@@ -22,7 +22,7 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-export default function SignInModal(props) {
+export default function SignInModal() {
   //Utilisation du redux
   const dispatch = useDispatch();
 
