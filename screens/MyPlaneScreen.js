@@ -6,12 +6,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-} from 'react-native';
+} from "react-native";
 //Composants
-import Header from '../components/shared/Header';
-import Flight from '../components/MyPlaneScreen/Flight';
-import Plane from '../components/MyPlaneScreen/Plane';
-import Services from '../components/MyPlaneScreen/Services';
+import Header from "../components/shared/Header";
+import Flight from "../components/MyPlaneScreen/Flight";
+import Plane from "../components/MyPlaneScreen/Plane";
+import Services from "../components/MyPlaneScreen/Services";
 import ServicesBlock from "../components/MyPlaneScreen/BlocksImage/ServicesBlock";
 import PlaneBlock from "../components/MyPlaneScreen/BlocksImage/PlaneBlock";
 import FlightBlock from "../components/MyPlaneScreen/BlocksImage/FlightBlock";
@@ -29,14 +29,13 @@ import { NavigationContainer } from "@react-navigation/native";
 const Tab = createMaterialTopTabNavigator();
 
 export default function MyPlaneScreen() {
-
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const serviceMovie = useSelector((state) => state.services.value);
-  console.log('movieRedux in MyPlaneScreen is :', serviceMovie);
+  console.log("movieRedux in MyPlaneScreen is :", serviceMovie);
 
   //State pour suivre l'onglet actif
-  const [activeTab, setActiveTab] = useState('Flight');
+  const [activeTab, setActiveTab] = useState("Flight");
 
   // Création d'une fonction pour personnaliser le onPress de la Tab & la navigation
   function CustomTabBar({ state, descriptors, navigation }) {
@@ -106,9 +105,9 @@ export default function MyPlaneScreen() {
 
       <View style={styles.blocImage}>
         {/* Bloc Amovible */}
-        {activeTab === 'Flight' && <FlightBlock />}
-        {activeTab === 'Plane' && <PlaneBlock />}
-        {activeTab === 'Services' && <ServicesBlock movie={serviceMovie} />}
+        {activeTab === "Flight" && <FlightBlock />}
+        {activeTab === "Plane" && <PlaneBlock />}
+        {activeTab === "Services" && <ServicesBlock movie={serviceMovie} />}
 
         {/* Transmission des données du film sélectionné */}
       </View>
@@ -157,7 +156,7 @@ export default function MyPlaneScreen() {
         </TouchableOpacity>
       </View>
       {/* Modal Badges */}
-      {/*<BadgeModal />*/}
+      <BadgeModal />
     </SafeAreaView>
   );
 }
@@ -191,8 +190,8 @@ const styles = StyleSheet.create({
     height: "20%",
     marginTop: 20,
 
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   blocIata: {
     width: "60%",

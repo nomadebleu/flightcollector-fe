@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     margin: 2,
-    color: "e1e5f2",
+    color: "#e1e5f2",
   },
   info: {
     flexDirection: "row",

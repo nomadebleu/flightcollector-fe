@@ -7,7 +7,11 @@ import { useSelector } from "react-redux";
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
-  const [scannedData, setScannedData] = useState("");
+  const [scannedFlight, setScannedFlight] = useState(null);
+  const [scannedFliIata, setScannedFliIata] = useState(null);
+  const [scannedDep, setScannedDep] = useState(null);
+  const [scannedArr, setScannedArr] = useState(null);
+
   const navigation = useNavigation();
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
@@ -18,20 +22,36 @@ export default function App() {
       setHasPermission(status === "granted");
     })();
   }, []);
-  function extractData(data) {
-    const pattern = /\b\d{4}\b/;
-    const match = data.match(pattern);
-    return match ? match[0] : null;
-  }
+
+  //get info from Boarding Scan
   const handleScan = ({ data }) => {
-    if (!scannedData) {
-      setScannedData(extractData(data));
+    if (scannedFlight) {
+      return;
     }
-    console.log(scannedData);
+    if (!data) {
+      return null;
+    }
+    console.log(data);
+    const formattedStr = data
+      .split(" ")
+      .filter((e) => e !== "")
+      .splice(2, 2);
+    const depIata = formattedStr[0].slice(0, 3);
+    const arrIata = formattedStr[0].slice(3, 6);
+    const flightNumber = String(Number(formattedStr[1]));
+    const flightIata = formattedStr[0].slice(6) + flightNumber;
+    setScannedFlight(flightNumber);
+    setScannedFliIata(flightIata);
+    setScannedDep(depIata);
+    setScannedArr(arrIata);
   };
+  console.log([scannedFliIata, scannedFlight, scannedDep, scannedArr]);
 
   const handleReset = () => {
-    setScannedData(null);
+    setScannedFlight("");
+    setScannedDep("");
+    setScannedArr("");
+    setScannedFliIata("");
   };
   handleClose = () => {
     if (user.isConnected) {
@@ -46,7 +66,7 @@ export default function App() {
   }
 
   let scanContainer;
-  if (scannedData) {
+  if (scannedFlight) {
     scanContainer = (
       <View style={styles.menu}>
         <View style={styles.buttonContainer}>
