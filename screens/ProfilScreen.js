@@ -28,10 +28,9 @@ import { useNavigation } from '@react-navigation/native';
 export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  console.log(user.flights[0].arrivalPlace)
   const dispatch = useDispatch();
 
-  //LocalHost
-  const urlBE = process.env.EXPO_PUBLIC_API_URL;
 
   //State des Inputs
   const [firstname, setFirstname] = useState('');
@@ -123,7 +122,12 @@ export default function ProfilScreen() {
   //Pour afficher 0 au lieu de l'erreur à cause de null
   const badgesLength = user.badges ? user.badges.length : 0;
   const planesLength = user.planes ? user.planes.length : 0;
-
+  
+  //Afficher le nombre de PlacesVisited et Favoris.
+  const PlacesLength = user.flights ? user.flights.length : 0;
+  const favoritesLength = user.planes ? user.planes.filter(plane => plane.isFavorite).length : 0;
+  
+  
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -216,51 +220,52 @@ export default function ProfilScreen() {
 
       {/* Mini Flights */}
       <View style={styles.containerMiniInput}>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='star'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {''}
-          </Text>
-          <Text style={styles.textMiniInput}>Favorites flights</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='map-marker'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {''}
-          </Text>
-          <Text style={styles.textMiniInput}>Places visited</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome5
-            name='award'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {badgesLength}
-          </Text>
-          <Text style={styles.textMiniInput}>Badges</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='plane'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {planesLength}
-          </Text>
-          <Text style={styles.textMiniInput}>Aircrafts</Text>
-        </View>
-      </View>
+  <View style={styles.miniInput}>
+    <FontAwesome
+      name='star'
+      size={25}
+      color='#002C82'
+    />
+    <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
+      {''}
+    </Text>
+    <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]} >{favoritesLength}</Text>
+    <Text style={styles.textMiniInput}>Favorites flights</Text>
+  </View>
+  <View style={styles.miniInput}>
+    <FontAwesome
+      name='map-marker'
+      size={25}
+      color='#002C82'
+    />
+    <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
+     {PlacesLength}{/* Affiche la longueur du tableau places visited */}
+    </Text>
+    <Text style={styles.textMiniInput}>Places visited</Text>
+  </View>
+  <View style={styles.miniInput}>
+    <FontAwesome5
+      name='award'
+      size={25}
+      color='#002C82'
+    />
+    <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
+      {badgesLength}
+    </Text>
+    <Text style={styles.textMiniInput}>Badges</Text>
+  </View>
+  <View style={styles.miniInput}>
+    <FontAwesome
+      name='plane'
+      size={25}
+      color='#002C82'
+    />
+    <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
+      {planesLength}
+    </Text>
+    <Text style={styles.textMiniInput}>Aircrafts</Text>
+  </View>
+</View>
 
       {/* Places I've visited */}
       <View style={styles.blocEmoticon}>
@@ -440,17 +445,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 5,
     zIndex: 1, // Pour que la legend soit au-dessus du TextInput
-  },
-  //Flags
-  flagContainer: {
-    flexDirection: 'row', // Pour aligner les drapeaux horizontalement
-  },
-  flagItem: {
-    marginRight: 10,
-  },
-  flagImage: {
-    width: 30,
-    height: 30,
-    
   },
 });

@@ -15,9 +15,9 @@ import Services from '../components/MyPlaneScreen/Services';
 import ServicesBlock from "../components/MyPlaneScreen/BlocksImage/ServicesBlock";
 import PlaneBlock from "../components/MyPlaneScreen/BlocksImage/PlaneBlock";
 import FlightBlock from "../components/MyPlaneScreen/BlocksImage/FlightBlock";
+import BadgeModal from "../components/MyPlaneScreen/BadgeModal";
 //Icones
-import { FontAwesome5 } from "@expo/vector-icons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 //Redux
 import { useSelector } from "react-redux";
 //Navigation
@@ -116,19 +116,19 @@ export default function MyPlaneScreen() {
       {/* Iata */}
       <View style={styles.blocIata}>
         <Text style={styles.iata}>CDG</Text>
-        <FontAwesome
+        <FontAwesome5
           name="plane"
           size={45}
           color="#002C82"
-          style={{ transform: [{ rotate: "45deg" }] }}
+          // style={{ transform: [{ rotate: "45deg" }] }}
         />
         <Text style={styles.iata}>DXB</Text>
       </View>
 
       {/* Nav Onglets */}
-      <View style={styles.blocOnglets}>
+      <View style={styles.blocOnglets}> 
         {/* props independent pour détacher de la nav globale */}
-        <NavigationContainer independent={true}>
+         <NavigationContainer independent={true}>
           <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
             <Tab.Screen
               name="Flight"
@@ -157,7 +157,7 @@ export default function MyPlaneScreen() {
         </TouchableOpacity>
       </View>
       {/* Modal Badges */}
-      {/*<BadgeModal />*/}
+      <BadgeModal />
     </SafeAreaView>
   );
 }
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   blocIata: {
     width: "60%",
-    height: "%",
+    height: "10%",
 
     flexDirection: "row",
     alignItems: "center",

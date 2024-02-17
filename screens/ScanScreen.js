@@ -45,14 +45,14 @@ export default function ScanScreen() {
       type: 'image/jpeg',
     });
 
-    fetch('https://flightcollector-be.vercel.app/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.result);
-      });
+    // fetch('https://flightcollector-be.vercel.app/upload', {
+    //   method: 'POST',
+    //   body: formData,
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data.result);
+    //   });
     // Naviguer vers MyPlane après avoir pris la photo
     navigation.navigate('MyPlane');
   };

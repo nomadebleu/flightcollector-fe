@@ -10,12 +10,12 @@ export default function Flight() {
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0,
-            longitudeDelta: 0.01,
-          }}
+          // initialRegion={{
+          //   latitude: 37.78825,
+          //   longitude: -122.4324,
+          //   latitudeDelta: 0.0,
+          //   longitudeDelta: 0.01,
+          // }}
         />
         <View style={styles.info}>
           <View style={styles.dep}>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     margin: 2,
-    color: "e1e5f2",
+    color: "#e1e5f2",
   },
   info: {
     flexDirection: "row",
