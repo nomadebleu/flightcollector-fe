@@ -1,60 +1,48 @@
-import React, { useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 //Composant
 import Header from '../components/shared/Header';
-import FormButton from '../components/shared/FormButton';
+import ModalReduction from '../components/ReductionScreen/ModalReduction';
 //Icones
 import { FontAwesome5 } from '@expo/vector-icons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/EvilIcons';
-//Gradient
-import { LinearGradient } from 'expo-linear-gradient';
 //Redux
 import { useSelector } from 'react-redux';
+//Gradient
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Reduction() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
-  //States Coupon & Modal
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [coupon, setCoupon] = useState('NOT YET');
 
-  //Pour générer un coupon de manière aléatoire
-  function generateCouponCode(length) {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let couponCode = '';
-    for (let i = 0; i < length; i++) {
-      couponCode += characters.charAt(
-        Math.floor(Math.random() * characters.length)
-      );
-    }
-    return couponCode;
-  }
-
-  //Fonction d'ouverture de la modal
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-    setCoupon(generateCouponCode(8));
-  };
   return (
-    <View style={styles.body}>
-      {/* Header */}
+    <SafeAreaView style={styles.body}>
       <Header title='Reductions' />
-      {/* Medal */}
-      <FontAwesome5
-        name='medal'
-        size={150}
-        color='#06D6A0'
-        style={styles.medal}
-      />
+      {/* Header */}
 
-      {/* Si le totalPoints est à 0 le message ne s'affiche pas */}
-      {user.totalPoints === 0 && (
-        <Text style={styles.textReduction}>Soon reductions</Text>
-      )}
+      <View style={styles.containerMedal}>
+        {/* Medal */}
+        <FontAwesome5
+          name='medal'
+          size={150}
+          color='#06D6A0'
+        />
 
-      <View style={styles.container}>
+        {/* Message en fonction du nbre de points */}
+        <Text style={styles.textReduction}>
+          {user.totalPoints === 0 || user.totalPoints < 5000
+            ? 'Soon reductions'
+            : user.totalPoints >= 20000
+            ? '20%'
+            : user.totalPoints >= 10000
+            ? '15%'
+            : user.totalPoints >= 5000
+            ? '10%'
+            : ''}
+        </Text>
+      </View>
+
+      <View style={styles.containerPercent}>
         {/* Bloc Gradient */}
         <LinearGradient
           colors={['rgba(0, 146, 255, 0.6)', 'rgba(6, 214, 160, 0.5)']}
@@ -99,6 +87,7 @@ export default function Reduction() {
             </View>
             <Text style={styles.text}>10000 pts</Text>
           </View>
+
           {/* 10% */}
           <View style={styles.pourcent}>
             <Text style={styles.text}>10%</Text>
@@ -125,57 +114,22 @@ export default function Reduction() {
           color='#06D6A0'
         />
       </View>
-      {/* Si le totalPoints est à 0 le message ne s'affiche pas */}
-      {user.totalPoints === 0 && (
-        <Text style={styles.textReduction}>No usable reduction yet</Text>
-      )}
 
-      {user.totalPoints !== null && (
-        <Text style={styles.points}>{user.totalPoints} points</Text>
-      )}
+      <View style={styles.containerFooter}>
+        {/* Si le totalPoints est à 0 le message ne s'affiche pas */}
+        {user.totalPoints === 0 || user.totalPoints < 5000 
+        ? <Text style={styles.textReduction}>No usable reduction yet</Text>
+        :''
+        }
 
-      {/* Use reduction */}
-      <View style={styles.centeredView}>
-        <Modal
-          animationType='fade'
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={toggleModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <TouchableOpacity onPress={() => toggleModal()}>
-                  <Icon
-                    name='close'
-                    size={30}
-                    color='#002C82'
-                  />
-                </TouchableOpacity>
+        {user.totalPoints !== null && (
+          <Text style={styles.points}>{user.totalPoints} points</Text>
+        )}
 
-                <Text style={styles.modalText}>Your Code Reduction</Text>
-                {/* Si le totalPoints est à 0 le code est switché par NOT YET */}
-                {user.totalPoints === 0 ? (
-                  <Text>NOT YET</Text>
-                ) : (
-                  <Text style={styles.couponCode}>{coupon}</Text>
-                )}
-                <FontAwesome5
-                  name='money-bill-wave'
-                  size={80}
-                  color='#002C82'
-                />
-              </View>
-            </View>
-          </View>
-        </Modal>
-        <FormButton
-          onPress={() => toggleModal()}
-          title='USE REDUCTION'
-          formStyle={styles.size}
-        />
+        {/* Use reduction */}
+        <ModalReduction />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -183,15 +137,27 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around',
   },
-  container: {
-    width: '50%',
+  containerMedal: {
+    width: '100%',
+    height: 200,
+    alignItems: 'center',
+
+    marginTop: '15%',
+  },
+  containerPercent: {
+    width: '100%',
+    height: 300,
+
     alignItems: 'center',
     justifyContent: 'center',
   },
-  medal: {
-    marginTop: '25%',
+  containerFooter: {
+    width: '100%',
+    height: 135,
+
+    alignItems: 'center',
+    background: 'green',
   },
   //Icones
   starBorder: {
@@ -231,9 +197,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Farsan-Regular',
   },
-  size: {
-    width: 250,
-  },
   textReduction: {
     fontFamily: 'Cabin-Bold',
     color: '#002C82',
@@ -245,44 +208,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Cabin-Bold',
     color: '#002C82',
     fontSize: 20,
-  },
-  //Modal
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    width: '95%',
-    height: '35%',
-
-    backgroundColor: '#F1F1F1',
-    borderRadius: 30,
-    padding: 20,
-
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    shadowColor: '#002C82',
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 146, 255, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalText: {
-    fontFamily: 'Cabin-Regular',
-    color: '#002C82',
-  },
-  couponCode: {
-    fontFamily: 'Cabin-Bold',
-    color: '#002C82',
   },
 });
