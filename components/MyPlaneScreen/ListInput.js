@@ -15,20 +15,14 @@ import {addMovie} from '../../reducers/services';
 
 
 export default function ListInput(props) {
+
   //States
   const [inputValue, setInputValue] = useState('');
   const [showList, setShowList] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null); //pour suivre l'item selectionné
+
   //Redux
   const dispatch = useDispatch();
-
-  //Gestion de la remise à 0 de la liste
-  useEffect(() => {
-    if (props.resetList) {
-      setInputValue('');
-      setShowList(false);
-    }
-  }, [props.resetList]);
 
   //Open the list
   const toggleList = () => {
@@ -43,11 +37,13 @@ export default function ListInput(props) {
     dispatch(addMovie(item));
   };
 
+
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
-           style={[styles.input, selectedItem === inputValue && styles.selectedInput]} 
+          style={[styles.input, selectedItem === inputValue && styles.selectedInput]} 
           value={inputValue}
           onChangeText={setInputValue}
           placeholder='Choose your movie'

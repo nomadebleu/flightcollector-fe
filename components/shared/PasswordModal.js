@@ -8,9 +8,9 @@ import {
   Text,
 } from 'react-native';
 //Composants
-import FormInput from '../shared/FormInput';
-import FormButton from '../shared/FormButton';
-import PasswordInput from '../shared/PasswordInput';
+import FormInput from './FormInput';
+import FormButton from './FormButton';
+import PasswordInput from './PasswordInput';
 //Redux
 import { useSelector } from 'react-redux';
 //Icones
@@ -131,7 +131,7 @@ export default function PasswordModal(props) {
         onPress={() => setModalVisible(true)}
         style={styles.formChange}
       >
-        <Text style={styles.textChange}>Change your password ?</Text>
+        <Text style={styles.textChange}>{props.title}</Text>
       </TouchableOpacity>
     </View>
   );

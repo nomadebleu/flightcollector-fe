@@ -1,12 +1,8 @@
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import React from 'react';
-//Redux
-import { useSelector } from "react-redux";
+
 
 export default function ServicesBlock(props) {
-
-//Utilisation du Redux
-  const serviceMovie = useSelector((state) => state.services.value);
     
   return (
     <>
@@ -31,7 +27,6 @@ export default function ServicesBlock(props) {
 }
 
 const styles = StyleSheet.create({
-  //Movie
   movieContainer: {
     width: '60%',
     height: '100%',

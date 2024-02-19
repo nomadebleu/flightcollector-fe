@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -15,11 +15,13 @@ import Services from "../components/MyPlaneScreen/Services";
 import ServicesBlock from "../components/MyPlaneScreen/BlocksImage/ServicesBlock";
 import PlaneBlock from "../components/MyPlaneScreen/BlocksImage/PlaneBlock";
 import FlightBlock from "../components/MyPlaneScreen/BlocksImage/FlightBlock";
+import BadgeModal from "../components/MyPlaneScreen/BadgeModal";
 //Icones
 import { FontAwesome5 } from "@expo/vector-icons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //Redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { clearMovie } from "../reducers/services";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -31,14 +33,18 @@ const Tab = createMaterialTopTabNavigator();
 export default function MyPlaneScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
-  const serviceMovie = useSelector((state) => state.services.value);
+  const serviceMovie = useSelector((state) => state.services.serviceMovie);
   console.log("movieRedux in MyPlaneScreen is :", serviceMovie);
 
-  //State pour suivre l'onglet actif
+  //State pour suivre l'onglet actif & stocker l'image de départ
   const [activeTab, setActiveTab] = useState("Flight");
+  const [imageSource, setImageSource] = useState(null);
+  const [showServiceBlock, setShowServiceBlock] = useState(false);
 
   // Création d'une fonction pour personnaliser le onPress de la Tab & la navigation
   function CustomTabBar({ state, descriptors, navigation }) {
+    const dispatch = useDispatch();
+
     return (
       <View style={{ flexDirection: "row", backgroundColor: "#fff" }}>
         {state.routes.map((route, index) => {
@@ -50,6 +56,7 @@ export default function MyPlaneScreen() {
             //Fonction onPress sur chaque onglet
             navigation.navigate(route.name);
             setActiveTab(route.name);
+            dispatch(clearMovie());
           };
 
           return (
@@ -98,18 +105,41 @@ export default function MyPlaneScreen() {
     }
   };
 
+  //useEffect pour afficher l'image dans le bloc avant de selectionner un service
+  useEffect(() => {
+    console.log("Active Tab:", activeTab);
+    if (activeTab === "Services") {
+      if (!serviceMovie) {
+        // Si aucun film n'est sélectionné, affiche l'image par défaut
+        const imagMovie = require("../assets/movie.png");
+        setImageSource(imagMovie);
+        setShowServiceBlock(false);
+      } else {
+        // Si un film est sélectionné, affiche le bloc de services
+        setShowServiceBlock(true);
+      }
+    } else {
+      // Réinitialise l'image et masque le bloc de services si activeTab n'est pas 'Services'
+      setImageSource(null);
+      setShowServiceBlock(false);
+    }
+  }, [activeTab, serviceMovie]);
+
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <Header title="My Plane" />
 
       <View style={styles.blocImage}>
-        {/* Bloc Amovible */}
+        {showServiceBlock && serviceMovie ? (
+          <ServicesBlock movie={serviceMovie} />
+        ) : (
+          imageSource && (
+            <Image source={imageSource} style={styles.imageStyle} />
+          )
+        )}
         {activeTab === "Flight" && <FlightBlock />}
         {activeTab === "Plane" && <PlaneBlock />}
-        {activeTab === "Services" && <ServicesBlock movie={serviceMovie} />}
-
-        {/* Transmission des données du film sélectionné */}
       </View>
 
       {/* Iata */}
@@ -132,17 +162,17 @@ export default function MyPlaneScreen() {
             <Tab.Screen
               name="Flight"
               component={Flight}
-              options={{ tabBarLabel: "Flight" }}
+              options={{ tabBarLabel: "Flight", swipeEnabled: false }}
             />
             <Tab.Screen
               name="Plane"
               component={Plane}
-              options={{ tabBarLabel: "Plane" }}
+              options={{ tabBarLabel: "Plane", swipeEnabled: false }}
             />
             <Tab.Screen
               name="Services"
               component={Services}
-              options={{ tabBarLabel: "Services" }}
+              options={{ tabBarLabel: "Services", swipeEnabled: false }}
             />
           </Tab.Navigator>
         </NavigationContainer>
@@ -156,7 +186,7 @@ export default function MyPlaneScreen() {
         </TouchableOpacity>
       </View>
       {/* Modal Badges */}
-      <BadgeModal />
+      {user.isConnected ? <BadgeModal /> : <View></View>}
     </SafeAreaView>
   );
 }
@@ -184,6 +214,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "solid",
     borderColor: "#002C82",
+  },
+  imageStyle: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
+    overflow: "hidden",
   },
   blocPoints: {
     width: "95%",

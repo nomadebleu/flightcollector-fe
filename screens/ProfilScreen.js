@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 //Composants
 import FormInput from '../components/shared/FormInput';
-import PasswordModal from '../components/ProfilScreen/PasswordModal';
+import PasswordModal from '../components/shared/PasswordModal';
 import Header from '../components/shared/Header';
 import FlagComponent from '../components/ProfilScreen/Flag';
 
@@ -210,7 +210,10 @@ export default function ProfilScreen() {
             formStyle={styles.size}
             editable={false}
           />
-          <PasswordModal styleModal={styles.modal} />
+          <PasswordModal 
+          styleModal={styles.modal}
+          title='Change your password' 
+          />
         </View>
       </View>
 

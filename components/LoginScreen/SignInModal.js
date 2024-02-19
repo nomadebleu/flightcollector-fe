@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import FormInput from '../shared/FormInput';
 import FormButton from '../shared/FormButton';
 import PasswordInput from '../shared/PasswordInput';
+import PasswordModal from '../shared/PasswordModal';
 //Redux
 import { useDispatch } from 'react-redux';
 import { login } from '../../reducers/user';
@@ -21,7 +22,6 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-console.log(apiUrl)
 
 export default function SignInModal() {
   //Utilisation du redux
@@ -72,11 +72,11 @@ export default function SignInModal() {
             mail: userData.data.mail,
             password: userData.data.password,
             token: userData.data.token,
-            totalPoints:userData.data.totalPoints,
-            badges:userData.data.badges,
-            flights:userData.data.flights,
-            planes:userData.data.planes,
-            _id:userData.data._id,
+            totalPoints: userData.data.totalPoints,
+            badges: userData.data.badges,
+            flights: userData.data.flights,
+            planes: userData.data.planes,
+            _id: userData.data._id,
           })
         );
         navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
@@ -128,19 +128,19 @@ export default function SignInModal() {
                 />
 
                 {/* Password */}
-                <PasswordInput
-                  label='Password'
-                  value={password}
-                  name='password'
-                  onChangeText={handleChange}
-                  placeholder='8 caracters mini. with M/1/!'
-                />
-
-                <View>
-                  <TouchableOpacity>
-                    <Text style={styles.forgotten}>Forgotten password?</Text>
-                  </TouchableOpacity>
-                </View>
+                {/* <View style={styles.password}> */}
+                  <PasswordInput
+                    label='Password'
+                    value={password}
+                    name='password'
+                    onChangeText={handleChange}
+                    placeholder='8 caracters mini. with M/1/!'
+                  />
+                  <PasswordModal
+                    styleModal={styles.modal}
+                    title='Forgotten password'
+                  />
+                {/* </View> */}
               </View>
 
               <FormButton
@@ -196,16 +196,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  //Forgotten Password
-  forgotten: {
-    position: 'absolute',
-    right: 20,
-    bottom: 0,
-
-    fontFamily: 'Farsan-Regular',
-    fontSize: 15,
-    color: '#002C82',
-  },
   //Sign In
   textBtnSignIn: {
     color: '#002C82',
@@ -239,6 +229,12 @@ const styles = StyleSheet.create({
   inputs: {
     width: '100%',
     height: '60%',
-    justifyContent: 'flex-end',
+    marginTop:30,
+  },
+  //Modal Password
+  modal: {
+    position: 'absolute',
+    right: 0,
+    top: 135,
   },
 });
