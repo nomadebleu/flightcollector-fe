@@ -3,7 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+import { addFlight } from "../reducers/flight";
+
+const apiKeyFlight = process.env.API_KEY_FLIGHTS;
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -11,10 +15,12 @@ export default function App() {
   const [scannedFliIata, setScannedFliIata] = useState(null);
   const [scannedDep, setScannedDep] = useState(null);
   const [scannedArr, setScannedArr] = useState(null);
+  const [date, setDate] = useState(null);
 
   const navigation = useNavigation();
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -40,12 +46,33 @@ export default function App() {
     const arrIata = formattedStr[0].slice(3, 6);
     const flightNumber = String(Number(formattedStr[1]));
     const flightIata = formattedStr[0].slice(6) + flightNumber;
+    const today = new Date().toISOString().slice(0, 10);
     setScannedFlight(flightNumber);
     setScannedFliIata(flightIata);
     setScannedDep(depIata);
     setScannedArr(arrIata);
+    setDate(today);
+
+    fetch(
+      `http://api.aviationstack.com/v1/flights?access_key=${apiKeyFlight}&dep_iata=${depIata}&arr_iata=${arrIata}&flight_number=${flightNumber}`
+    )
+      .then((response) => response.json())
+      .then((dataApi) => {
+        console.log("ApiData:", dataApi);
+        dispatch(
+          addFlight({
+            planes: dataApi.data[0].aircraft,
+            departure: dataApi.data[0].flight_date,
+            arrival: dataApi.data[0].arrival,
+            departure: dataApi.data[0].departure,
+            airline: dataApi.data[0].airline,
+            flight: dataApi.data[0].flight,
+            live: dataApi.data[0].live,
+          })
+        );
+      });
   };
-  console.log([scannedFliIata, scannedFlight, scannedDep, scannedArr]);
+  console.log([scannedFliIata, scannedFlight, scannedDep, scannedArr, date]);
 
   const handleReset = () => {
     setScannedFlight("");
