@@ -27,7 +27,7 @@ export default function App() {
     if (!scannedData) {
       setScannedData(extractData(data));
     }
-    console.log(scannedData);
+    console.log('numero de vol:',scannedData);
   };
 
   const handleReset = () => {
