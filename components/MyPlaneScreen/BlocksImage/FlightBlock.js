@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
 export default function FlightBlock() {
   return (
@@ -10,10 +10,15 @@ export default function FlightBlock() {
         initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
-          latitudeDelta: 0.0,
-          longitudeDelta: 0.01,
+          latitudeDelta: 50,
+          longitudeDelta: 50,
         }}
-      />
+      >
+        <Marker
+        coordinate={{latitude:37.7, longitude:-122.49}}/>
+        <Marker
+        coordinate={{latitude:38.7, longitude:-110.49}}/>
+      </MapView>
     </View>
   );
 }
