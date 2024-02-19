@@ -6,12 +6,9 @@ import ListInput from './ListInput';
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-export default function Services(props) {
+export default function Services() {
   //States
-  const [resetList, setResetList] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
-
-
 
   // Chargement des movies
   useEffect(() => {
@@ -32,17 +29,15 @@ export default function Services(props) {
     }
   };
 
-  //Mise à jour
-  useEffect(() => {
-    console.log('Ma selection de movies :', dataMovies);
-  }, [dataMovies]);
+
+
 
   return (
     <View style={styles.onglet}>
       <Text style={styles.title}>YOUR MOVIES</Text>
       <ListInput
-        resetList={resetList}
         movies={dataMovies}
+     
       />
       {/* <Text style={styles.title}>YOUR MEALS</Text>
      <ListInput resetList={resetList}/>
