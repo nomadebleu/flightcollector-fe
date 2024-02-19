@@ -198,7 +198,7 @@ export default function MyPlaneScreen() {
         </TouchableOpacity>
       </View>
       {/* Modal Badges */}
-      <BadgeModal />
+      {user.isConnected? <BadgeModal /> : <View></View>}
     </SafeAreaView>
   );
 }

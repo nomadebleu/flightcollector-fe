@@ -28,6 +28,7 @@ export default function ScanScreen() {
     })();
   }, []);
 
+  //Navigation si je referme le scan
   const handleClose = () => {
     if (user.isConnected) {
       navigation.navigate('TabNavigator');
@@ -35,6 +36,7 @@ export default function ScanScreen() {
       navigation.navigate('Home');
     }
   };
+  
   const takePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
     const formData = new FormData();
