@@ -23,4 +23,4 @@ export const flightSlice = createSlice({
 });
 
 export const { addFlight } = flightSlice.actions;
-export default badgeSlice.reducer;
+export default flightSlice.reducer;
