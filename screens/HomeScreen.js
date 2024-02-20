@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
   Image,
   SafeAreaView,
@@ -21,10 +22,13 @@ import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
 
 
+
 export default function HomeScreen() {
   //Utilisation du Redux
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  //Stat Scan Aircraft
+  const[scanAircraft, setScanAircraft]= useState('');
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -78,7 +82,21 @@ export default function HomeScreen() {
           <View style={styles.scan}>
             
             <View style={styles.icones}>
-              <Text style={styles.label}>Scan Aircraft</Text>
+             
+              <TextInput
+              placeholder='Enter Immatriculation Aircraft'
+              onChangeText={(value)=> setScanAircraft(value)}
+              value={scanAircraft}
+              style={styles.scanAircraft}
+              >
+
+              </TextInput>
+              <FontAwesome
+                name="check-circle"
+                size={30}
+                color="#80C9FF"
+                onPress={() => handleScan()}
+              />
               <FontAwesome
                 name="camera"
                 size={30}
@@ -185,6 +203,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     backgroundColor: "#F1F1F1",
+  },
+  scanAircraft:{
+    width:'70%',
+   backgroundColor:'red',
+   fontSize:20,
+   fontFamily:'Cabin-Regular',
+   color:'#002C82',
   },
   //LogOut
   logout: {

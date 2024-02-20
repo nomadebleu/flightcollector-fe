@@ -2,7 +2,6 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 //Composants
 import ListInput from './ListInput';
-import FormInput from '../../components/shared/FormInput';
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;

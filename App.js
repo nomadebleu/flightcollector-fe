@@ -22,6 +22,7 @@ import { Provider} from "react-redux";
 import user from "./reducers/user";
 import badge from "./reducers/badge";
 import services from './reducers/services';
+import flights from './reducers/flight';
 
 //Redux Persist
 import { persistStore, persistReducer } from "redux-persist";
@@ -34,7 +35,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
 
 const store = configureStore({
-  reducer:{user,badge,services},
+  reducer:{user,badge,services, flights},
 });
 
 
