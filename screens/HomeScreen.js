@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
 
+
 export default function HomeScreen() {
   //Utilisation du Redux
   const dispatch = useDispatch();
@@ -72,8 +73,10 @@ export default function HomeScreen() {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
+         
           {/* Scan Aircraft */}
           <View style={styles.scan}>
+            
             <View style={styles.icones}>
               <Text style={styles.label}>Scan Aircraft</Text>
               <FontAwesome
