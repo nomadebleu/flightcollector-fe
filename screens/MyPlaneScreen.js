@@ -34,6 +34,7 @@ export default function MyPlaneScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
+  const flightRedux = useSelector((state) => state.flights.value);
   console.log("movieRedux in MyPlaneScreen is :", serviceMovie);
 
   //State pour suivre l'onglet actif & stocker l'image de départ
@@ -144,14 +145,14 @@ export default function MyPlaneScreen() {
 
       {/* Iata */}
       <View style={styles.blocIata}>
-        <Text style={styles.iata}>CDG</Text>
+        <Text style={styles.iata}>{flightRedux[0].iataDep}</Text>
         <FontAwesome
           name="plane"
           size={45}
           color="#002C82"
           style={{ transform: [{ rotate: "45deg" }] }}
         />
-        <Text style={styles.iata}>DXB</Text>
+        <Text style={styles.iata}>{flightRedux[0].iataArr}</Text>
       </View>
 
       {/* Nav Onglets */}

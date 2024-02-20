@@ -1,7 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+//Redux
+import { useSelector } from 'react-redux';
+
 
 export default function Plane() {
+
+
+    //Utilisation du Redux
+    const flightRedux = useSelector((state) => state.flights.value);
+
+    //Les infos du flight
+    const registrationNumber = flightRedux[0].registrationNumber;
+    const plane = flightRedux[0].plane;
+    const airline = flightRedux[0].airline;
+
+
   //Photo Provisoire
   const planeType = [
     { picture: "../../assets/planes/A220.jpg" },
@@ -15,11 +29,11 @@ export default function Plane() {
   return (
     <View style={styles.onglet}>
       <Text style={styles.title}>REGISTRATION NUMBER</Text>
-      <Text style={styles.item}>YRBAC</Text>
+      <Text style={styles.item}>{registrationNumber}</Text>
       <Text style={styles.title}>PLANE TYPE</Text>
-      <Text style={styles.item}>A220</Text>
-      <Text style={styles.title}>PLANE AGE</Text>
-      <Text style={styles.item}>31</Text>
+      <Text style={styles.item}>{plane}</Text>
+      <Text style={styles.title}>AIRLINE</Text>
+      <Text style={styles.item}>{airline}</Text>
       <Text style={styles.title}>FIRST FLIGHT DATE</Text>
       <Text style={styles.item}>21-08-1993</Text>
     </View>

@@ -65,7 +65,7 @@ export default function PassScreen() {
   //Récupération des données pour le redux
   const fetchDataToRedux = (depIata, arrIata, flightNumber) => {
     fetch(
-      `http://api.aviationstack.com/v1/flights?access_key=${apiKeyFlight}&dep_iata=${depIata}&arr_iata=${arrIata}&flight_number=${flightNumber}`
+      `http://api.aviationstack.com/v1/flights?access_key=5a5bec36edd01c2b4c4f10b63b8a4dcf&dep_iata=${depIata}&arr_iata=${arrIata}&flight_number=${flightNumber}`
     )
       .then((response) => response.json())
       .then((dataApi) => {
@@ -89,6 +89,7 @@ export default function PassScreen() {
             iataArr:firstFlightData.arrival.iata,
             })
           );
+          navigation.navigate('MyPlane');
         } else {
           console.log('No information for this flight.');
         }

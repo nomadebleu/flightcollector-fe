@@ -2,8 +2,35 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
 import MapView from "react-native-maps";
+//Composants
+//Redux
+import { useSelector } from 'react-redux';
 
 export default function Flight() {
+  //Utilisation du Redux
+  const flightRedux = useSelector((state) => state.flights.value);
+
+  //Conversion des heures
+  const timeDScheduled = flightRedux[0].departureScheduled;//Departure Scheduled
+  const departureScheduled = new Date(timeDScheduled);
+  const timeDepartureScheduled = departureScheduled.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+  console.log('timeDepartureScheduled is:',timeDepartureScheduled)
+
+  const timeDEstimated = flightRedux[0].departureEstimated;//Departure Estimated
+  const departureEstimated = new Date(timeDEstimated);
+  const timeDepartureEstimated = departureEstimated.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+  console.log('timeDepartureEstimated is:',timeDepartureEstimated)
+
+  const timeAScheduled = flightRedux[0].arrivalScheduled;//Arrival Scheduled
+  const arrivalScheduled = new Date(timeAScheduled);
+  const timeArrivalScheduled = arrivalScheduled.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+  console.log('timeArrivalScheduled is:',timeArrivalScheduled)
+
+  const timeAEstimated = flightRedux[0].arrivalEstimated;//Arrival Estimated
+  const arrivalEstimated = new Date(timeAEstimated);
+  const timeArrivalEstimated = arrivalEstimated.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
+  console.log('timeArrivalEstimated is:',timeArrivalEstimated)
+
   return (
     <View style={styles.onglet}>
       {/* Map */}
@@ -20,13 +47,13 @@ export default function Flight() {
         <View style={styles.info}>
           <View style={styles.dep}>
             <Text style={styles.title}>DEPARTURE</Text>
-            <Text style={styles.item}>Scheduled 10:00AM</Text>
-            <Text style={styles.item}>Actual 10:20AM</Text>
+            <Text style={styles.item}>Scheduled {timeDepartureScheduled}</Text>
+            <Text style={styles.item}>Estimated {timeDepartureEstimated}</Text>
           </View>
           <View style={styles.arr}>
             <Text style={styles.title}>ARRIVAL</Text>
-            <Text style={styles.item}>Scheduled 19:40PM</Text>
-            <Text style={styles.item}>Estimated 20:00PM</Text>
+            <Text style={styles.item}>Scheduled {timeArrivalScheduled}</Text>
+            <Text style={styles.item}>Estimated {timeArrivalEstimated}</Text>
           </View>
         </View>
       </View>
