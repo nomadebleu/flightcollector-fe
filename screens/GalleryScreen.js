@@ -13,6 +13,43 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //Composant
 import Header from '../components/shared/Header';
 
+//Data des flights
+const arrayFlights = [
+  {
+    numeroReservation:'4528DF85',
+    planes:['142563256322'],
+    departure:'12-02-2024',
+    arrival:'14-02-2024',
+    airport:'ABC Airport',
+    arrivalPlace:'Russia',
+    departurePlace:'Canada',
+    iataArrival:'ABC',
+    iataDep:'XYZ',
+    services:[
+      {nbredeplance:120,
+        movie:['a','b','c'],
+        meals:'Breakfast & Lunch',
+      }],
+  },
+  {
+    numeroReservation:'7528DF85',
+    planes:['742563256322'],
+    departure:'18-02-2024',
+    arrival:'19-02-2024',
+    airport:'SBC Airport',
+    arrivalPlace:'France',
+    departurePlace:'Canada',
+    iataArrival:'CDG',
+    iataDep:'CAN',
+    services:[
+      {nbredeplance:120,
+        movie:['c','f','g'],
+        meals:'Breakfast',
+      }],
+  },
+]; 
+
+
 export default function GalleryScreen() {
   return (
     <SafeAreaView style={styles.body}>

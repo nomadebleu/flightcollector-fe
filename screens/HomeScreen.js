@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 //Composants
 import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
+import { addFlight } from "../reducers/flight";
 
 
 
@@ -47,6 +48,41 @@ export default function HomeScreen() {
   const handlePass = () => {
     navigation.navigate("Pass");
   };
+
+  //Fetch des data flights
+  const handleFetchDataFlight = async() => {
+  try {
+    const response = await fetch(`${apiUrl}/flights/allFlights`)
+    const flightData = await response.json();
+
+    if (flightData.result) {
+      console.log('FlightData:', flightData.data);
+      dispatch(
+        addFlight({
+          registrationNumber:flightData.data.registrationNumber,
+          planes: flightData.data.planes,
+          departure:flightData.data.departure,
+          departureScheduled: flightData.data.departureScheduled,
+          departureEstimated: flightData.data.departureEstimated,
+          iataDep:flightData.data.iataDep,
+
+          arrivalScheduled:flightData.data.arrivalScheduled,
+          arrivalEstimated: flightData.data.arrivalEstimated,
+          iataArr:flightData.data.arrival.iata,
+          })
+      );
+      navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
+      setMail('');
+      setPassword('');
+      setModalVisible(!modalVisible);
+    } else {
+      console.error('Error during connection', userData.error);
+    }
+  } catch (error) {
+    console.error('Error during connection:', error);
+  }
+};
+  
 
   return (
     <SafeAreaView style={styles.body}>
@@ -95,7 +131,7 @@ export default function HomeScreen() {
                 name="check-circle"
                 size={30}
                 color="#80C9FF"
-                onPress={() => handleScan()}
+                onPress={() => handleFetchDataFlight()}
               />
               <FontAwesome
                 name="camera"

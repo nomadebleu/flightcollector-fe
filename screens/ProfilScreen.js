@@ -12,7 +12,6 @@ import FormInput from '../components/shared/FormInput';
 import PasswordModal from '../components/shared/PasswordModal';
 import Header from '../components/shared/Header';
 import FlagComponent from '../components/ProfilScreen/Flag';
-
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
