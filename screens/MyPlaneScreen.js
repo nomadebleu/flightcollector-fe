@@ -35,7 +35,7 @@ export default function MyPlaneScreen() {
   const user = useSelector((state) => state.user.value);
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
   const flightRedux = useSelector((state) => state.flights.value);
-  console.log("movieRedux in MyPlaneScreen is :", serviceMovie);
+  console.log("FLIGHT REDUX is :", flightRedux);
 
   //State pour suivre l'onglet actif & stocker l'image de départ
   const [activeTab, setActiveTab] = useState("Flight");
@@ -152,7 +152,7 @@ export default function MyPlaneScreen() {
           color="#002C82"
           style={{ transform: [{ rotate: "45deg" }] }}
         />
-        <Text style={styles.iata}>{flightRedux[0].iataArr}</Text>
+        <Text style={styles.iata}>{flightRedux[0].iataArrival}</Text>
       </View>
 
       {/* Nav Onglets */}

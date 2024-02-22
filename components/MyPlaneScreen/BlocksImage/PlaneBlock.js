@@ -1,11 +1,20 @@
 import { StyleSheet, Image, View } from 'react-native';
 import React from 'react';
+//Redux
+import { useSelector } from 'react-redux';
 
 export default function PlaneBlock() {
+
+  //Utilisation du Redux
+  const flightRedux = useSelector((state) => state.flights.value);
+
+  //L'image du flight
+  const picture = flightRedux[0].planes.picture;
+
   return (
     <View style={styles.planeContainer}>
       <Image
-        source={require('../../../assets/planes/A220.jpg')}
+        source={{ uri: picture }}
         style={styles.plane}
       />
     </View>
