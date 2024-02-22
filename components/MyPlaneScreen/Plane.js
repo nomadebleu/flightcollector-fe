@@ -5,37 +5,25 @@ import { useSelector } from 'react-redux';
 
 
 export default function Plane() {
-
-
     //Utilisation du Redux
     const flightRedux = useSelector((state) => state.flights.value);
 
     //Les infos du flight
-    const registrationNumber = flightRedux[0].registrationNumber;
-    const plane = flightRedux[0].plane;
-    const airline = flightRedux[0].airline;
+    const immatriculation = flightRedux[0].planes.immatriculation;
+    const plane = flightRedux[0].planes.type;
+    const airline = flightRedux[0].planes.compagnie;
+    const age = flightRedux[0].planes.age;
 
-
-  //Photo Provisoire
-  const planeType = [
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-  ];
   return (
     <View style={styles.onglet}>
-      <Text style={styles.title}>REGISTRATION NUMBER</Text>
-      <Text style={styles.item}>{registrationNumber}</Text>
+      <Text style={styles.title}>IMMATRICULATION AIRCRAFT</Text>
+      <Text style={styles.item}>{immatriculation}</Text>
       <Text style={styles.title}>PLANE TYPE</Text>
       <Text style={styles.item}>{plane}</Text>
       <Text style={styles.title}>AIRLINE</Text>
       <Text style={styles.item}>{airline}</Text>
-      <Text style={styles.title}>FIRST FLIGHT DATE</Text>
-      <Text style={styles.item}>21-08-1993</Text>
+      <Text style={styles.title}>AIRCRAFT AGE</Text>
+      <Text style={styles.item}>{age}</Text>
     </View>
   );
 }

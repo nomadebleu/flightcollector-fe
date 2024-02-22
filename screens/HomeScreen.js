@@ -20,13 +20,19 @@ import { useNavigation } from "@react-navigation/native";
 //Composants
 import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
+import { addFlight } from "../reducers/flight";
+
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function HomeScreen() {
   //Utilisation du Redux
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  //State Scan Aircraft
+
+  //Stat Scan Aircraft
   const[scanAircraft, setScanAircraft]= useState('');
+
   //Gestion Navigation
   const navigation = useNavigation();
 
@@ -45,6 +51,39 @@ export default function HomeScreen() {
     navigation.navigate("Pass");
   };
 
+  //Fetch des data flights
+  const handleFetchDataFlight = async() => {
+  try {
+    const response = await fetch(`${apiUrl}/flights/${scanAircraft}`)
+    const flightData = await response.json();
+
+    if (flightData.result) {
+      console.log('FlightData:', flightData.data);
+      dispatch(
+        addFlight({
+          planes: flightData.data.planes,
+          departure:flightData.data.departure,
+          departureScheduled: flightData.data.departureScheduled,
+          departureEstimated: flightData.data.departureEstimated,
+          departureActual: flightData.data.departureActual,
+          arrival:flightData.data.arrival,
+          arrivalScheduled:flightData.data.arrivalScheduled,
+          arrivalEstimated: flightData.data.arrivalEstimated,
+          airportNameDest:flightData.data.airportNameDest,
+          iataArrival:flightData.data.iataArrival,
+          iataDep:flightData.data.iataDep,
+          nbrePlaces:flightData.data.nbrePlaces,
+          })
+      );
+      navigation.navigate('MyPlane'); //Navigation vers Home avec la Tab
+    } else {
+      console.error('Error during connection', userData.error);
+    }
+  } catch (error) {
+    console.error('Error during connection:', error);
+  }
+};
+  
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -74,11 +113,14 @@ export default function HomeScreen() {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
+         
           {/* Scan Aircraft */}
           <View style={styles.scan}>
+            
             <View style={styles.icones}>
-            <TextInput
-              placeholder='Enter Immatriculation Aircraft'
+             
+              <TextInput
+              placeholder='Reservation Number'
               onChangeText={(value)=> setScanAircraft(value)}
               value={scanAircraft}
               style={styles.scanAircraft}
@@ -91,12 +133,7 @@ export default function HomeScreen() {
                 color="#80C9FF"
                 onPress={() => handleFetchDataFlight()}
               />
-              <FontAwesome
-                name="camera"
-                size={30}
-                color="#80C9FF"
-                onPress={() => handleScan()}
-              />
+              
             </View>
           </View>
           {/*Scan Boarding Pass */}
@@ -197,6 +234,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     backgroundColor: "#F1F1F1",
+  },
+  scanAircraft:{
+    width:'70%',
+ 
+   fontSize:20,
+   fontFamily:'Cabin-Regular',
+   color:'#002C82',
   },
   //LogOut
   logout: {
