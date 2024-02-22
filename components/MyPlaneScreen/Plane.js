@@ -1,30 +1,26 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 //Redux
-import { useSelector } from 'react-redux';
-
+import { useSelector } from "react-redux";
 
 export default function Plane() {
+  //Utilisation du Redux
+  const flightRedux = useSelector((state) => state.flights.value);
 
-
-    //Utilisation du Redux
-    const flightRedux = useSelector((state) => state.flights.value);
-
-    //Les infos du flight
-    const registrationNumber = flightRedux[0].registrationNumber;
-    const plane = flightRedux[0].plane;
-    const airline = flightRedux[0].airline;
-
+  //Les infos du flight
+  const registrationNumber = flightRedux[0].registrationNumber;
+  const plane = flightRedux[0].plane;
+  const airline = flightRedux[0].airline;
 
   //Photo Provisoire
   const planeType = [
     { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
-    { picture: "../../assets/planes/A220.jpg" },
+    { picture: "../../assets/planes/A320.jpg" },
+    { picture: "../../assets/planes/A321.jpg" },
+    { picture: "../../assets/planes/A350.jpg" },
+    { picture: "../../assets/planes/A380.jpg" },
+    { picture: "../../assets/planes/B747.jpg" },
+    { picture: "../../assets/planes/B777.jpg" },
   ];
   return (
     <View style={styles.onglet}>
