@@ -20,17 +20,13 @@ import { useNavigation } from "@react-navigation/native";
 //Composants
 import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
-import { addFlight } from "../reducers/flight";
-
-
 
 export default function HomeScreen() {
   //Utilisation du Redux
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  //Stat Scan Aircraft
+  //State Scan Aircraft
   const[scanAircraft, setScanAircraft]= useState('');
-
   //Gestion Navigation
   const navigation = useNavigation();
 
@@ -48,41 +44,6 @@ export default function HomeScreen() {
   const handlePass = () => {
     navigation.navigate("Pass");
   };
-
-  //Fetch des data flights
-  const handleFetchDataFlight = async() => {
-  try {
-    const response = await fetch(`${apiUrl}/flights/allFlights`)
-    const flightData = await response.json();
-
-    if (flightData.result) {
-      console.log('FlightData:', flightData.data);
-      dispatch(
-        addFlight({
-          registrationNumber:flightData.data.registrationNumber,
-          planes: flightData.data.planes,
-          departure:flightData.data.departure,
-          departureScheduled: flightData.data.departureScheduled,
-          departureEstimated: flightData.data.departureEstimated,
-          iataDep:flightData.data.iataDep,
-
-          arrivalScheduled:flightData.data.arrivalScheduled,
-          arrivalEstimated: flightData.data.arrivalEstimated,
-          iataArr:flightData.data.arrival.iata,
-          })
-      );
-      navigation.navigate('TabNavigator'); //Navigation vers Home avec la Tab
-      setMail('');
-      setPassword('');
-      setModalVisible(!modalVisible);
-    } else {
-      console.error('Error during connection', userData.error);
-    }
-  } catch (error) {
-    console.error('Error during connection:', error);
-  }
-};
-  
 
   return (
     <SafeAreaView style={styles.body}>
@@ -113,13 +74,10 @@ export default function HomeScreen() {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
-         
           {/* Scan Aircraft */}
           <View style={styles.scan}>
-            
             <View style={styles.icones}>
-             
-              <TextInput
+            <TextInput
               placeholder='Enter Immatriculation Aircraft'
               onChangeText={(value)=> setScanAircraft(value)}
               value={scanAircraft}
@@ -239,13 +197,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     backgroundColor: "#F1F1F1",
-  },
-  scanAircraft:{
-    width:'70%',
-   backgroundColor:'red',
-   fontSize:20,
-   fontFamily:'Cabin-Regular',
-   color:'#002C82',
   },
   //LogOut
   logout: {
