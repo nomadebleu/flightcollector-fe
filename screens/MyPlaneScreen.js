@@ -35,7 +35,6 @@ export default function MyPlaneScreen() {
   const user = useSelector((state) => state.user.value);
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
   const flightRedux = useSelector((state) => state.flights.value);
-  console.log("FLIGHT REDUX is :", flightRedux);
 
   //State pour suivre l'onglet actif & stocker l'image de départ
   const [activeTab, setActiveTab] = useState("Flight");
@@ -159,7 +158,9 @@ export default function MyPlaneScreen() {
       <View style={styles.blocOnglets}>
         {/* props independent pour détacher de la nav globale */}
         <NavigationContainer independent={true}>
-          <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+          <Tab.Navigator 
+          tabBar={(props) => <CustomTabBar {...props} />}
+          >
             <Tab.Screen
               name="Flight"
               component={Flight}

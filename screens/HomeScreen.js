@@ -80,15 +80,36 @@ export default function HomeScreen() {
           meals:flightData.data.meals
           })
       );
-      navigation.navigate('MyPlane'); //Navigation vers Home avec la Tab
+      navigation.navigate('MyPlane'); 
     } else {
-      console.error('Error during connection', userData.error);
+      console.error('Error during connection', flightData.error);
     }
   } catch (error) {
     console.error('Error during connection:', error);
   }
 };
   
+const handleFetchDataFlightImmat = async() => {
+  try {
+    const response = await fetch(`${apiUrl}/planes/${enterImmat}`)
+    const planeData = await response.json();
+
+    if (planeData.result) {
+      console.log('PlaneData:', planeData.data);
+      dispatch(
+        addFlight({
+          planes: planeData.data,
+          })
+      );
+      navigation.navigate('MyPlane', {screen: 'Plane'}); 
+    } else {
+      console.error('Error during connection', planeData.error);
+    }
+  } catch (error) {
+    console.error('Error during connection:', error);
+  }
+};
+
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
@@ -118,7 +139,11 @@ export default function HomeScreen() {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
+        
+        
          {/* Immatriculation Aircraft */}
+
+         {!user.isConnected ? (
          <View style={styles.scan}>
             
             <View style={styles.icones}>
@@ -135,46 +160,52 @@ export default function HomeScreen() {
                 name="check-circle"
                 size={30}
                 color="#80C9FF"
-                onPress={() => handleFetchDataFlight()}
+                onPress={() => handleFetchDataFlightImmat()}
               />
               
             </View>
           </View>
-          {/* Reservation Number */}
-          <View style={styles.scan}>
+         ):(
+          <>
+             {/* Reservation Number */}
+             <View style={styles.scan}>
             
-            <View style={styles.icones}>
-             
-              <TextInput
-              placeholder='Reservation Number'
-              onChangeText={(value)=> setEnterReservation(value)}
-              value={enterReservation}
-              style={styles.enterReservation}
-              >
-
-              </TextInput>
-              <FontAwesome
-                name="check-circle"
-                size={30}
-                color="#80C9FF"
-                onPress={() => handleFetchDataFlight()}
-              />
+             <View style={styles.icones}>
               
-            </View>
-          </View>
+               <TextInput
+               placeholder='Reservation Number'
+               onChangeText={(value)=> setEnterReservation(value)}
+               value={enterReservation}
+               style={styles.enterReservation}
+               >
+ 
+               </TextInput>
+               <FontAwesome
+                 name="check-circle"
+                 size={30}
+                 color="#80C9FF"
+                 onPress={() => handleFetchDataFlight()}
+               />
+               
+             </View>
+           </View>
+ 
+           {/*Scan Boarding Pass */}
+           <View style={styles.scan}>
+             <View style={styles.icones}>
+               <Text style={styles.label}>Scan Boarding Pass</Text>
+               <FontAwesome
+                 name="camera"
+                 size={30}
+                 color='#002C82'
+                 onPress={() => handlePass()}
+               />
+             </View>
+           </View>
+           </>
+         )}
+       
 
-          {/*Scan Boarding Pass */}
-          <View style={styles.scan}>
-            <View style={styles.icones}>
-              <Text style={styles.label}>Scan Boarding Pass</Text>
-              <FontAwesome
-                name="camera"
-                size={30}
-                color='#002C82'
-                onPress={() => handlePass()}
-              />
-            </View>
-          </View>
         </ImageBackground>
       </View>
       {!user.isConnected ? (
