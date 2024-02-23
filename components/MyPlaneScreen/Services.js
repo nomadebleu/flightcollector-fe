@@ -2,6 +2,8 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 //Composants
 import ListInput from './ListInput';
+//Redux
+import { useSelector } from "react-redux";
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -9,7 +11,9 @@ const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 export default function Services() {
   //States
   const [dataMovies, setDataMovies] = useState([]);
-  const [meals, setMeals] = useState('');
+ 
+  //Utilisation du Redux
+  const flightRedux = useSelector((state) => state.flights.value);
 
   // Chargement des movies
   useEffect(() => {
@@ -32,21 +36,12 @@ export default function Services() {
 
   return (
     <View style={styles.onglet}>
-      <View style={styles.otherService}>
-      <Text style={[styles.title2, {marginRight: 11}]}>YOUR SEAT</Text>
-        <TextInput
-          style={styles.input}
-          value={meals}
-          onChangeText={(value) => setMeals(value)}
-          editable={false}
-        />
-      </View>
+      
       <View style={styles.otherService}>
         <Text style={styles.title2}>YOUR MEALS</Text>
         <TextInput
           style={styles.input}
-          value={meals}
-          onChangeText={(value) => setMeals(value)}
+          value={flightRedux[0].meals}
           editable={false}
         />
       </View>

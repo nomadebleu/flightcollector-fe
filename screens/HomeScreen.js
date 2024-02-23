@@ -30,8 +30,9 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
-  //Stat Scan Aircraft
-  const[scanAircraft, setScanAircraft]= useState('');
+  //States Inputs
+  const[enterReservation, setEnterReservation]= useState('');
+  const[enterImmat, setEnterImmat]= useState('');
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ export default function HomeScreen() {
   //Fetch des data flights
   const handleFetchDataFlight = async() => {
   try {
-    const response = await fetch(`${apiUrl}/flights/${scanAircraft}`)
+    const response = await fetch(`${apiUrl}/flights/${enterReservation}`)
     const flightData = await response.json();
 
     if (flightData.result) {
@@ -62,17 +63,21 @@ export default function HomeScreen() {
       dispatch(
         addFlight({
           planes: flightData.data.planes,
+
           departure:flightData.data.departure,
           departureScheduled: flightData.data.departureScheduled,
           departureEstimated: flightData.data.departureEstimated,
           departureActual: flightData.data.departureActual,
+
           arrival:flightData.data.arrival,
           arrivalScheduled:flightData.data.arrivalScheduled,
           arrivalEstimated: flightData.data.arrivalEstimated,
-          airportNameDest:flightData.data.airportNameDest,
-          iataArrival:flightData.data.iataArrival,
-          iataDep:flightData.data.iataDep,
+
+          iataArrival:flightData.data.airportArr.iataCode,
+          iataDep:flightData.data.airportDep.iataCode,
+
           nbrePlaces:flightData.data.nbrePlaces,
+          meals:flightData.data.meals
           })
       );
       navigation.navigate('MyPlane'); //Navigation vers Home avec la Tab
@@ -113,17 +118,16 @@ export default function HomeScreen() {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
-         
-          {/* Scan Aircraft */}
-          <View style={styles.scan}>
+         {/* Immatriculation Aircraft */}
+         <View style={styles.scan}>
             
             <View style={styles.icones}>
              
               <TextInput
-              placeholder='Reservation Number'
-              onChangeText={(value)=> setScanAircraft(value)}
-              value={scanAircraft}
-              style={styles.scanAircraft}
+              placeholder='Immatriculation Aircraft'
+              onChangeText={(value)=> setEnterImmat(value)}
+              value={enterImmat}
+              style={styles.enterReservation}
               >
 
               </TextInput>
@@ -136,6 +140,29 @@ export default function HomeScreen() {
               
             </View>
           </View>
+          {/* Reservation Number */}
+          <View style={styles.scan}>
+            
+            <View style={styles.icones}>
+             
+              <TextInput
+              placeholder='Reservation Number'
+              onChangeText={(value)=> setEnterReservation(value)}
+              value={enterReservation}
+              style={styles.enterReservation}
+              >
+
+              </TextInput>
+              <FontAwesome
+                name="check-circle"
+                size={30}
+                color="#80C9FF"
+                onPress={() => handleFetchDataFlight()}
+              />
+              
+            </View>
+          </View>
+
           {/*Scan Boarding Pass */}
           <View style={styles.scan}>
             <View style={styles.icones}>
@@ -235,7 +262,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#F1F1F1",
   },
-  scanAircraft:{
+  enterReservation:{
     width:'70%',
  
    fontSize:20,
