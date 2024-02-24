@@ -17,8 +17,11 @@ export const badgeSlice = createSlice({
       });
       // state.value=[];
     },
+    clearBadges : (state) => {
+      state.value = [];
+    }
   },
 });
 
-export const { addBadge } = badgeSlice.actions;
+export const { addBadge, clearBadges } = badgeSlice.actions;
 export default badgeSlice.reducer;

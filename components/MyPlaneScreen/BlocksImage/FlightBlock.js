@@ -74,11 +74,10 @@ export default function FlightBlock() {
     }
   };
   return (
-    <View style={styles.mapContainer}>
+  <View  /*style={styles.mapContainer}*/>
       <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
+          region={{
+           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 50,
           longitudeDelta: 50,
@@ -100,5 +99,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
   },
 });
