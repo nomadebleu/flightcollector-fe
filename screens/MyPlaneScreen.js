@@ -63,6 +63,7 @@ export default function MyPlaneScreen() {
        headers: {'Content-type' :  'application/json'},
        body: JSON.stringify({userId}),
      });
+     
      const data = await response.json();
      console.log('Data:', data);
  
@@ -191,7 +192,7 @@ export default function MyPlaneScreen() {
             <Image source={imageSource} style={styles.imageStyle} />
           )
         )}
-        {activeTab === "Flight" && <FlightBlock />}
+        {/* {activeTab === "Flight" && <FlightBlock />} */}
         {activeTab === "Plane" && <PlaneBlock />}
       </View>
 
@@ -214,11 +215,11 @@ export default function MyPlaneScreen() {
           <Tab.Navigator 
           tabBar={(props) => <CustomTabBar {...props} />}
           >
-            <Tab.Screen
+            {/* <Tab.Screen
               name="Flight"
               component={Flight}
               options={{ tabBarLabel: "Flight", swipeEnabled: false }}
-            />
+            /> */}
             <Tab.Screen
               name="Plane"
               component={Plane}

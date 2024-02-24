@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View  } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 //Redux
 import { useSelector } from 'react-redux';
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+    height: '100%',
+    width : '100%',
   },
 });

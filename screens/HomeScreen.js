@@ -47,6 +47,7 @@ export default function HomeScreen() {
   const handleScan = () => {
     navigation.navigate("Scan");
   };
+  
   //Gestion du Boarding Pass
   const handlePass = () => {
     navigation.navigate("Pass");

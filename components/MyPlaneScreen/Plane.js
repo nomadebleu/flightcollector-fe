@@ -8,7 +8,7 @@ export default function Plane() {
     const flightRedux = useSelector((state) => state.flights.value);
 
     //Les infos du flight
-    const immatriculation = flightRedux[0].planes.immatriculation;
+    const immatriculation = flightRedux[0].planes?.immatriculation;
     const plane = flightRedux[0].planes.type;
     const airline = flightRedux[0].planes.compagnie;
     const age = flightRedux[0].planes.age;
