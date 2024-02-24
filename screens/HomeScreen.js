@@ -62,6 +62,7 @@ export default function HomeScreen() {
       console.log('FlightData:', flightData.data);
       dispatch(
         addFlight({
+          _id:flightData.data._id,
           planes: flightData.data.planes,
 
           departure:flightData.data.departure,

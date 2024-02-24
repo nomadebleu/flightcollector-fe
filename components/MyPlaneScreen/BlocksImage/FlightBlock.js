@@ -3,6 +3,8 @@ import { StyleSheet, View} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 //Redux
 import { useSelector } from 'react-redux';
+//Calcul distance
+const { calculateDistance } = require("../../../module/Distance");
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -25,6 +27,13 @@ export default function FlightBlock() {
     handleFetchDataIataDep();
     handleFetchDataIataArr();
   }, []);
+
+//Calcul des points
+  const pointsCercle = calculateDistance(mapFlight.latA,mapFlight.longA,mapFlight.latD,mapFlight.longD)
+  console.log('pointsCercle:',pointsCercle);
+  const points = Math.ceil(pointsCercle);
+  console.log('points:',points);
+
 
   //Fetch des long et lat du flight en fonction des iataCode
   const handleFetchDataIataArr = async () => {
@@ -73,6 +82,30 @@ export default function FlightBlock() {
       console.error('Error during connection:', error);
     }
   };
+
+
+  //Fetch pour le calcul des points et l'affectation au vol
+  const handleUpDatePoints = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/flights/points`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          flightId:flightRedux[0]._id,
+          pointsFlight:points,
+        }),
+      });
+      const pointsData = await response.json();
+      if (pointsData.result) {
+        console.log('pointData:', pointsData.message);
+      } else {
+        console.error('Error during connection', pointsData.error);
+      }
+    } catch (error) {
+      console.error('Error during connection:', error);
+    }
+  };
+  handleUpDatePoints();
   return (
   <View  style={styles.mapContainer}>
       <MapView
