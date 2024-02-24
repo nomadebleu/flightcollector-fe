@@ -29,7 +29,6 @@ export default function ProfilScreen() {
   const user = useSelector((state) => state.user.value);
   const userBadges = useSelector(state => state.badge.value);
   const userPoints = user.totalPoints
-  console.log('up', userPoints, 'b', userBadges)
   const dispatch = useDispatch();
 
   //LocalHost
