@@ -44,6 +44,7 @@ export default function MyPlaneScreen() {
   const user = useSelector((state) => state.user.value);
   const userId = user._id;
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
+  const flightRedux = useSelector((state) => state.flights.value);
   const dispatch= useDispatch();
   
   //State pour suivre l'onglet actif & stocker l'image de départ
