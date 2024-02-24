@@ -28,6 +28,9 @@ import { useNavigation } from '@react-navigation/native';
 export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const userBadges = useSelector(state => state.badge.value);
+  const userPoints = user.totalPoints
+  console.log('up', userPoints, 'b', userBadges)
   const dispatch = useDispatch();
 
   //LocalHost
@@ -52,31 +55,30 @@ export default function ProfilScreen() {
     setFirstname(user.firstname);
     setLastname(user.lastname);
     setMail(user.mail);
-    setPoints(user.totalPoints);
-    setBadges(user.badges);
-  
+    // setPoints(user.totalPoints);
+    // setBadges(user.badges);
 
-    if (user.badges && user.badges.length > 0) {
-      // Affichage des pictures des badges
-      const badgesImages = user.badges.map((badge, index) => {
-        return (
-          <Image
-            key={index}
-            source={{ uri: badge.picture }}
-            style={styles.emoticon}
-          />
 
-        );
-      });
+    // if (user.badges && user.badges.length > 0) {
+    //   // Affichage des pictures des badges
+    //   const badgesImages = user.badges.map((badge, index) => {
+    //     return (
+    //       <Image
+    //         key={index}
+    //         source={{ uri: badge.picture }}
+    //         style={styles.emoticon}
+    //       />
 
-      setBadges(badgesImages);
-    }
+    //     );
+    //   });
+
+    //   setBadges(badgesImages);
     setPassword(
       user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
- 
+
 
   //Gestion Picker
   const pickImageAsync = async () => {
@@ -121,8 +123,13 @@ export default function ProfilScreen() {
   };
 
   //Pour afficher 0 au lieu de l'erreur à cause de null
-  const badgesLength = user.badges ? user.badges.length : 0;
+  const badgesLength = userBadges ? userBadges.length : 0;
   const planesLength = user.planes ? user.planes.length : 0;
+  //Affiché que une seul fois l'arrivalPlaces :
+  const uniqueArrivalPlaces = user.flights ? [...new Set(user.flights.map(flight => flight.airportNameDest))] : [];
+  const placeLength = uniqueArrivalPlaces.length;
+  //Affiché les avions en favoris.
+  const FavLength = user.planes.isFavorite ? user.planes.isFavorite.length : 0;
 
   return (
     <SafeAreaView style={styles.body}>
@@ -210,9 +217,9 @@ export default function ProfilScreen() {
             formStyle={styles.size}
             editable={false}
           />
-          <PasswordModal 
-          styleModal={styles.modal}
-          title='Change your password' 
+          <PasswordModal
+            styleModal={styles.modal}
+            title='Change your password'
           />
         </View>
       </View>
@@ -228,6 +235,7 @@ export default function ProfilScreen() {
           <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
             {''}
           </Text>
+          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{FavLength}</Text>
           <Text style={styles.textMiniInput}>Favorites flights</Text>
         </View>
         <View style={styles.miniInput}>
@@ -239,6 +247,7 @@ export default function ProfilScreen() {
           <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
             {''}
           </Text>
+          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{placeLength}</Text>
           <Text style={styles.textMiniInput}>Places visited</Text>
         </View>
         <View style={styles.miniInput}>
@@ -270,7 +279,7 @@ export default function ProfilScreen() {
         <View style={styles.containerTitle}>
           <Text style={styles.titleEmoticon}>PLACES I'VE VISITED</Text>
           <View style={styles.flagContainer}>
-          <FlagComponent />
+            <FlagComponent />
           </View>
         </View>
       </View>
@@ -285,19 +294,38 @@ export default function ProfilScreen() {
           <Text style={styles.titleEmoticon}>MY BADGES</Text>
         </View>
 
-        <Text>{badges}</Text>
+        {/* <Text>{badges}</Text> */}
+        <View style={styles.badgeContainer}>
+          {userBadges.map((badge, index) => (
+            <View key={index} style={styles.badge}>
+              <Image source={{ uri: badge.picture }} style={{ width: 30, height: 30 }} />
+            </View>
+          ))}
+        </View>
+        </View>
+        {/* TOTAL POINTS */}
+
+
+        <View style={styles.blocEmoticon}>
+          <View style={styles.containerTitle}>
+            <Text style={styles.titleEmoticon}>TOTAL POINTS</Text>
+            <View style={styles.points}>
+              <Text>{userPoints}</Text>
+            </View>
+          </View>
+        </View>
+        {/* <View>
       </View>
-      {/* TOTAL POINTS */}
       <View>
         <FormInput
           label='TOTAL POINTS'
-          value={points.toLocaleString()}
+          value={user.totalPoints}
           name='totalPoints'
           editable={false}
           titleStyle={styles.legend}
           formStyle={styles.points}
         />
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
@@ -373,13 +401,20 @@ const styles = StyleSheet.create({
     height: 42,
   },
   points: {
-    height: 42,
-    fontSize: 16,
-    textAlign: 'center',
-    padding: 10,
+    backgroundColor: '#f0f0f0', // Couleur de fond
+    borderRadius: 10, // Bord arrondi
+    paddingHorizontal: 10, // Espace intérieur horizontal
+    paddingVertical: 5, // Espace intérieur vertical
     fontFamily: 'Cabin-Bold',
-    color: '#002C82',
   },
+  // points: {
+  //   height: 100,
+  //   fontSize: 16,
+  //   // textAlign: 'center',
+  //   padding: 10,
+  //   fontFamily: 'Cabin-Bold',
+  //   color: '#002C82',
+  // },
   //MiniInputs
   containerMiniInput: {
     flexDirection: 'row',
@@ -429,7 +464,7 @@ const styles = StyleSheet.create({
 
     marginBottom: 20,
     borderRadius: 5,
-},
+  },
   titleEmoticon: {
     fontFamily: 'Cabin-Regular',
     fontSize: 12,
@@ -454,6 +489,13 @@ const styles = StyleSheet.create({
   flagImage: {
     width: 30,
     height: 30,
-    
+
+  },
+  badgeContainer: {
+    flexDirection: 'row', // Alignement horizontal
+    alignItems: 'center', // Centrer verticalement les badges
+  },
+  badge: {
+    marginRight: 10, // Marge entre chaque badge
   },
 });

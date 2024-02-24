@@ -1,14 +1,14 @@
-import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import React, {useEffect, useState} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 
 export default function FlightBlock() {
+ 
   return (
-    <View style={styles.mapContainer}>
+  <View  /*style={styles.mapContainer}*/>
       <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
+          region={{
+           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 50,
           longitudeDelta: 50,
@@ -16,7 +16,7 @@ export default function FlightBlock() {
       >
         <Marker
         coordinate={{latitude:37.7, longitude:-122.49}}/>
-        <Marker
+         <Marker
         coordinate={{latitude:38.7, longitude:-110.49}}/>
       </MapView>
     </View>
@@ -32,5 +32,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
   },
 });

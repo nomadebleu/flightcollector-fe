@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   StyleSheet,
@@ -15,13 +16,16 @@ import Services from "../components/MyPlaneScreen/Services";
 import ServicesBlock from "../components/MyPlaneScreen/BlocksImage/ServicesBlock";
 import PlaneBlock from "../components/MyPlaneScreen/BlocksImage/PlaneBlock";
 import FlightBlock from "../components/MyPlaneScreen/BlocksImage/FlightBlock";
-import BadgeModal from "../components/MyPlaneScreen/BadgeModal";
+import BadgeModal from "../components/MyPlaneScreen/BadgesModals/BadgeModal";
+
+
 //Icones
 import { FontAwesome5 } from "@expo/vector-icons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
 import { clearMovie } from "../reducers/services";
+import { addBadge } from "../reducers/badge";
 //Navigation
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -30,45 +34,94 @@ import { NavigationContainer } from "@react-navigation/native";
 //Définition de la navigation indépendante
 const Tab = createMaterialTopTabNavigator();
 
+
 export default function MyPlaneScreen() {
+  //Local address
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+  
+  
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const userId = user._id;
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
-  console.log("movieRedux in MyPlaneScreen is :", serviceMovie);
-
+  const dispatch= useDispatch();
+  
   //State pour suivre l'onglet actif & stocker l'image de départ
   const [activeTab, setActiveTab] = useState("Flight");
   const [imageSource, setImageSource] = useState(null);
   const [showServiceBlock, setShowServiceBlock] = useState(false);
+ //State BadgeModals 
+ const [userBadges, setUserBadges] = useState([]);
+
+
+ 
+ const fetchLatestBadge = async () => {
+   try {
+     const response = await fetch(`${apiUrl}/badges/unlockBadges`, {
+       method: 'POST',
+       headers: {'Content-type' :  'application/json'},
+       body: JSON.stringify({userId}),
+     });
+     const data = await response.json();
+     console.log('Data:', data);
+ 
+     if (data.unlockedBadges && data.unlockedBadges.length > 0) {
+       setUserBadges(data.unlockedBadges);
+       dispatch(addBadge({
+        picture: data.unlockedBadges[0].picture,
+        name: data.unlockedBadges[0].name,
+        description: data.unlockedBadges[0].description,
+        points: data.unlockedBadges[0].points,
+      }));
+     
+
+     } else {
+       // Si aucun badge n'est débloqué, ne rien mettre à jour dans l'état
+       console.log('Aucun badge débloqué.');
+ 
+       return;
+     }
+   } catch (error) {
+     console.error('Error fetching latest badge:', error);
+   }
+ };
+ useFocusEffect(
+   React.useCallback(() => {
+     fetchLatestBadge();
+   }, [])
+   );
+
 
   // Création d'une fonction pour personnaliser le onPress de la Tab & la navigation
   function CustomTabBar({ state, descriptors, navigation }) {
     const dispatch = useDispatch();
+    
 
-    return (
-      <View style={{ flexDirection: "row", backgroundColor: "#fff" }}>
+      return (
+        <View style={{ flexDirection: "row", backgroundColor: "#fff" }}>
         {state.routes.map((route, index) => {
           //On map chaque route & on extrait les descriptors(options)
           const { options } = descriptors[route.key];
           const label = options.tabBarLabel || route.name;
-
+          
           const onPress = () => {
             //Fonction onPress sur chaque onglet
             navigation.navigate(route.name);
             setActiveTab(route.name);
             dispatch(clearMovie());
           };
-
+          
+          
           return (
             <TouchableOpacity
-              key={index}
-              onPress={onPress}
-              style={{
+            key={index}
+            onPress={onPress}
+            style={{
                 flex: 1,
                 alignItems: "center",
                 paddingVertical: 15,
                 backgroundColor:
-                  activeTab === route.name ? "#75bbf4" : "#002C82",
+                activeTab === route.name ? "#75bbf4" : "#002C82",
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
                 borderLeftWidth: 0.5,
@@ -76,7 +129,7 @@ export default function MyPlaneScreen() {
                 borderStyle: "solid",
                 borderColor: activeTab === route.name ? "#75bbf4" : "#fff",
               }}
-            >
+              >
               <Text
                 style={{
                   color: activeTab === route.name ? "#002C82" : "#fff",
@@ -92,7 +145,7 @@ export default function MyPlaneScreen() {
       </View>
     );
   }
-
+  
   //Gestion Navigation
   const navigation = useNavigation();
 
@@ -107,7 +160,6 @@ export default function MyPlaneScreen() {
 
   //useEffect pour afficher l'image dans le bloc avant de selectionner un service
   useEffect(() => {
-    console.log("Active Tab:", activeTab);
     if (activeTab === "Services") {
       if (!serviceMovie) {
         // Si aucun film n'est sélectionné, affiche l'image par défaut
@@ -186,7 +238,9 @@ export default function MyPlaneScreen() {
         </TouchableOpacity>
       </View>
       {/* Modal Badges */}
-      {user.isConnected ? <BadgeModal /> : <View></View>}
+      {userBadges.length ? <BadgeModal userBadges ={userBadges}/> : <View></View>} 
+      {/* <CheckBadges userId={userId} apiUrl={apiUrl} /> */}
+      
     </SafeAreaView>
   );
 }
@@ -231,7 +285,7 @@ const styles = StyleSheet.create({
   },
   blocIata: {
     width: "60%",
-    height: "%",
+    height: "10%",
 
     flexDirection: "row",
     alignItems: "center",

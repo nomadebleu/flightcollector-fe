@@ -9,9 +9,9 @@ const initialState = {
     token: null,
     profilPhoto: null,
     totalPoints:0,
-    badges: null,
-    flights: null,
-    planes: null,
+    badges: [],
+    flights: [],
+    planes: [],
     _id:null,
   },
 };
@@ -32,8 +32,12 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photos = action.payload;
     },
+    addPoints: (state, action) => {
+      // Ajouter des points au profil de l'utilisateur
+      state.value.totalPoints += action.payload;
+    },
   },
 });
 
-export const { login, logout, addPhoto } = userSlice.actions;
+export const { login, logout, addPhoto, addPoints } = userSlice.actions;
 export default userSlice.reducer;
