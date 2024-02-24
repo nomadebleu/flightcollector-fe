@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFlight } from "../reducers/flight";
 
 const apiKeyFlight = process.env.API_KEY_FLIGHTS;
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function PassScreen() {
   //States
@@ -43,7 +45,7 @@ export default function PassScreen() {
     }
     console.log("Data Boarding Pass:", data);
     //Répartition des données du BoardingPass
-    const formattedStr = data
+    /*const formattedStr = data
       .split(" ")
       .filter((e) => e !== "")
       .splice(2, 2);
@@ -52,20 +54,56 @@ export default function PassScreen() {
     const flightNumber = String(Number(formattedStr[1]));
     console.log(
       `depIata is :${depIata}, arrIata is :${arrIata}, flightNumber is:${flightNumber}`
-    );
-    // const flightIata = formattedStr[0].slice(6) + flightNumber;
-    // console.log('Flight IATA is :', flightIata);
-    // const today = new Date().toISOString().slice(0, 10);
-    // setScannedFlight(flightNumber);
-    // setScannedFliIata(flightIata);
-    // setScannedDep(depIata);
-    // setScannedArr(arrIata);
-    // setDate(today);
-    fetchDataToRedux(depIata, arrIata, flightNumber);
+    );*/
+    const reservationNumber = data
+      .split(" ")
+      .filter((e) => e !== "")
+      .splice(1, 1);
+    console.log("reservationNumber from boardingPass:", reservationNumber);
+
+    //Fetch des data flights
+    const handleFetchDataFlight = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/flights/${reservationNumber}`);
+        const flightData = await response.json();
+        console.log("flightdata:", flightData);
+        //On vérifie qu'il y a des data
+        if (flightData.result) {
+          console.log("FlightData:", flightData.data);
+          dispatch(
+            addFlight({
+              planes: flightData.data.planes,
+
+              departure: flightData.data.departure,
+              departureScheduled: flightData.data.departureScheduled,
+              departureEstimated: flightData.data.departureEstimated,
+              departureActual: flightData.data.departureActual,
+
+              arrival: flightData.data.arrival,
+              arrivalScheduled: flightData.data.arrivalScheduled,
+              arrivalEstimated: flightData.data.arrivalEstimated,
+
+              iataArrival: flightData.data.airportArr.iataCode,
+              iataDep: flightData.data.airportDep.iataCode,
+
+              nbrePlaces: flightData.data.nbrePlaces,
+              meals: flightData.data.meals,
+            })
+          );
+          navigation.navigate("MyPlane");
+        } else {
+          console.error("Error during connection", flightData.error);
+        }
+      } catch (error) {
+        console.error("Error with this flight:", error);
+      }
+    };
+    handleFetchDataFlight(reservationNumber);
+    console.log("FlightRedux is :", flightRedux);
   };
 
   //Récupération des données pour le redux
-  const fetchDataToRedux = (depIata, arrIata, flightNumber) => {
+  /*const fetchDataToRedux = (depIata, arrIata, flightNumber) => {
     fetch(
       `http://api.aviationstack.com/v1/flights?access_key=${apiKeyFlight}&dep_iata=${depIata}&arr_iata=${arrIata}&flight_number=${flightNumber}`
     )
@@ -101,13 +139,7 @@ export default function PassScreen() {
       });
   };
   console.log("FlightRedux is :", flightRedux);
-
-  // const handleReset = () => {
-  //   setScannedFlight('');
-  //   setScannedDep('');
-  //   setScannedArr('');
-  //   setScannedFliIata('');
-  // };
+*/
 
   //Fermeture du Scan par l'icone
   const handleClose = () => {
