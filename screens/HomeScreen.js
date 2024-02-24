@@ -81,6 +81,21 @@ export default function HomeScreen() {
           meals:flightData.data.meals
           })
       );
+
+      const flightIds = [flightData.data._id];
+
+      const associateResponse = await fetch(`${apiUrl}/users/associateFlights/${user._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ flightIds })
+      });
+      console.log(associateResponse)
+
+      const associateData = await associateResponse.json();
+      console.log(associateData.message); // Affiche le message de la réponse
+    
       navigation.navigate('MyPlane'); 
     } else {
       console.error('Error during connection', flightData.error);
@@ -110,6 +125,7 @@ const handleFetchDataFlightImmat = async() => {
     console.error('Error during connection:', error);
   }
 };
+
 
   return (
     <SafeAreaView style={styles.body}>
