@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 //Redux
 import { useSelector } from 'react-redux';
@@ -74,7 +74,7 @@ export default function FlightBlock() {
     }
   };
   return (
-  <View  /*style={styles.mapContainer}*/>
+  <View  style={styles.mapContainer}>
       <MapView
           region={{
            latitude: 37.78825,
@@ -82,6 +82,7 @@ export default function FlightBlock() {
           latitudeDelta: 50,
           longitudeDelta: 50,
         }}
+        style={styles.map}
       >
         <Marker coordinate={{ latitude: mapFlight.latD, longitude: mapFlight.longD }} />
         <Marker coordinate={{ latitude: mapFlight.latA, longitude: mapFlight.longA }} />
@@ -96,10 +97,8 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
     overflow: 'hidden', //Pour voir le radius
-  },
-  map: {
+    },
+    map: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
-  },
-});
+    },
+    });
