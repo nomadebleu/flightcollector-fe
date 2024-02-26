@@ -6,7 +6,9 @@ import FormButton from '../../components/shared/FormButton';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import { FontAwesome5 } from '@expo/vector-icons';
 //Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPoints } from '../../reducers/user';
+import { UseDispatch } from 'react-redux';
 
 export default function ModalReduction() {
   //States Coupon & Modal
@@ -15,12 +17,68 @@ export default function ModalReduction() {
 
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
+  const totalPoints = user.totalPoints
+  const userId = user._id
+  //Backend 
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 
   //Fonction d'ouverture de la modal
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
     setCoupon(generateCouponCode(8));
   };
+
+
+  //Modifier les points après réductions 
+  const updateUserPoints = async ( pointsToRemove) => {
+    try {
+      const response = await fetch(`${apiUrl}/users/updatePoints/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ pointsToRemove })
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Update points request failed: ${errorMessage}`);
+      }
+  
+      const data = await response.json();
+      console.log(data)
+      return data.newTotalPoints;
+    } catch (error) {
+      console.error('Error updating user points:', error);
+      throw error;
+    }
+  };
+
+  //fonction pour redistribué les points de Réductions 
+  const handleUseReduction = async () => {
+    let pointsToRemove = 0;
+    if (totalPoints >= 20000) {
+      pointsToRemove = 20000;
+    }
+
+   else if (totalPoints >= 10000) {
+      pointsToRemove = 10000;
+    } 
+    else if (totalPoints >= 5000) {
+      pointsToRemove = 5000;
+    }
+ 
+    console.log(pointsToRemove);
+  
+    try {
+      await updateUserPoints(pointsToRemove); 
+      toggleModal();
+    } catch (error) {
+      console.error('Failed to use reduction:', error);
+    }
+  };
+
 
   //Pour générer un coupon de manière aléatoire
   function generateCouponCode(length) {
@@ -71,7 +129,7 @@ export default function ModalReduction() {
         </View>
       </Modal>
       <FormButton
-        onPress={() => toggleModal()}
+        onPress={() => handleUseReduction()}
         title='USE REDUCTION'
         formStyle={styles.size}
       />

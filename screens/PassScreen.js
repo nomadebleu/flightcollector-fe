@@ -72,6 +72,7 @@ export default function PassScreen() {
           console.log("FlightData:", flightData.data);
           dispatch(
             addFlight({
+              _id: flightData.data._id,
               planes: flightData.data.planes,
 
               departure: flightData.data.departure,
@@ -90,6 +91,8 @@ export default function PassScreen() {
               meals: flightData.data.meals,
             })
           );
+
+          
           navigation.navigate("MyPlane");
         } else {
           console.error("Error during connection", flightData.error);

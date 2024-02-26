@@ -10,6 +10,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
 //Gradient
 import { LinearGradient } from 'expo-linear-gradient';
+import { addPoints } from '../reducers/user';
 
 export default function Reduction() {
   //Utilisation du Redux
@@ -38,7 +39,7 @@ export default function Reduction() {
             ? '15%'
             : user.totalPoints >= 5000
             ? '10%'
-            : ''}
+            :''}
         </Text>
       </View>
 

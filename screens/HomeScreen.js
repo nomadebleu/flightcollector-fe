@@ -83,16 +83,17 @@ export default function HomeScreen() {
           })
       );
 
-      const flightIds = [flightData.data._id];
+      const flightId = flightData.data._id;
+      const planeId = flightData.data.planes._id
 
       const associateResponse = await fetch(`${apiUrl}/users/associateFlights/${user._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ flightIds })
+        body: JSON.stringify({ flightId, planeId })
       });
-      console.log(associateResponse)
+  
 
       const associateData = await associateResponse.json();
       console.log(associateData.message); // Affiche le message de la réponse
