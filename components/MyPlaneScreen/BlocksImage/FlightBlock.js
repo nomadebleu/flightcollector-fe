@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
     overflow: 'hidden', //Pour voir le radius
-    },
-    map: {
+  },
+  map: {
     flex: 1,
-    },
-    });
+  },
+});
