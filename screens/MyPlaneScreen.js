@@ -52,7 +52,7 @@ export default function MyPlaneScreen() {
   const [imageSource, setImageSource] = useState(null);
   const [showServiceBlock, setShowServiceBlock] = useState(false);
  //State BadgeModals 
- const [userBadges, setUserBadges] = useState([]);
+ const [userBadges, setUserBadges] = useState(0);
 
 
  

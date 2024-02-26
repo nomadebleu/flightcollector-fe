@@ -39,28 +39,22 @@ export default function BadgeModal({userBadges}) {
   //Close Modal
   const handleCloseModal = async () => {
     try {
-      let totalPointsToAdd = 0;
-    // Itérer sur chaque badge dans userBadges et ajouter les points de chaque badge au total
-    userBadges.forEach((badge) => {
-      totalPointsToAdd += badge.points;
-    });
-
-      const response = await fetch(`${apiUrl}/users/addPoints`, {
+      if (userBadges.length > 0) {
+        let totalPointsToAdd = userBadges[0].points;
+      const response = await fetch(`${apiUrl}/users/updatePoints/${user._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId:user._id,
-          pointsToAdd: totalPointsToAdd,
+          pointsToAdd : totalPointsToAdd,
         }),
       });
-      console.log('response', response);
       const data = await response.json();
-      console.log('Data is :', data);
-      if (data.result) {
-        dispatch(addPoints(totalPointsToAdd))
+      if (data.result){
+      console.log('Mis à jour avec succes')
       } else {
         console.error('Error during update');
       }
+    }
     } catch (error) {
       console.error('Error during update:', error);
     }

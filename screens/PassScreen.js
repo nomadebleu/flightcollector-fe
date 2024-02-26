@@ -90,6 +90,8 @@ export default function PassScreen() {
               meals: flightData.data.meals,
             })
           );
+
+          
           navigation.navigate("MyPlane");
         } else {
           console.error("Error during connection", flightData.error);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -33,21 +34,41 @@ const FlagComponent = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchFlags = async () => {
-      try {
-        const fetchedFlags = await fetchUserFlightAirports();
-        setFlags([...new Set(fetchedFlags)]);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des drapeaux :', error);
-        // Gérer l'erreur
-      }
-    };
+  // useEffect(() => {
+  //   const fetchFlags = async () => {
+  //     try {
+  //       const fetchedFlags = await fetchUserFlightAirports();
+  //       setFlags([...new Set(fetchedFlags)]);
+  //     } catch (error) {
+  //       console.error('Erreur lors de la récupération des drapeaux :', error);
+  //       // Gérer l'erreur
+  //     }
+  //   };
 
-    if (user.flights && user.flights.length > 0) {
-      fetchFlags();
-    }
-  }, [user.flights]);
+  //   if (user.flights && user.flights.length > 0) {
+  //     fetchFlags();
+  //   }
+  // }, [user.flights]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchFlags = async () => {
+        try {
+          const fetchedFlags = await fetchUserFlightAirports();
+          setFlags([...new Set(fetchedFlags)]);
+          console.log(flags)
+        } catch (error) {
+          console.error('Erreur lors de la récupération des drapeaux :', error);
+          // Gérer l'erreur
+        }
+      };
+  
+      if (user.flights ) {
+        fetchFlags();
+      }
+    }, [user.flights])
+  );
+  
 
   return (
     <ScrollView horizontal contentContainerStyle={styles.flagContainer}>
