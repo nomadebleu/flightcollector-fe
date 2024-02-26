@@ -204,7 +204,9 @@ export default function MyPlaneScreen() {
       <View style={styles.blocOnglets}>
         {/* props independent pour détacher de la nav globale */}
         <NavigationContainer independent={true}>
-          <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+          <Tab.Navigator 
+          tabBar={(props) => <CustomTabBar {...props} />}
+          >
             <Tab.Screen
               name="Flight"
               component={Flight}
