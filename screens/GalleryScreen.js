@@ -126,6 +126,7 @@ export default function GalleryScreen() {
 
   //add un plane en Fav
   const addPlaneToFavorites = async (planeId) => {
+    console.log('add')
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     try {
       const response = await fetch(`${apiUrl}/planes/addFavoris/${userId}/${planeId}`, {
@@ -139,6 +140,13 @@ export default function GalleryScreen() {
       }
 
       const data = await response.json();
+      setUserPlanes(planes=> planes.map(plane => {
+        if (plane._id === planeId){
+          return {... plane, isFavorite : true }
+        }
+        return plane;
+      } ))
+
     } catch (error) {
       console.error('Erreur lors de la requête pour ajouter un avion aux favoris :', error);
       // Gérez l'erreur
@@ -147,6 +155,7 @@ export default function GalleryScreen() {
 
   //remove Plane en Fav
   const removePlaneFromFavorites = async (planeId) => {
+    console.log('remove')
     const apiUrl = process.env.EXPO_PUBLIC_API_URL;
     try {
       const response = await fetch(`${apiUrl}/planes/removeFavoris/${userId}/${planeId}`, {
@@ -161,6 +170,12 @@ export default function GalleryScreen() {
       }
 
       const data = await response.json();
+      setUserPlanes(planes=> planes.map(plane => {
+        if (plane._id === planeId){
+          return {... plane, isFavorite : false }
+        }
+        return plane;
+      } ))
     } catch (error) {
       console.error('Erreur lors de la requête pour supprimer un avion des favoris :', error);
       // Gérez l'erreur
@@ -217,7 +232,9 @@ export default function GalleryScreen() {
     <ScrollView>
       <View style={styles.containerPlanes}>
   {searchQuery === '' // Vérifie si la recherche est vide
-    ? userPlanes.map((plane, index) => ( // Affiche tous les avions
+    ? userPlanes.map((plane, index) => {
+      console.log(plane.isFavorite, plane.type) // Affiche tous les avions
+      return(
       <View key={index} style={[styles.plane, index !== 0 && styles.planeMarginTop, { marginLeft: 40 }]}>
         {/* Contenu de l'avion */}
         <View style={styles.img}>
@@ -234,18 +251,21 @@ export default function GalleryScreen() {
                       : addPlaneToFavorites(plane._id);
                   }}
                 >
-                  <FontAwesome
+                  {plane.isFavorite ?<FontAwesome
                     name='star'
                     size={10}
-                    color={plane.isFavorite ? 'yellow' : 'blue'} />
+                    color='yellow' /> :<FontAwesome
+                    name='star'
+                    size={10}
+                    color='blue' /> }
                 </TouchableOpacity>
               </View>
               <View style={styles.descPlane}>
                 <Text style={{ fontFamily: 'Cabin-Bold' }}>{plane.type}</Text>
                 <Text style={styles.descText}>{plane.description}</Text>
       </View>
-      </View>
-    ))
+      </View>)}
+    )
     : filterPlanesByType().map((plane, index) => ( 
       <View key={index} style={[styles.plane, index !== 0 && styles.planeMarginTop, { marginLeft: 20 }]}>
         {/* Contenu de l'avion */}
