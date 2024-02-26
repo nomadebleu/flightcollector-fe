@@ -12,6 +12,7 @@ import FormInput from '../components/shared/FormInput';
 import PasswordModal from '../components/shared/PasswordModal';
 import Header from '../components/shared/Header';
 import FlagComponent from '../components/ProfilScreen/Flag';
+
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -23,12 +24,14 @@ import { logout, addPhoto } from "../reducers/user";
 import * as ImagePicker from 'expo-image-picker';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
+import BlueBloc from '../components/ProfilScreen/BlueBlocs';
 
 export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const userBadges = useSelector(state => state.badge.value);
   const userPoints = user.totalPoints
+  console.log('up', userPoints, 'b', userBadges)
   const dispatch = useDispatch();
 
   //LocalHost
@@ -221,9 +224,11 @@ export default function ProfilScreen() {
           />
         </View>
       </View>
-
-      {/* Mini Flights */}
       <View style={styles.containerMiniInput}>
+      <BlueBloc userBadges={userBadges} urlBE={urlBE} user={user} />
+      </View>
+      {/* Mini Flights */}
+      {/* <View style={styles.containerMiniInput}>
         <View style={styles.miniInput}>
           <FontAwesome
             name='star'
@@ -270,10 +275,10 @@ export default function ProfilScreen() {
           </Text>
           <Text style={styles.textMiniInput}>Aircrafts</Text>
         </View>
-      </View>
+      </View> */}
 
       {/* Places I've visited */}
-      <View style={styles.blocEmoticon}>
+      {/* <View style={styles.blocEmoticon}>
         <View style={styles.containerTitle}>
           <Text style={styles.titleEmoticon}>PLACES I'VE VISITED</Text>
           <View style={styles.flagContainer}>
@@ -282,36 +287,35 @@ export default function ProfilScreen() {
         </View>
       </View>
       <View>
-      </View>
+      </View> */}
 
 
 
       {/* My badges */}
-      <View style={styles.blocEmoticon}>
+      {/* <View style={styles.blocEmoticon}>
         <View style={styles.containerTitle}>
           <Text style={styles.titleEmoticon}>MY BADGES</Text>
-        </View>
+        </View> */}
 
         {/* <Text>{badges}</Text> */}
-        <View style={styles.badgeContainer}>
+        {/* <View style={styles.badgeContainer}>
           {userBadges.map((badge, index) => (
             <View key={index} style={styles.badge}>
               <Image source={{ uri: badge.picture }} style={{ width: 30, height: 30 }} />
             </View>
           ))}
         </View>
-        </View>
+        </View> */}
         {/* TOTAL POINTS */}
 
-
-        <View style={styles.blocEmoticon}>
+        {/* <View style={styles.blocEmoticon}>
           <View style={styles.containerTitle}>
             <Text style={styles.titleEmoticon}>TOTAL POINTS</Text>
             <View style={styles.points}>
               <Text>{userPoints}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* <View>
       </View>
       <View>

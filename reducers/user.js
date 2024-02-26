@@ -33,8 +33,7 @@ export const userSlice = createSlice({
       state.value.photos = action.payload;
     },
     addPoints: (state, action) => {
-      // Ajouter des points au profil de l'utilisateur
-      state.value.totalPoints += action.payload;
+      state.value.totalPoints = action.payload;
     },
   },
 });
