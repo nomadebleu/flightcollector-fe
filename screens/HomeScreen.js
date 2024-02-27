@@ -42,11 +42,6 @@ export default function HomeScreen() {
     dispatch(logout());
     navigation.navigate("Login");
   };
-
-  //Gestion du Scan Aicraft
-  const handleScan = () => {
-    navigation.navigate("Scan");
-  };
   
   //Gestion du Boarding Pass
   const handlePass = () => {
@@ -98,6 +93,7 @@ export default function HomeScreen() {
       const associateData = await associateResponse.json();
       console.log(associateData.message); // Affiche le message de la réponse
     
+      setEnterReservation('');
       navigation.navigate('MyPlane'); 
     } else {
       console.error('Error during connection', flightData.error);

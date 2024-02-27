@@ -1,86 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+//Action lors de la navigation
+import { useFocusEffect } from '@react-navigation/native';
+//Redux
 import { useSelector } from 'react-redux';
 
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
 const FlagComponent = () => {
+  //States
   const [flags, setFlags] = useState([]);
+
+  //Redux
   const user = useSelector((state) => state.user.value);
   const userId = user._id;
 
-  const urlBE = process.env.EXPO_PUBLIC_API_URL;
-
+  //Fonction pour accèder aux Flags des Airports d'ARRIVEE de l'ensemble des Flights du User
   async function fetchUserFlightAirports() {
-    try {
-      const response = await fetch(`${urlBE}/airports/getUserFlightAirport`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId })
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des données');
-      }
-
-      const data = await response.json();
-      const airportFlags = data.userFlightAirports.map(flight => flight?.arrivalAirport?.flag ?? "Unknown");
-      return airportFlags;
-
-    } catch (error) {
-      console.error('Une erreur s\'est produite lors de la récupération des vols de l\'utilisateur :', error);
-      return []; // Retourner un tableau vide en cas d'erreur
+    const response = await fetch(`${apiUrl}/airports/getUserFlightAirport`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    });
+    if (!response.ok) {
+      console.error('Erreur lors de la récupération des données');
+      return [];
     }
+    const data = await response.json();
+    return data.userFlightAirports.map(
+      (flight) => flight?.arrivalAirport?.flag ?? 'Unknown'
+    ); //Si chaque element de gauche est valide, j'accède au suivant
   }
 
-  // useEffect(() => {
-  //   const fetchFlags = async () => {
-  //     try {
-  //       const fetchedFlags = await fetchUserFlightAirports();
-  //       setFlags([...new Set(fetchedFlags)]);
-  //     } catch (error) {
-  //       console.error('Erreur lors de la récupération des drapeaux :', error);
-  //       // Gérer l'erreur
-  //     }
-  //   };
-
-  //   if (user.flights && user.flights.length > 0) {
-  //     fetchFlags();
-  //   }
-  // }, [user.flights]);
-
+  //Charge les Flags des Flights du User
   useFocusEffect(
     React.useCallback(() => {
       const fetchFlags = async () => {
+        if (!user.flights) return; // Vérifie si le user a des flights
         try {
           const fetchedFlags = await fetchUserFlightAirports();
-          setFlags([...new Set(fetchedFlags)]);
-          console.log(flags)
+          setFlags([...new Set(fetchedFlags)]); //Permet d'éliminer les doublons
+          console.log('Les Flags sont :', flags);
         } catch (error) {
           console.error('Erreur lors de la récupération des drapeaux :', error);
-          // Gérer l'erreur
         }
       };
-  
-      if (user.flights ) {
-        fetchFlags();
-      }
+      fetchFlags();
     }, [user.flights])
   );
-  
 
   return (
-    <ScrollView horizontal contentContainerStyle={styles.flagContainer}>
+    <ScrollView
+      horizontal
+      contentContainerStyle={styles.flagContainer}
+    >
       {flags.map((flagUrl, index) => (
-        <View key={index} style={styles.flagItem}>
+        <View
+          key={index}
+          style={styles.flagItem}
+        >
           {flagUrl ? (
             <Image
               style={styles.flagImage}
               source={{ uri: flagUrl }}
             />
           ) : (
-            <Text>Drapeau non disponible</Text>
+            <Text>No flags yet</Text>
           )}
         </View>
       ))}

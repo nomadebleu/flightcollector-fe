@@ -11,27 +11,23 @@ import {
 import FormInput from '../components/shared/FormInput';
 import PasswordModal from '../components/shared/PasswordModal';
 import Header from '../components/shared/Header';
-import FlagComponent from '../components/ProfilScreen/Flag';
-
+import BlueBloc from '../components/ProfilScreen/BlueBlocs';
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'react-native-vector-icons';
 //Redux
-import { useSelector, useDispatch } from "react-redux";
-import { logout, addPhoto } from "../reducers/user";
+import { useSelector, useDispatch } from 'react-redux';
+import { logout, addPhoto } from '../reducers/user';
 //Picker
 import * as ImagePicker from 'expo-image-picker';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
-import BlueBloc from '../components/ProfilScreen/BlueBlocs';
+
 
 export default function ProfilScreen() {
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
-  const userBadges = useSelector(state => state.badge.value);
-  const userPoints = user.totalPoints
-  console.log('up', userPoints, 'b', userBadges)
+  const userBadges = useSelector((state) => state.badge.value);
   const dispatch = useDispatch();
 
   //LocalHost
@@ -42,8 +38,6 @@ export default function ProfilScreen() {
   const [lastname, setLastname] = useState('');
   const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
-  const [points, setPoints] = useState('');
-  const [badges, setBadges] = useState('');
 
   //State Image Profil
   const [selectedImage, setSelectedImage] = useState(null);
@@ -56,30 +50,10 @@ export default function ProfilScreen() {
     setFirstname(user.firstname);
     setLastname(user.lastname);
     setMail(user.mail);
-    // setPoints(user.totalPoints);
-    // setBadges(user.badges);
-
-
-    // if (user.badges && user.badges.length > 0) {
-    //   // Affichage des pictures des badges
-    //   const badgesImages = user.badges.map((badge, index) => {
-    //     return (
-    //       <Image
-    //         key={index}
-    //         source={{ uri: badge.picture }}
-    //         style={styles.emoticon}
-    //       />
-
-    //     );
-    //   });
-
-    //   setBadges(badgesImages);
     setPassword(
       user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
-
-
 
   //Gestion Picker
   const pickImageAsync = async () => {
@@ -89,13 +63,13 @@ export default function ProfilScreen() {
     });
     const formData = new FormData();
     console.log(result);
-    formData.append("photoFromFront", {
+    formData.append('photoFromFront', {
       uri: result?.uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
+      name: 'photo.jpg',
+      type: 'image/jpeg',
     });
-    fetch("http://192.168.1.65:3000/users/upload", {
-      method: "POST",
+    fetch('http://192.168.1.65:3000/users/upload', {
+      method: 'POST',
       body: formData,
     })
       .then((response) => response.json())
@@ -122,15 +96,6 @@ export default function ProfilScreen() {
     setPassword('');
     navigation.navigate('Login'); //Navigation vers Login
   };
-
-  //Pour afficher 0 au lieu de l'erreur à cause de null
-  const badgesLength = userBadges ? userBadges.length : 0;
-  const planesLength = user.planes ? user.planes.length : 0;
-  //Affiché que une seul fois l'arrivalPlaces :
-  const uniqueArrivalPlaces = user.flights ? [...new Set(user.flights.map(flight => flight.airportNameDest))] : [];
-  const placeLength = uniqueArrivalPlaces.length;
-  //Affiché les avions en favoris.
-  const FavLength = user.planes.isFavorite ? user.planes.isFavorite.length : 0;
 
   return (
     <SafeAreaView style={styles.body}>
@@ -224,110 +189,14 @@ export default function ProfilScreen() {
           />
         </View>
       </View>
-      <View style={styles.containerMiniInput}>
-      <BlueBloc userBadges={userBadges} urlBE={urlBE} user={user} />
-      </View>
       {/* Mini Flights */}
-      {/* <View style={styles.containerMiniInput}>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='star'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {''}
-          </Text>
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{FavLength}</Text>
-          <Text style={styles.textMiniInput}>Favorites flights</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='map-marker'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {''}
-          </Text>
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{placeLength}</Text>
-          <Text style={styles.textMiniInput}>Places visited</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome5
-            name='award'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {badgesLength}
-          </Text>
-          <Text style={styles.textMiniInput}>Badges</Text>
-        </View>
-        <View style={styles.miniInput}>
-          <FontAwesome
-            name='plane'
-            size={25}
-            color='#002C82'
-          />
-          <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-            {planesLength}
-          </Text>
-          <Text style={styles.textMiniInput}>Aircrafts</Text>
-        </View>
-      </View> */}
-
-      {/* Places I've visited */}
-      {/* <View style={styles.blocEmoticon}>
-        <View style={styles.containerTitle}>
-          <Text style={styles.titleEmoticon}>PLACES I'VE VISITED</Text>
-          <View style={styles.flagContainer}>
-            <FlagComponent />
-          </View>
-        </View>
-      </View>
       <View>
-      </View> */}
-
-
-
-      {/* My badges */}
-      {/* <View style={styles.blocEmoticon}>
-        <View style={styles.containerTitle}>
-          <Text style={styles.titleEmoticon}>MY BADGES</Text>
-        </View> */}
-
-        {/* <Text>{badges}</Text> */}
-        {/* <View style={styles.badgeContainer}>
-          {userBadges.map((badge, index) => (
-            <View key={index} style={styles.badge}>
-              <Image source={{ uri: badge.picture }} style={{ width: 30, height: 30 }} />
-            </View>
-          ))}
-        </View>
-        </View> */}
-        {/* TOTAL POINTS */}
-
-        {/* <View style={styles.blocEmoticon}>
-          <View style={styles.containerTitle}>
-            <Text style={styles.titleEmoticon}>TOTAL POINTS</Text>
-            <View style={styles.points}>
-              <Text>{userPoints}</Text>
-            </View>
-          </View>
-        </View> */}
-        {/* <View>
-      </View>
-      <View>
-        <FormInput
-          label='TOTAL POINTS'
-          value={user.totalPoints}
-          name='totalPoints'
-          editable={false}
-          titleStyle={styles.legend}
-          formStyle={styles.points}
+        <BlueBloc
+          userBadges={userBadges}
+          urlBE={urlBE}
+          user={user}
         />
-      </View> */}
+      </View>
     </SafeAreaView>
   );
 }
@@ -342,6 +211,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 50,
     right: 70,
+    
     fontFamily: 'Farsan-Regular',
     fontSize: 32,
     color: '#80C9FF',
@@ -364,11 +234,13 @@ const styles = StyleSheet.create({
   },
   //Icone +
   iconContainer: {
-    width: 35, // Largeur de l'icône
-    height: 35, // Hauteur de l'icône
+    width: 35, 
+    height: 35,
+
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
+
     backgroundColor: '#002C82',
 
     borderRadius: 20,
@@ -386,118 +258,13 @@ const styles = StyleSheet.create({
   inputs: {
     marginTop: 20,
   },
-  legend: {
-    position: 'absolute',
-    top: 2,
-    left: 2,
-
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 5,
-
-    fontFamily: 'Cabin-Regular',
-    fontSize: 12,
-    color: '#002C82',
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
-  },
   size: {
     height: 42,
-  },
-  points: {
-    backgroundColor: '#f0f0f0', // Couleur de fond
-    borderRadius: 10, // Bord arrondi
-    paddingHorizontal: 10, // Espace intérieur horizontal
-    paddingVertical: 5, // Espace intérieur vertical
-    fontFamily: 'Cabin-Bold',
-  },
-  // points: {
-  //   height: 100,
-  //   fontSize: 16,
-  //   // textAlign: 'center',
-  //   padding: 10,
-  //   fontFamily: 'Cabin-Bold',
-  //   color: '#002C82',
-  // },
-  //MiniInputs
-  containerMiniInput: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-
-    flexWrap: 'wrap',
-    marginBottom: 15,
-  },
-  miniInput: {
-    width: '40%',
-    height: 45,
-
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#002C82',
-    backgroundColor: '#80C9FF',
-    borderRadius: 5,
-  },
-  textMiniInput: {
-    fontFamily: 'Farsan-Regular',
-    fontSize: 20,
-    color: '#002C82',
   },
   //Modal Password Change
   modal: {
     position: 'absolute',
     right: 0,
     top: 40,
-  },
-  //Emoticon
-  emoticon: {
-    width: 25,
-    height: 25,
-  },
-  blocEmoticon: {
-    width: 345,
-    height: 42,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#002C82',
-
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-  titleEmoticon: {
-    fontFamily: 'Cabin-Regular',
-    fontSize: 12,
-    color: '#002C82',
-  },
-  containerTitle: {
-    position: 'absolute',
-    top: -10,
-    left: 35,
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 5,
-    borderRadius: 5,
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
-  },
-  //Flags
-  flagContainer: {
-    flexDirection: 'row', // Pour aligner les drapeaux horizontalement
-  },
-  flagItem: {
-    marginRight: 10,
-  },
-  flagImage: {
-    width: 30,
-    height: 30,
-
-  },
-  badgeContainer: {
-    flexDirection: 'row', // Alignement horizontal
-    alignItems: 'center', // Centrer verticalement les badges
-  },
-  badge: {
-    marginRight: 10, // Marge entre chaque badge
   },
 });

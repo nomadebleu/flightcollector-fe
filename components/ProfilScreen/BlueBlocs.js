@@ -1,102 +1,96 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+//Icones
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+//Composants
 import FlagComponent from './Flag';
+//Redux
 import { useDispatch } from 'react-redux';
 import { addPoints } from '../../reducers/user';
 
 const BlueBloc = ({ urlBE, user }) => {
-  const [userPoints, setUserPoints] = useState(0);
-  const [favoris, setFavoris] = useState(0);
-  const [planes, setPlanes] = useState(0);
-  const [places, setPlaces] = useState(0);
-  const [badges, setBadges] = useState(0);
-  const [pictureOfBadges, setPictureOfBadges]= useState([])
+  //States
+  const [userData, setUserData] = useState({
+    userPoints: 0,
+    favoris: 0,
+    planes: 0,
+    places: 0,
+    badges: 0,
+    pictureOfBadges: [],
+  });
+
+  //Redux
   const dispatch = useDispatch();
 
-
- const fetchUserPoints = async () => {
+  // Récupère les données du User
+  const fetchUserData = async () => {
     try {
-      const response = await fetch(`${urlBE}/users/totalPoints/${user._id}`);
-      if (!response.ok) {
+      // Récupère le total des points du User
+      const pointsResponse = await fetch(
+        `${urlBE}/users/totalPoints/${user._id}`
+      );
+      if (!pointsResponse.ok) {
         throw new Error('Erreur lors de la récupération des points');
       }
-      const data = await response.json();
-      console.log(data)
-      setUserPoints(data.totalPoints);
-      dispatch(addPoints(data.totalPoints))
-      
+      const pointsData = await pointsResponse.json();
+
+      // Récupère le nbre de Favoris et de Planes du User
+      const aircraftsResponse = await fetch(
+        `${urlBE}/planes/favoris/${user._id}`
+      );
+      if (!aircraftsResponse.ok) {
+        throw new Error('La requête a échoué');
+      }
+      const aircraftsData = await aircraftsResponse.json();
+
+      // Récupère le nbre de Badges et leurs visuels du User
+      const badgesResponse = await fetch(`${urlBE}/badges/${user._id}`);
+      if (!badgesResponse.ok) {
+        throw new Error('Erreur lors de la récupération des badges');
+      }
+      const badgesData = await badgesResponse.json();
+
+      // Récupère tous les Flights du User
+      const placesResponse = await fetch(
+        `${urlBE}/flights/allFlights/${user._id}`
+      );
+      if (!placesResponse.ok) {
+        throw new Error('Erreur lors de la récupération des lieux');
+      }
+      const placesData = await placesResponse.json();
+
+      // MAJ avec les nouvelles valeurs
+      setUserData({
+        userPoints: pointsData.totalPoints,
+        favoris: aircraftsData.userFavoritePlanes,
+        planes: aircraftsData.numberOfPlanes,
+        places: placesData.uniqueFlightsCount,
+        badges: badgesData.CountBadges,
+        pictureOfBadges: badgesData.badgePictures,
+      });
+
+      // Dispatch pour ajouter les points
+      dispatch(addPoints(pointsData.totalPoints));
     } catch (error) {
-      console.error('Erreur lors de la récupération des points :', error);
+      console.error(
+        'Erreur lors de la récupération des données du User :',
+        error
+      );
     }
   };
 
- async function fetchAircrafts() {
-    try {
-      const response = await fetch(`${urlBE}/planes/favoris/${user._id}`);
-      if (!response.ok) {
-        throw new Error('La requête a échoué');
-      }
-      const data = await response.json();
-      console.log(data)
-      setFavoris(data.userFavoritePlanes);
-      setPlanes(data.numberOfPlanes);
-      return data;
-    } catch (error) {
-      console.error('Une erreur s\'est produite lors de la récupération des avions :', error);
-      throw error;
-    }
-  }
-
-   async function fetchBadges() {
-    try {
-      const response = await fetch(`${urlBE}/badges/${user._id}`); // Assurez-vous d'ajuster l'URL en fonction de votre route backend
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des badges');
-      }
-      const data = await response.json();
-      if (data.result){
-      setBadges(data.CountBadges)
-      setPictureOfBadges(data.badgePictures)
-      }
-      return data; 
-    } catch (error) {
-      console.error('Erreur lors de la récupération des badges :', error);
-      // Gérer l'erreur ou renvoyer null si nécessaire
-      return null;
-    }
-  }
-
-  async function fetchPlaces() {
-    try {
-      const response = await fetch(`${urlBE}/flights/allFlights/${user._id}`); // Assurez-vous d'ajuster l'URL en fonction de votre route backend
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des lieux');
-      }
-      const data = await response.json();
-      setPlaces(data.uniqueFlightsCount)
-      return data; // Retourne les données récupérées
-    } catch (error) {
-      console.error('Erreur lors de la récupération des lieux :', error);
-      // Gérer l'erreur ou renvoyer null si nécessaire
-      return null;
-    }
-  }
-
+  // Pour charger les données du User au chargement du composant
   useFocusEffect(
-  React.useCallback(() => {
-    fetchUserPoints();
-    fetchAircrafts();
-    fetchBadges();
-    fetchPlaces();
-  }, []))
-
-
-
+    React.useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
 
   return (
     <View style={styles.containerMiniInput}>
+      
+      {/* Favorites */}
       <View style={styles.miniInput}>
         <FontAwesome
           name='star'
@@ -104,11 +98,12 @@ const BlueBloc = ({ urlBE, user }) => {
           color='#002C82'
         />
         <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-          {''}
+          {userData.favoris}
         </Text>
-        <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{favoris}</Text>
         <Text style={styles.textMiniInput}>Favorites flights</Text>
       </View>
+      
+      {/* Places Visited */}
       <View style={styles.miniInput}>
         <FontAwesome
           name='map-marker'
@@ -116,11 +111,12 @@ const BlueBloc = ({ urlBE, user }) => {
           color='#002C82'
         />
         <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-          {''}
+          {userData.places}
         </Text>
-        <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{places}</Text>
         <Text style={styles.textMiniInput}>Places visited</Text>
       </View>
+
+      {/* Badges */}
       <View style={styles.miniInput}>
         <FontAwesome5
           name='award'
@@ -128,10 +124,12 @@ const BlueBloc = ({ urlBE, user }) => {
           color='#002C82'
         />
         <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-          {badges}
+          {userData.badges}
         </Text>
         <Text style={styles.textMiniInput}>Badges</Text>
       </View>
+
+      {/* Aircrafts */}
       <View style={styles.miniInput}>
         <FontAwesome
           name='plane'
@@ -139,12 +137,13 @@ const BlueBloc = ({ urlBE, user }) => {
           color='#002C82'
         />
         <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>
-          {planes}
+          {userData.planes}
         </Text>
         <Text style={styles.textMiniInput}>Aircrafts</Text>
       </View>
 
-       <View style={styles.blocEmoticon}>
+      {/* PLACES I'VE VISITED */}
+      <View style={styles.blocEmoticon}>
         <View style={styles.containerTitle}>
           <Text style={styles.titleEmoticon}>PLACES I'VE VISITED</Text>
           <View style={styles.flagContainer}>
@@ -152,118 +151,38 @@ const BlueBloc = ({ urlBE, user }) => {
           </View>
         </View>
       </View>
-      <View>
-      </View>
-
+    
+      {/* MY BADGES */}
       <View style={styles.blocEmoticon}>
         <View style={styles.containerTitle}>
           <Text style={styles.titleEmoticon}>MY BADGES</Text>
         </View>
-
         <View style={styles.badgeContainer}>
-        {pictureOfBadges.map((picture, index) => (
-          <Image key={index} source={{ uri: picture}} style={{ width: 30, height: 30 }} />
-        ))}
+          {userData.pictureOfBadges.map((picture, index) => (
+            <Image
+              key={index}
+              source={{ uri: picture }}
+              style={{ width: 30, height: 30 }}
+            />
+          ))}
+        </View>
       </View>
-        </View> 
+
+       {/* TOTAL POINTS */}
       <View style={styles.blocEmoticon}>
-  <View style={styles.containerTitle}>
-    <Text style={styles.titleEmoticon}>TOTAL POINTS</Text>
-    <View style={styles.points}>
-      <Text>{userPoints}</Text>
-    </View>
-  </View>
-    </View>
+        <View style={styles.containerTitle}>
+          <Text style={styles.titleEmoticon}>TOTAL POINTS</Text>
+          <View style={styles.points}>
+            <Text style={[styles.textMiniInput, { fontFamily: 'Cabin-Bold' }]}>{userData.userPoints}</Text>
+          </View>
+        </View>
+      </View>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  body: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  //Titles
-  welcome: {
-    position: 'absolute',
-    top: 50,
-    right: 70,
-    fontFamily: 'Farsan-Regular',
-    fontSize: 32,
-    color: '#80C9FF',
-  },
-  //Profil Picture
-  containerPicture: {
-    width: '100%',
-    height: 100,
-
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  pictureProfil: {
-    width: 100,
-    height: 100,
-
-    borderRadius: 50,
-    borderWidth: 5,
-    borderColor: '#002C82',
-  },
-  //Icone +
-  iconContainer: {
-    width: 35, // Largeur de l'icône
-    height: 35, // Hauteur de l'icône
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    backgroundColor: '#002C82',
-
-    borderRadius: 20,
-  },
-  //LogOut
-  logout: {
-    width: 50,
-    height: 50,
-
-    position: 'absolute',
-    right: 2,
-    alignItems: 'center',
-  },
-  // Inputs
-  inputs: {
-    marginTop: 20,
-  },
-  legend: {
-    position: 'absolute',
-    top: 2,
-    left: 2,
-
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 5,
-
-    fontFamily: 'Cabin-Regular',
-    fontSize: 12,
-    color: '#002C82',
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
-  },
-  size: {
-    height: 42,
-  },
-  points: {
-    backgroundColor: '#f0f0f0', // Couleur de fond
-    borderRadius: 10, // Bord arrondi
-    paddingHorizontal: 10, // Espace intérieur horizontal
-    paddingVertical: 5, // Espace intérieur vertical
-    fontFamily: 'Cabin-Bold',
-  },
-  // points: {
-  //   height: 100,
-  //   fontSize: 16,
-  //   // textAlign: 'center',
-  //   padding: 10,
-  //   fontFamily: 'Cabin-Bold',
-  //   color: '#002C82',
-  // },
-  //MiniInputs
   containerMiniInput: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -273,11 +192,9 @@ const styles = StyleSheet.create({
   miniInput: {
     width: '40%',
     height: 45,
-
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-
     margin: 10,
     borderWidth: 1,
     borderColor: '#002C82',
@@ -289,26 +206,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#002C82',
   },
-  //Modal Password Change
-  modal: {
-    position: 'absolute',
-    right: 0,
-    top: 40,
-  },
-  //Emoticon
-  emoticon: {
-    width: 25,
-    height: 25,
-  },
   blocEmoticon: {
     width: 345,
     height: 42,
-
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#002C82',
-
     marginBottom: 20,
     borderRadius: 5,
   },
@@ -324,27 +228,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F1F1',
     paddingHorizontal: 5,
     borderRadius: 5,
-    zIndex: 1, // Pour que la legend soit au-dessus du TextInput
+    zIndex: 1,
   },
-  //Flags
   flagContainer: {
-    flexDirection: 'row', // Pour aligner les drapeaux horizontalement
+    flexDirection: 'row',
   },
   flagItem: {
     marginRight: 10,
   },
-  flagImage: {
-    width: 30,
-    height: 30,
-
-  },
   badgeContainer: {
-    flexDirection: 'row', // Alignement horizontal
-    alignItems: 'center', // Centrer verticalement les badges
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   badge: {
-    marginRight: 10, // Marge entre chaque badge
+    marginRight: 10,
   },
-})
+  points:{
+    alignItems:'center',
+    justifyContent:'center',
+  }
+});
 
 export default BlueBloc;
