@@ -7,188 +7,122 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState } from 'react';
+//Redux
 import { useSelector } from 'react-redux';
+//Action lors de la navigation
+import { useFocusEffect } from '@react-navigation/native';
 //Icones
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //Composant
 import Header from '../components/shared/Header';
 
-
-//Data des flights
-// const arrayFlights = [
-//   {
-//     numeroReservation: '4528DF85',
-//     planes: ['142563256322'],
-//     departure: '12-02-2024',
-//     arrival: '14-02-2024',
-//     airport: 'ABC Airport',
-//     arrivalPlace: 'Russia',
-//     departurePlace: 'Canada',
-//     iataArrival: 'ABC',
-//     iataDep: 'XYZ',
-//     services: [
-//       {
-//         nbredeplance: 120,
-//         movie: ['a', 'b', 'c'],
-//         meals: 'Breakfast & Lunch',
-//       }],
-//   },
-//   {
-//     numeroReservation: '7528DF85',
-//     planes: ['742563256322'],
-//     departure: '18-02-2024',
-//     arrival: '19-02-2024',
-//     airport: 'SBC Airport',
-//     arrivalPlace: 'France',
-//     departurePlace: 'Canada',
-//     iataArrival: 'CDG',
-//     iataDep: 'CAN',
-//     services: [
-//       {
-//         nbredeplance: 120,
-//         movie: ['c', 'f', 'g'],
-//         meals: 'Breakfast',
-//       }],
-//   },
-// ];
-
+//Local address
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
 export default function GalleryScreen() {
-  //State plane
+  //States
   const [userPlanes, setUserPlanes] = useState([]);
-  //state Original Favoris 
   const [originalUserPlanes, setOriginalUserPlanes] = useState([]);
-  //Filtré avion par recherche
   const [searchQuery, setSearchQuery] = useState('');
 
-
-
-  //utilisation ReduxStore
+  //Redux
   const user = useSelector((state) => state.user.value);
-  const userId = user._id
+  const userId = user._id;
 
+  //L'ensemble des Planes du User à la navigation
   useFocusEffect(
     React.useCallback(() => {
       fetchPlanesByUserId();
     }, [])
   );
+  const fetchPlanesByUserId = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/planes/allPlanes/${userId}`);
+      if (!response.ok) {
+        throw new Error(
+          'Erreur lors de la récupération des avions - Erreur HTTP : ' +
+            response.status
+        );
+      }
+      const planes = await response.json();
+      setUserPlanes(planes);
+      setOriginalUserPlanes(planes);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des avions :', error);
+    }
+  };
 
-  //trié les planes par favorits
+  //ADD d'un Plane en Favoris
+  const addPlaneToFavorites = async (planeId) => {
+    try {
+      await fetch(`${apiUrl}/planes/addFavoris/${userId}/${planeId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setUserPlanes(prevPlanes => {
+        return prevPlanes.map(plane => {
+          if (plane._id === planeId) {
+            return { ...plane, isFavorite: true };
+          }
+          return plane;
+        });
+      });
+    } catch (error) {
+      console.error('Erreur lors de la requête:', error);
+    }
+  };
+
+  //REMOVE d'un Plane en Favoris
+  const removePlaneFromFavorites = async (planeId) => {
+    try {
+      await fetch(`${apiUrl}/planes/removeFavoris/${userId}/${planeId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setUserPlanes(prevPlanes => {
+        return prevPlanes.map(plane => {
+          if (plane._id === planeId) {
+            return { ...plane, isFavorite: false };
+          }
+          return plane;
+        });
+      });
+    } catch (error) {
+      console.error('Erreur lors de la requête:', error);
+    }
+  };
+
+  //Tri des Planes en fonction des Favoris
   const sortPlanesByFavorite = () => {
-    const favoritePlanes = userPlanes.filter(plane => plane.isFavorite);
-    const nonFavoritePlanes = userPlanes.filter(plane => !plane.isFavorite);
+    const favoritePlanes = userPlanes.filter((plane) => plane.isFavorite);
+    const nonFavoritePlanes = userPlanes.filter((plane) => !plane.isFavorite);
     setUserPlanes([...favoritePlanes, ...nonFavoritePlanes]);
   };
 
-  //réstauré les planes par favorits 
+  //Restaure les Planes non triés
   const restoreOriginalOrder = () => {
     setUserPlanes(originalUserPlanes);
   };
 
-  //filtré les planes par recherches
+  //Fonction pour filtrer par type de Plane
   const filterPlanesByType = () => {
-    return userPlanes.filter(plane => plane.type.toLowerCase().includes(searchQuery.toLowerCase()));
+    return userPlanes.filter((plane) =>
+      plane.type.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   };
-
-  //mettre à jour l'input
-  const handleSearchInputChange = (text) => {
-    setSearchQuery(text);
-  };
-
-  //Data des planes
-  function fetchPlanesByUserId() {
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-    fetch(`${apiUrl}/planes/allPlanes/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des avions - Erreur HTTP : ' + response.status);
-        }
-        return response.json();
-      })
-      .then(planes => {
-        setUserPlanes(planes)
-        setOriginalUserPlanes(planes)
-      })
-      .catch(error => {
-        console.error('Erreur lors de la récupération des avions :', error);
-      });
-  }
-
-
-  //add un plane en Fav
-  const addPlaneToFavorites = async (planeId) => {
-    console.log('add')
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-    try {
-      const response = await fetch(`${apiUrl}/planes/addFavoris/${userId}/${planeId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Erreur lors de l\'ajout de l\'avion aux favoris');
-      }
-
-      const data = await response.json();
-      setUserPlanes(planes=> planes.map(plane => {
-        if (plane._id === planeId){
-          return {... plane, isFavorite : true }
-        }
-        return plane;
-      } ))
-
-    } catch (error) {
-      console.error('Erreur lors de la requête pour ajouter un avion aux favoris :', error);
-      // Gérez l'erreur
-    }
-  };
-
-  //remove Plane en Fav
-  const removePlaneFromFavorites = async (planeId) => {
-    console.log('remove')
-    const apiUrl = process.env.EXPO_PUBLIC_API_URL;
-    try {
-      const response = await fetch(`${apiUrl}/planes/removeFavoris/${userId}/${planeId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la suppression de l\'avion des favoris');
-      }
-
-      const data = await response.json();
-      setUserPlanes(planes=> planes.map(plane => {
-        if (plane._id === planeId){
-          return {... plane, isFavorite : false }
-        }
-        return plane;
-      } ))
-    } catch (error) {
-      console.error('Erreur lors de la requête pour supprimer un avion des favoris :', error);
-      // Gérez l'erreur
-    }
-  };
-
-
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
       <Header title='Gallery' />
 
-      {/* Search/filter/favorite container */}
+      {/* Search Container */}
       <View style={styles.containerSearch}>
         <View style={styles.icones}>
           <FontAwesome
@@ -199,7 +133,7 @@ export default function GalleryScreen() {
           <FontAwesome
             name='star'
             size={25}
-            color='yellow'
+            color='#FFCA0C'
             onPress={() => {
               if (userPlanes !== originalUserPlanes) {
                 restoreOriginalOrder(); // Restaurer l'ordre original
@@ -208,150 +142,164 @@ export default function GalleryScreen() {
               }
             }}
           />
-          <FontAwesome
-            name='search'
-            size={25}
-            color='#002C82'
-          />
         </View>
 
-        <View style={styles.searchBar}>
-        <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
-          <TextInput
-            inlineImageLeft='search'
-            style={styles.text}
-            value={searchQuery}
-            size={25}
-            onChangeText={handleSearchInputChange}
-            placeholder="Rechercher par type d'avion..."
-          />
+        <View>
+          <KeyboardAvoidingView
+            behavior='padding'
+            style={{ flex: 1 }}
+          >
+            <TextInput
+              inlineImageLeft='search'
+              style={styles.searchBar}
+              value={searchQuery}
+              size={25}
+              onChangeText={(text) => setSearchQuery(text)}
+              placeholder='Search by Plane Type'
+            />
           </KeyboardAvoidingView>
         </View>
+      </View>
+
+      <ScrollView>
+        <View style={styles.containerPlanes}>
+          {searchQuery === ''
+            ? userPlanes.map(
+                (
+                  plane,
+                  index //Mets les Planes si l'input Search est vide
+                ) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.plane,
+                      index !== 0 && styles.planeMarginTop,
+                      { marginLeft: 40 },
+                    ]}
+                  >
+                    {/* Contenu de l'avion */}
+                    <View style={styles.img}>
+                      <Image
+                        style={styles.imgPlane}
+                        source={{ uri: plane.picture }}
+                      />
+                      <TouchableOpacity
+                        style={styles.favoriteButton}
+                        onPress={() => {
+                          plane.isFavorite
+                            ? removePlaneFromFavorites(plane._id)
+                            : addPlaneToFavorites(plane._id);
+                        }}
+                      >
+                        <FontAwesome
+                          name='star'
+                          size={10}
+                          color={plane.isFavorite ? '#FFCA0C' : '#002C82'}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.descPlane}>
+                      <Text style={styles.text}>{plane.type}</Text>
+                      <Text style={styles.descText}>{plane.description}</Text>
+                    </View>
+                  </View>
+                )
+              )
+            : filterPlanesByType().map((plane, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.plane,
+                    index !== 0 && styles.planeMarginTop,
+                    { marginLeft: 20 },
+                  ]}
+                >
+                  {/* Contenu de l'avion */}
+                  <View style={styles.img}>
+                    <Image
+                      style={styles.imgPlane}
+                      source={{ uri: plane.picture }}
+                    />
+                    <TouchableOpacity
+                      style={styles.favoriteButton}
+                      onPress={() => {
+                        plane.isFavorite
+                          ? removePlaneFromFavorites(plane._id)
+                          : addPlaneToFavorites(plane._id);
+                      }}
+                    >
+                      <FontAwesome
+                        name='star'
+                        size={10}
+                        color={plane.isFavorite ? 'yellow' : 'blue'}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.descPlane}>
+                    <Text style={styles.text}>{plane.type}</Text>
+                    <Text style={styles.descText}>{plane.description}</Text>
+                  </View>
+                </View>
+              ))}
         </View>
-
-    <ScrollView>
-      <View style={styles.containerPlanes}>
-  {searchQuery === '' // Vérifie si la recherche est vide
-    ? userPlanes.map((plane, index) => {
-      console.log(plane.isFavorite, plane.type) // Affiche tous les avions
-      return(
-      <View key={index} style={[styles.plane, index !== 0 && styles.planeMarginTop, { marginLeft: 40 }]}>
-        {/* Contenu de l'avion */}
-        <View style={styles.img}>
-                <Image
-                  style={styles.imgPlane}
-                  source={{ uri: plane.picture }}
-
-                />
-                <TouchableOpacity
-                  style={styles.favoriteButton}
-                  onPress={() => {
-                    plane.isFavorite
-                      ? removePlaneFromFavorites(plane._id)
-                      : addPlaneToFavorites(plane._id);
-                  }}
-                >
-                  {plane.isFavorite ?<FontAwesome
-                    name='star'
-                    size={10}
-                    color='yellow' /> :<FontAwesome
-                    name='star'
-                    size={10}
-                    color='blue' /> }
-                </TouchableOpacity>
-              </View>
-              <View style={styles.descPlane}>
-                <Text style={{ fontFamily: 'Cabin-Bold' }}>{plane.type}</Text>
-                <Text style={styles.descText}>{plane.description}</Text>
-      </View>
-      </View>)}
-    )
-    : filterPlanesByType().map((plane, index) => ( 
-      <View key={index} style={[styles.plane, index !== 0 && styles.planeMarginTop, { marginLeft: 20 }]}>
-        {/* Contenu de l'avion */}
-        <View style={styles.img}>
-                <Image
-                  style={styles.imgPlane}
-                  source={{ uri: plane.picture }}
-
-                />
-                <TouchableOpacity
-                  style={styles.favoriteButton}
-                  onPress={() => {
-                    plane.isFavorite
-                      ? removePlaneFromFavorites(plane._id)
-                      : addPlaneToFavorites(plane._id);
-                  }}
-                >
-                  <FontAwesome
-                    name='star'
-                    size={10}
-                    color={plane.isFavorite ? 'yellow' : 'blue'} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.descPlane}>
-                <Text style={{ fontFamily: 'Cabin-Bold' }}>{plane.type}</Text>
-                <Text style={styles.descText}>{plane.description}</Text>                
-
-      </View>
-      </View>
-    ))
-  }
-</View>
-</ScrollView>
+      </ScrollView>
     </SafeAreaView>
-
-
-
   );
 }
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
+  //Search
   containerSearch: {
     width: '90%',
     height: '10%',
 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+
     marginTop: '15%',
     padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  },
+  searchBar: {
+    width: 200,
+    height: '80%',
+
+    borderWidth: 1,
+    borderColor: '#002C82',
+
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  //Planes
+  containerPlanes: {
+    width: '90%',
+    height: '100%',
+
     alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   icones: {
-    width: '30%',
     height: '100%',
 
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  searchBar: {
-    width: '70%',
-    height: '80%',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  containerPlanes: {
-    width: '90%',
-    height: '80%',
 
-    alignItems: 'center',
-    marginTop: 10,
-    // backgroundColor: 'pink',
+    gap: 20,
   },
   plane: {
     width: 335,
     height: 120,
 
-    fontFamily: 'Cabin-Regular',
-    color: '#002C82',
-
     flexDirection: 'row',
     alignItems: 'center',
+
+    fontFamily: 'Cabin-Regular',
+    color: '#002C82',
 
     borderWidth: 1,
     borderColor: '#002C82',
@@ -361,6 +309,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
   },
+  //Picture,Desc, Plane
   img: {
     borderRadius: 6,
     overflow: 'hidden',
@@ -378,36 +327,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    width: '90%',
-    height: '80%',
-
-    borderWidth: 1,
-    borderColor: '#002C82',
-
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    zIndex: 0, // Pour que le TextInput soit en dessous du texte du label
+    fontFamily: 'Cabin-Bold',
   },
+
+  //Icone dans Picture
   favoriteButton: {
     position: 'absolute',
     top: 5,
     right: 5,
-    backgroundColor: 'rgba(255, 0, 0, 0.5)',
+
+    backgroundColor: '#0092FF',
     borderRadius: 5,
+
     paddingHorizontal: 8,
     paddingVertical: 5,
-  },
-  favoriteText: {
-    color: '#ffffff',
-  },
-  containerSearch: {
-    width: '90%',
-    height: '10%',
-    marginTop: '25%', // Modifiez la valeur de marginTop selon vos besoins
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
   },
 });

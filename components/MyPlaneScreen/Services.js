@@ -72,9 +72,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   input: {
-    
     width: 190,
     height: 30,
+
+    color:'#002C82',
+    textAlign:'center',
     borderWidth: 1,
     borderColor: '#002C82',
     borderRadius: 6,
@@ -90,11 +92,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderStyle: 'solid',
     borderColor: '#002C82',
-
   },
   movie: {
     width: '95%',
     height: '60%',
-
   },
 });
