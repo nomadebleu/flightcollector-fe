@@ -14,6 +14,7 @@ export default function ModalReduction() {
   //States Coupon & Modal
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [coupon, setCoupon] = useState('NOT YET');
+  const [couponMessage, setCouponMessage] = useState(0);
 
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
@@ -60,13 +61,16 @@ export default function ModalReduction() {
     let pointsToRemove = 0;
     if (totalPoints >= 20000) {
       pointsToRemove = 20000;
+      setCouponMessage(20)
     }
 
    else if (totalPoints >= 10000) {
       pointsToRemove = 10000;
+      setCouponMessage(15)
     } 
     else if (totalPoints >= 5000) {
       pointsToRemove = 5000;
+      setCouponMessage(10)
     }
  
     console.log(pointsToRemove);
@@ -112,9 +116,9 @@ export default function ModalReduction() {
                 />
               </TouchableOpacity>
 
-              <Text style={styles.modalText}>Your Code Reduction</Text>
+              <Text style={styles.modalText}>Your Code Reduction {couponMessage} %</Text>
               {/* Si le totalPoints est à 0 le code est switché par NOT YET */}
-              {user.totalPoints === 0 ? (
+              {user.totalPoints < 5000 ? (
                 <Text>NOT YET</Text>
               ) : (
                 <Text style={styles.couponCode}>{coupon}</Text>
