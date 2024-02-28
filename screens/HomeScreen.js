@@ -74,7 +74,8 @@ export default function HomeScreen() {
           iataDep:flightData.data.airportDep.iataCode,
 
           nbrePlaces:flightData.data.nbrePlaces,
-          meals:flightData.data.meals
+          meals:flightData.data.meals,
+          points:flightData.data.points,
           })
       );
 
