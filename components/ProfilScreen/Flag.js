@@ -43,7 +43,6 @@ const FlagComponent = () => {
         try {
           const fetchedFlags = await fetchUserFlightAirports();
           setFlags([...new Set(fetchedFlags)]); //Permet d'éliminer les doublons
-          console.log('Les Flags sont :', flags);
         } catch (error) {
           console.error('Erreur lors de la récupération des drapeaux :', error);
         }
