@@ -204,9 +204,7 @@ export default function MyPlaneScreen() {
       <View style={styles.blocOnglets}>
         {/* props independent pour détacher de la nav globale */}
         <NavigationContainer independent={true}>
-          <Tab.Navigator 
-          tabBar={(props) => <CustomTabBar {...props} />}
-          >
+          <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
             <Tab.Screen
               name="Flight"
               component={Flight}
@@ -228,7 +226,9 @@ export default function MyPlaneScreen() {
 
       {/* Bloc Points & Nav */}
       <View style={styles.blocPoints}>
-        <Text style={styles.text}>This scan will give you 150 pts</Text>
+        <Text style={styles.text}>
+          This scan will give you {flightRedux[0].points} pts
+        </Text>
         <TouchableOpacity onPress={() => handleClickToHome()}>
           <FontAwesome5 name="chevron-circle-left" size={50} color="#002C82" />
         </TouchableOpacity>
