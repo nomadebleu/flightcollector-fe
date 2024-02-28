@@ -16,10 +16,12 @@ export default function ModalReduction() {
   const [coupon, setCoupon] = useState('NOT YET');
   const [couponMessage, setCouponMessage] = useState(0);
 
+
   //Utilisation du Redux
   const user = useSelector((state) => state.user.value);
   const totalPoints = user.totalPoints
   const userId = user._id
+  const dispatch = useDispatch();
   //Backend 
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -46,16 +48,17 @@ export default function ModalReduction() {
         const errorMessage = await response.text();
         throw new Error(`Update points request failed: ${errorMessage}`);
       }
-  
+      
       const data = await response.json();
       console.log(data)
+      dispatch(addPoints(data.newTotalPoints))
       return data.newTotalPoints;
     } catch (error) {
       console.error('Error updating user points:', error);
       throw error;
     }
   };
-
+  
   //fonction pour redistribué les points de Réductions 
   const handleUseReduction = async () => {
     let pointsToRemove = 0;
@@ -63,8 +66,8 @@ export default function ModalReduction() {
       pointsToRemove = 20000;
       setCouponMessage(20)
     }
-
-   else if (totalPoints >= 10000) {
+    
+    else if (totalPoints >= 10000) {
       pointsToRemove = 10000;
       setCouponMessage(15)
     } 
@@ -72,9 +75,9 @@ export default function ModalReduction() {
       pointsToRemove = 5000;
       setCouponMessage(10)
     }
- 
+    
     console.log(pointsToRemove);
-  
+    
     try {
       await updateUserPoints(pointsToRemove); 
       toggleModal();
