@@ -9,7 +9,11 @@ import FlagComponent from './Flag';
 import { useDispatch } from 'react-redux';
 import { addPoints } from '../../reducers/user';
 
-const BlueBloc = ({ urlBE, user }) => {
+
+  //Local address
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
+
+const BlueBloc = ({user}) => {
   //States
   const [userData, setUserData] = useState({
     userPoints: 0,
@@ -28,7 +32,7 @@ const BlueBloc = ({ urlBE, user }) => {
     try {
       // Récupère le total des points du User
       const pointsResponse = await fetch(
-        `${urlBE}/users/totalPoints/${user._id}`
+        `${apiUrl}/users/totalPoints/${user._id}`
       );
       if (!pointsResponse.ok) {
         throw new Error('Erreur lors de la récupération des points');
@@ -37,7 +41,7 @@ const BlueBloc = ({ urlBE, user }) => {
 
       // Récupère le nbre de Favoris et de Planes du User
       const aircraftsResponse = await fetch(
-        `${urlBE}/planes/favoris/${user._id}`
+        `${apiUrl}/planes/favoris/${user._id}`
       );
       if (!aircraftsResponse.ok) {
         throw new Error('La requête a échoué');
@@ -45,7 +49,7 @@ const BlueBloc = ({ urlBE, user }) => {
       const aircraftsData = await aircraftsResponse.json();
 
       // Récupère le nbre de Badges et leurs visuels du User
-      const badgesResponse = await fetch(`${urlBE}/badges/${user._id}`);
+      const badgesResponse = await fetch(`${apiUrl}/badges/${user._id}`);
       if (!badgesResponse.ok) {
         throw new Error('Erreur lors de la récupération des badges');
       }
@@ -53,7 +57,7 @@ const BlueBloc = ({ urlBE, user }) => {
 
       // Récupère tous les Flights du User
       const placesResponse = await fetch(
-        `${urlBE}/flights/allFlights/${user._id}`
+        `${apiUrl}/flights/allFlights/${user._id}`
       );
       if (!placesResponse.ok) {
         throw new Error('Erreur lors de la récupération des lieux');

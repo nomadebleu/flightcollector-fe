@@ -31,7 +31,7 @@ export default function ProfilScreen() {
   const dispatch = useDispatch();
 
   //LocalHost
-  const urlBE = process.env.EXPO_PUBLIC_API_URL;
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   //State des Inputs
   const [firstname, setFirstname] = useState('');
@@ -68,7 +68,7 @@ export default function ProfilScreen() {
       name: 'photo.jpg',
       type: 'image/jpeg',
     });
-    fetch('http://192.168.1.65:3000/users/upload', {
+    fetch(`${apiUrl}/users/upload`, {
       method: 'POST',
       body: formData,
     })
@@ -193,7 +193,6 @@ export default function ProfilScreen() {
       <View>
         <BlueBloc
           userBadges={userBadges}
-          urlBE={urlBE}
           user={user}
         />
       </View>
