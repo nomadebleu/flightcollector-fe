@@ -89,10 +89,27 @@ export default function PassScreen() {
 
               nbrePlaces: flightData.data.nbrePlaces,
               meals: flightData.data.meals,
+              points: flightData.data.points,
             })
           );
 
-          
+          const flightId = flightData.data._id;
+          const planeId = flightData.data.planes._id;
+
+          const associateResponse = await fetch(
+            `${apiUrl}/users/associateFlights/${user._id}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ flightId, planeId }),
+            }
+          );
+
+          const associateData = await associateResponse.json();
+          console.log(associateData.message); // Affiche le message de la réponse
+
           navigation.navigate("MyPlane");
         } else {
           console.error("Error during connection", flightData.error);
