@@ -31,8 +31,8 @@ export default function HomeScreen() {
   const user = useSelector((state) => state.user.value);
 
   //States Inputs
-  const[enterReservation, setEnterReservation]= useState('');
-  const[enterImmat, setEnterImmat]= useState('');
+  const [enterReservation, setEnterReservation] = useState("");
+  const [enterImmat, setEnterImmat] = useState("");
 
   //Gestion Navigation
   const navigation = useNavigation();
@@ -42,88 +42,90 @@ export default function HomeScreen() {
     dispatch(logout());
     navigation.navigate("Login");
   };
-  
+
   //Gestion du Boarding Pass
   const handlePass = () => {
     navigation.navigate("Pass");
   };
 
   //Fetch des data flights
-  const handleFetchDataFlight = async() => {
-  try {
-    const response = await fetch(`${apiUrl}/flights/${enterReservation}`)
-    const flightData = await response.json();
+  const handleFetchDataFlight = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/flights/${enterReservation}`);
+      const flightData = await response.json();
 
-    if (flightData.result) {
-      console.log('FlightData:', flightData.data);
-      dispatch(
-        addFlight({
-          _id:flightData.data._id,
-          planes: flightData.data.planes,
+      if (flightData.result) {
+        console.log("FlightData:", flightData.data);
+        dispatch(
+          addFlight({
+            _id: flightData.data._id,
+            planes: flightData.data.planes,
 
-          departure:flightData.data.departure,
-          departureScheduled: flightData.data.departureScheduled,
-          departureEstimated: flightData.data.departureEstimated,
-          departureActual: flightData.data.departureActual,
+            departure: flightData.data.departure,
+            departureScheduled: flightData.data.departureScheduled,
+            departureEstimated: flightData.data.departureEstimated,
+            departureActual: flightData.data.departureActual,
 
-          arrival:flightData.data.arrival,
-          arrivalScheduled:flightData.data.arrivalScheduled,
-          arrivalEstimated: flightData.data.arrivalEstimated,
+            arrival: flightData.data.arrival,
+            arrivalScheduled: flightData.data.arrivalScheduled,
+            arrivalEstimated: flightData.data.arrivalEstimated,
 
-          iataArrival:flightData.data.airportArr.iataCode,
-          iataDep:flightData.data.airportDep.iataCode,
+            iataArrival: flightData.data.airportArr.iataCode,
+            iataDep: flightData.data.airportDep.iataCode,
 
-          nbrePlaces:flightData.data.nbrePlaces,
-          meals:flightData.data.meals
+            nbrePlaces: flightData.data.nbrePlaces,
+            meals: flightData.data.meals,
+            points: flightData.data.points,
           })
-      );
+        );
 
-      const flightId = flightData.data._id;
-      const planeId = flightData.data.planes._id
+        const flightId = flightData.data._id;
+        const planeId = flightData.data.planes._id;
 
-      const associateResponse = await fetch(`${apiUrl}/users/associateFlights/${user._id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ flightId, planeId })
-      });
-  
+        const associateResponse = await fetch(
+          `${apiUrl}/users/associateFlights/${user._id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ flightId, planeId }),
+          }
+        );
 
-      const associateData = await associateResponse.json();
-      console.log(associateData.message); // Affiche le message de la réponse
-    
-      setEnterReservation('');
-      navigation.navigate('MyPlane'); 
-    } else {
-      console.error('Error during connection', flightData.error);
+        const associateData = await associateResponse.json();
+        console.log(associateData.message); // Affiche le message de la réponse
+
+        setEnterReservation("");
+        navigation.navigate("MyPlane");
+      } else {
+        console.error("Error during connection", flightData.error);
+      }
+    } catch (error) {
+      console.error("Error during connection:", error);
     }
-  } catch (error) {
-    console.error('Error during connection:', error);
-  }
-};
-  
-const handleFetchDataFlightImmat = async() => {
-  try {
-    const response = await fetch(`${apiUrl}/planes/${enterImmat}`)
-    const planeData = await response.json();
+  };
 
-    if (planeData.result) {
-      console.log('PlaneData:', planeData.data);
-      dispatch(
-        addFlight({
-          planes: planeData.data,
+  const handleFetchDataFlightImmat = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/planes/${enterImmat}`);
+      const planeData = await response.json();
+
+      if (planeData.result) {
+        console.log("PlaneData:", planeData.data);
+        dispatch(
+          addFlight({
+            planes: planeData.data,
           })
-      );
-      navigation.navigate('MyPlane', {screen: 'Plane'}); 
-    } else {
-      console.error('Error during connection', planeData.error);
+        );
+        navigation.navigate("MyPlane", { screen: "Plane" });
+      } else {
+        console.error("Error during connection", planeData.error);
+      }
+    } catch (error) {
+      console.error("Error during connection:", error);
     }
-  } catch (error) {
-    console.error('Error during connection:', error);
-  }
-};
-
+  };
 
   return (
     <SafeAreaView style={styles.body}>
@@ -154,73 +156,59 @@ const handleFetchDataFlightImmat = async() => {
           source={require("../assets/trajetsAvion.png")}
           style={styles.imageBack}
         >
-        
-        
-         {/* Immatriculation Aircraft */}
+          {/* Immatriculation Aircraft */}
 
-         {!user.isConnected ? (
-         <View style={styles.scan}>
-            
-            <View style={styles.icones}>
-             
-              <TextInput
-              placeholder='Immatriculation Aircraft'
-              onChangeText={(value)=> setEnterImmat(value)}
-              value={enterImmat}
-              style={styles.enterReservation}
-              >
-
-              </TextInput>
-              <FontAwesome
-                name="check-circle"
-                size={30}
-                color="#80C9FF"
-                onPress={() => handleFetchDataFlightImmat()}
-              />
-              
+          {!user.isConnected ? (
+            <View style={styles.scan}>
+              <View style={styles.icones}>
+                <TextInput
+                  placeholder="Immatriculation Aircraft"
+                  onChangeText={(value) => setEnterImmat(value)}
+                  value={enterImmat}
+                  style={styles.enterReservation}
+                ></TextInput>
+                <FontAwesome
+                  name="check-circle"
+                  size={30}
+                  color="#80C9FF"
+                  onPress={() => handleFetchDataFlightImmat()}
+                />
+              </View>
             </View>
-          </View>
-         ):(
-          <>
-             {/* Reservation Number */}
-             <View style={styles.scan}>
-            
-             <View style={styles.icones}>
-              
-               <TextInput
-               placeholder='Reservation Number'
-               onChangeText={(value)=> setEnterReservation(value)}
-               value={enterReservation}
-               style={styles.enterReservation}
-               >
- 
-               </TextInput>
-               <FontAwesome
-                 name="check-circle"
-                 size={30}
-                 color="#80C9FF"
-                 onPress={() => handleFetchDataFlight()}
-               />
-               
-             </View>
-           </View>
- 
-           {/*Scan Boarding Pass */}
-           <View style={styles.scan}>
-             <View style={styles.icones}>
-               <Text style={styles.label}>Scan Boarding Pass</Text>
-               <FontAwesome
-                 name="camera"
-                 size={30}
-                 color='#002C82'
-                 onPress={() => handlePass()}
-               />
-             </View>
-           </View>
-           </>
-         )}
-       
+          ) : (
+            <>
+              {/* Reservation Number */}
+              <View style={styles.scan}>
+                <View style={styles.icones}>
+                  <TextInput
+                    placeholder="Reservation Number"
+                    onChangeText={(value) => setEnterReservation(value)}
+                    value={enterReservation}
+                    style={styles.enterReservation}
+                  ></TextInput>
+                  <FontAwesome
+                    name="check-circle"
+                    size={30}
+                    color="#80C9FF"
+                    onPress={() => handleFetchDataFlight()}
+                  />
+                </View>
+              </View>
 
+              {/*Scan Boarding Pass */}
+              <View style={styles.scan}>
+                <View style={styles.icones}>
+                  <Text style={styles.label}>Scan Boarding Pass</Text>
+                  <FontAwesome
+                    name="camera"
+                    size={30}
+                    color="#002C82"
+                    onPress={() => handlePass()}
+                  />
+                </View>
+              </View>
+            </>
+          )}
         </ImageBackground>
       </View>
       {!user.isConnected ? (
@@ -308,12 +296,12 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#F1F1F1",
   },
-  enterReservation:{
-    width:'70%',
- 
-   fontSize:20,
-   fontFamily:'Cabin-Regular',
-   color:'#002C82',
+  enterReservation: {
+    width: "70%",
+
+    fontSize: 20,
+    fontFamily: "Cabin-Regular",
+    color: "#002C82",
   },
   //LogOut
   logout: {

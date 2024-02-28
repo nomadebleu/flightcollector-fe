@@ -9,7 +9,7 @@ export const flightSlice = createSlice({
   reducers: {
     addFlight: (state, action) => {
       console.log('addFlight:', action.payload);
-      state.value.push(action.payload);
+      state.value = [action.payload];
     },
   },
 });
