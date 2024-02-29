@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,23 +6,22 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-} from 'react-native';
+} from "react-native";
 //Composants
-import FormInput from '../components/shared/FormInput';
-import PasswordModal from '../components/shared/PasswordModal';
-import Header from '../components/shared/Header';
-import BlueBloc from '../components/ProfilScreen/BlueBlocs';
+import FormInput from "../components/shared/FormInput";
+import PasswordModal from "../components/shared/PasswordModal";
+import Header from "../components/shared/Header";
+import BlueBloc from "../components/ProfilScreen/BlueBlocs";
 //Icones
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Entypo } from 'react-native-vector-icons';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Entypo } from "react-native-vector-icons";
 //Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { logout, addPhoto } from '../reducers/user';
+import { useSelector, useDispatch } from "react-redux";
+import { logout, addPhoto } from "../reducers/user";
 //Picker
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 //Navigation
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfilScreen() {
   //Utilisation du Redux
@@ -34,10 +33,10 @@ export default function ProfilScreen() {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
   //State des Inputs
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [mail, setMail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
 
   //State Image Profil
   const [selectedImage, setSelectedImage] = useState(null);
@@ -51,7 +50,7 @@ export default function ProfilScreen() {
     setLastname(user.lastname);
     setMail(user.mail);
     setPassword(
-      user.password.length > 8 ? '******' : user.password.replace(/./g, '*')
+      user.password.length > 8 ? "******" : user.password.replace(/./g, "*")
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
   }, [user]); //Mise à jour au chgt du user
 
@@ -60,29 +59,28 @@ export default function ProfilScreen() {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 1,
+      base64: true,
     });
-    const formData = new FormData();
-    console.log(result);
-    formData.append('photoFromFront', {
-      uri: result?.uri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
-    });
-    fetch(`${apiUrl}/users/upload`, {
-      method: 'POST',
-      body: formData,
+
+    console.log("here the base64 of picker:", result);
+
+    fetch(`${apiUrl}/upload`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: result.assets[0].base64 }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("Here is the data from fetch:", data);
         data.result && dispatch(addPhoto(data.url));
+        const urlCloudinary = data.image;
       });
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
       console.log(result);
     } else {
-      alert('You did not select any image.');
+      alert("You did not select any image.");
     }
   };
   console.log(selectedImage);
@@ -90,17 +88,17 @@ export default function ProfilScreen() {
   //Gestion LogOut
   const handleLogOut = () => {
     dispatch(logout());
-    setFirstname('');
-    setLastname('');
-    setMail('');
-    setPassword('');
-    navigation.navigate('Login'); //Navigation vers Login
+    setFirstname("");
+    setLastname("");
+    setMail("");
+    setPassword("");
+    navigation.navigate("Login"); //Navigation vers Login
   };
 
   return (
     <SafeAreaView style={styles.body}>
       {/* Header */}
-      <Header title='Welcome                                  ' />
+      <Header title="Welcome                                  " />
 
       {/* Picture Profil & Log Out */}
       <View style={styles.containerPicture}>
@@ -108,7 +106,7 @@ export default function ProfilScreen() {
           {!selectedImage && (
             <Image
               style={styles.pictureProfil}
-              source={require('../assets/user.png')}
+              source={require("../assets/user.png")}
             />
           )}
           {selectedImage && ( //Ajoute la possibilité de cliquer sur l'image quand on l'a déjà
@@ -124,24 +122,17 @@ export default function ProfilScreen() {
           {!selectedImage && ( //Supprime l'icone + lorsque le user à mis une photo
             <View style={styles.iconContainer}>
               <FontAwesome
-                name='plus-circle'
+                name="plus-circle"
                 size={30}
-                color='#F1F1F1'
+                color="#F1F1F1"
                 onPress={pickImageAsync}
               />
             </View>
           )}
         </View>
 
-        <TouchableOpacity
-          style={styles.logout}
-          onPress={() => handleLogOut()}
-        >
-          <Entypo
-            name='log-out'
-            size={30}
-            color='#F1F1F1'
-          />
+        <TouchableOpacity style={styles.logout} onPress={() => handleLogOut()}>
+          <Entypo name="log-out" size={30} color="#F1F1F1" />
         </TouchableOpacity>
       </View>
       {/* Titles */}
@@ -149,27 +140,27 @@ export default function ProfilScreen() {
       <View style={styles.inputs}>
         {/* FIRST NAME */}
         <FormInput
-          label='First Name'
+          label="First Name"
           value={firstname}
-          name='firstname'
+          name="firstname"
           formStyle={styles.size}
           editable={false}
         />
 
         {/* LAST NAME */}
         <FormInput
-          label='Last Name'
+          label="Last Name"
           value={lastname}
-          name='lastname'
+          name="lastname"
           formStyle={styles.size}
           editable={false}
         />
 
         {/* Email address */}
         <FormInput
-          label='Email Address'
+          label="Email Address"
           value={mail}
-          name='mail'
+          name="mail"
           formStyle={styles.size}
           editable={false}
         />
@@ -177,24 +168,21 @@ export default function ProfilScreen() {
         {/* Password */}
         <View>
           <FormInput
-            label='Password'
+            label="Password"
             value={password}
-            name='password'
+            name="password"
             formStyle={styles.size}
             editable={false}
           />
           <PasswordModal
             styleModal={styles.modal}
-            title='Change your password'
+            title="Change your password"
           />
         </View>
       </View>
       {/* Mini Flights */}
       <View>
-        <BlueBloc
-          userBadges={userBadges}
-          user={user}
-        />
+        <BlueBloc userBadges={userBadges} user={user} />
       </View>
     </SafeAreaView>
   );
@@ -202,26 +190,26 @@ export default function ProfilScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   //Titles
   welcome: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     right: 70,
-    
-    fontFamily: 'Farsan-Regular',
+
+    fontFamily: "Farsan-Regular",
     fontSize: 32,
-    color: '#80C9FF',
+    color: "#80C9FF",
   },
   //Profil Picture
   containerPicture: {
-    width: '100%',
+    width: "100%",
     height: 100,
 
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   pictureProfil: {
     width: 100,
@@ -229,18 +217,18 @@ const styles = StyleSheet.create({
 
     borderRadius: 50,
     borderWidth: 5,
-    borderColor: '#002C82',
+    borderColor: "#002C82",
   },
   //Icone +
   iconContainer: {
-    width: 35, 
+    width: 35,
     height: 35,
 
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
 
-    backgroundColor: '#002C82',
+    backgroundColor: "#002C82",
 
     borderRadius: 20,
   },
@@ -249,9 +237,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
 
-    position: 'absolute',
+    position: "absolute",
     right: 2,
-    alignItems: 'center',
+    alignItems: "center",
   },
   // Inputs
   inputs: {
@@ -262,7 +250,7 @@ const styles = StyleSheet.create({
   },
   //Modal Password Change
   modal: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     top: 40,
   },
