@@ -19,6 +19,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //Composant
 import Header from '../components/shared/Header';
 
+
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
@@ -27,6 +28,7 @@ export default function GalleryScreen() {
   const [userPlanes, setUserPlanes] = useState([]);
   const [originalUserPlanes, setOriginalUserPlanes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortFav, setSortFav] = useState(false);
 
   //Redux
   const user = useSelector((state) => state.user.value);
@@ -100,16 +102,14 @@ export default function GalleryScreen() {
   };
 
   //Tri des Planes en fonction des Favoris
-  const sortPlanesByFavorite = () => {
-    const favoritePlanes = userPlanes.filter((plane) => plane.isFavorite);
-    const nonFavoritePlanes = userPlanes.filter((plane) => !plane.isFavorite);
-    setUserPlanes([...favoritePlanes, ...nonFavoritePlanes]);
-  };
+  const planeByFav = (arr) => {
+    if (sortFav){
+      return  arr.sort(a => a.isFavorite? -1 : 1);
+    }
+    return arr;
+  }
 
-  //Restaure les Planes non triés
-  const restoreOriginalOrder = () => {
-    setUserPlanes(originalUserPlanes);
-  };
+
 
   //Fonction pour filtrer par type de Plane
   const filterPlanesByType = () => {
@@ -135,12 +135,9 @@ export default function GalleryScreen() {
             size={25}
             color='#FFCA0C'
             onPress={() => {
-              if (userPlanes !== originalUserPlanes) {
-                restoreOriginalOrder(); // Restaurer l'ordre original
-              } else {
-                sortPlanesByFavorite(); // Trier les avions par favoris
+          setSortFav(!sortFav); // Trier les avions par favoris
               }
-            }}
+            }
           />
         </View>
 
@@ -163,8 +160,7 @@ export default function GalleryScreen() {
 
       <ScrollView>
         <View style={styles.containerPlanes}>
-          {searchQuery === ''
-            ? userPlanes.map(
+          {planeByFav(filterPlanesByType()).map( 
                 (
                   plane,
                   index //Mets les Planes si l'input Search est vide
@@ -205,42 +201,8 @@ export default function GalleryScreen() {
                   </View>
                 )
               )
-            : filterPlanesByType().map((plane, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.plane,
-                    index !== 0 && styles.planeMarginTop,
-                    { marginLeft: 20 },
-                  ]}
-                >
-                  {/* Contenu de l'avion */}
-                  <View style={styles.img}>
-                    <Image
-                      style={styles.imgPlane}
-                      source={{ uri: plane.picture }}
-                    />
-                    <TouchableOpacity
-                      style={styles.favoriteButton}
-                      onPress={() => {
-                        plane.isFavorite
-                          ? removePlaneFromFavorites(plane._id)
-                          : addPlaneToFavorites(plane._id);
-                      }}
-                    >
-                      <FontAwesome
-                        name='star'
-                        size={10}
-                        color={plane.isFavorite ? 'yellow' : 'blue'}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.descPlane}>
-                    <Text style={styles.text}>{plane.type}</Text>
-                    <Text style={styles.descText}>{plane.description}</Text>
-                  </View>
-                </View>
-              ))}
+            }
+          
         </View>
       </ScrollView>
     </SafeAreaView>

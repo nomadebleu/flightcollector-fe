@@ -74,11 +74,12 @@ export default function ProfilScreen() {
         console.log("Here is the data from fetch:", data);
         data.result && dispatch(addPhoto(data.url));
         const urlCloudinary = data.image;
+        
       });
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
-      console.log(result);
+      console.log(result.assets[0].uri);
     } else {
       alert("You did not select any image.");
     }
