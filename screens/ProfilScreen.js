@@ -52,6 +52,7 @@ export default function ProfilScreen() {
     setPassword(
       user.password.length > 8 ? "******" : user.password.replace(/./g, "*")
     ); //Remplace le password hashé par 8* car password demandé de 8 caractères
+    setSelectedImage(user.pictureProfil);
   }, [user]); //Mise à jour au chgt du user
 
   //Gestion Picker
@@ -74,6 +75,16 @@ export default function ProfilScreen() {
         console.log("Here is the data from fetch:", data);
         data.result && dispatch(addPhoto(data.url));
         const urlCloudinary = data.image;
+
+        fetch(`${apiUrl}/putImage/${user._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl: urlCloudinary }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("profilePicture updated in DB", data);
+          });
       });
 
     if (!result.canceled) {
@@ -92,6 +103,7 @@ export default function ProfilScreen() {
     setLastname("");
     setMail("");
     setPassword("");
+    //setSelectedImage("");
     navigation.navigate("Login"); //Navigation vers Login
   };
 

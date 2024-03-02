@@ -7,7 +7,7 @@ const initialState = {
     mail: null,
     password: null,
     token: null,
-    profilPhoto: null,
+    pictureProfil: null,
     totalPoints: 0,
     badges: [],
     flights: [],
@@ -30,7 +30,7 @@ export const userSlice = createSlice({
       state.value.token = null;
     },
     addPhoto: (state, action) => {
-      state.value.profilPhoto = action.payload;
+      state.value.pictureProfil = action.payload;
     },
     addPoints: (state, action) => {
       state.value.totalPoints = action.payload;
