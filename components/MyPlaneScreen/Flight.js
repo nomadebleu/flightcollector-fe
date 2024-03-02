@@ -1,35 +1,50 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import ProgressBar from "react-native-progress/Bar";
 
 import MapView from "react-native-maps";
 //Composants
 //Redux
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 export default function Flight() {
   //Utilisation du Redux
   const flightRedux = useSelector((state) => state.flights.value);
 
   //Conversion des heures
-  const timeDScheduled = flightRedux[0].departureScheduled;//Departure Scheduled
+  const timeDScheduled = flightRedux[0].departureScheduled; //Departure Scheduled
   const departureScheduled = new Date(timeDScheduled);
-  const timeDepartureScheduled = departureScheduled.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
-  console.log('timeDepartureScheduled is:',timeDepartureScheduled)
+  const timeDepartureScheduled = departureScheduled.toLocaleTimeString(
+    "en-US",
+    { hour12: true, hour: "numeric", minute: "2-digit" }
+  );
+  console.log("timeDepartureScheduled is:", timeDepartureScheduled);
 
-  const timeDEstimated = flightRedux[0].departureEstimated;//Departure Estimated
+  const timeDEstimated = flightRedux[0].departureEstimated; //Departure Estimated
   const departureEstimated = new Date(timeDEstimated);
-  const timeDepartureEstimated = departureEstimated.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
-  console.log('timeDepartureEstimated is:',timeDepartureEstimated)
+  const timeDepartureEstimated = departureEstimated.toLocaleTimeString(
+    "en-US",
+    { hour12: true, hour: "numeric", minute: "2-digit" }
+  );
+  console.log("timeDepartureEstimated is:", timeDepartureEstimated);
 
-  const timeAScheduled = flightRedux[0].arrivalScheduled;//Arrival Scheduled
+  const timeAScheduled = flightRedux[0].arrivalScheduled; //Arrival Scheduled
   const arrivalScheduled = new Date(timeAScheduled);
-  const timeArrivalScheduled = arrivalScheduled.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
-  console.log('timeArrivalScheduled is:',timeArrivalScheduled)
+  const timeArrivalScheduled = arrivalScheduled.toLocaleTimeString("en-US", {
+    hour12: true,
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  console.log("timeArrivalScheduled is:", timeArrivalScheduled);
 
-  const timeAEstimated = flightRedux[0].arrivalEstimated;//Arrival Estimated
+  const timeAEstimated = flightRedux[0].arrivalEstimated; //Arrival Estimated
   const arrivalEstimated = new Date(timeAEstimated);
-  const timeArrivalEstimated = arrivalEstimated.toLocaleTimeString('en-US', { hour12: true, hour: 'numeric', minute: '2-digit' });
-  console.log('timeArrivalEstimated is:',timeArrivalEstimated)
+  const timeArrivalEstimated = arrivalEstimated.toLocaleTimeString("en-US", {
+    hour12: true,
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  console.log("timeArrivalEstimated is:", timeArrivalEstimated);
 
   return (
     <View style={styles.onglet}>
@@ -56,6 +71,8 @@ export default function Flight() {
             <Text style={styles.item}>Estimated {timeArrivalEstimated}</Text>
           </View>
         </View>
+        {/*<View style={styles.progressBar}></View>*/}
+        <ProgressBar progress={0.5} width={300} style={styles.bar} />
       </View>
     </View>
   );
@@ -86,5 +103,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 15,
+  },
+  progressBar: {
+    height: 20,
+    flexDirection: "row",
+    width: "100%",
+    backgroundColor: "white",
+    borderColor: "#000",
+    borderWidth: 2,
+    borderRadius: 5,
+  },
+  bar: {
+    justifyContent: "center",
+    borderColor: "#000",
+    marginStart: 35,
+    color: "#f8c555",
   },
 });
