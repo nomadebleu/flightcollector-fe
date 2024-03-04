@@ -92,7 +92,7 @@ export default function MyPlaneScreen() {
       const idCounts = {};
       for (const id of flightIds) {
         idCounts[id] = (idCounts[id] || 0) + 1;
-        console.log(idCounts)
+        console.log(idCounts[id])
       }
   
       for (const id in idCounts) {
