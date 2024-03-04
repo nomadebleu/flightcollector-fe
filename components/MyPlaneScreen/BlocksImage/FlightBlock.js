@@ -91,27 +91,27 @@ export default function FlightBlock() {
   };
 
   //Fetch pour le calcul des points et l'affectation au vol
-  const handleUpDatePoints = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/flights/points`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          flightId: flightRedux[0]._id,
-          pointsFlight: points,
-        }),
-      });
-      const pointsData = await response.json();
-      if (pointsData.result) {
-        console.log("pointData:", pointsData.message);
-      } else {
-        console.error("Error during connection", pointsData.error);
-      }
-    } catch (error) {
-      console.error("Error during connection:", error);
-    }
-  };
-  handleUpDatePoints();
+  // const handleUpDatePoints = async () => {
+  //   try {
+  //     const response = await fetch(`${apiUrl}/flights/points`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         flightId: flightRedux[0]._id,
+  //         pointsFlight: points,
+  //       }),
+  //     });
+  //     const pointsData = await response.json();
+  //     if (pointsData.result) {
+  //       console.log("pointData:", pointsData.message);
+  //     } else {
+  //       console.error("Error during connection", pointsData.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during connection:", error);
+  //   }
+  // };
+  // handleUpDatePoints();
   return (
     <View style={styles.mapContainer}>
       <MapView
