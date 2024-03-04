@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 //Composants
 import Header from "../components/shared/Header";
 import SignUpModal from "../components/LoginScreen/SignUpModal";
-import { addFlight } from "../reducers/flight";
+import { addFlight, addFlightId} from "../reducers/flight";
 
 //Local address
 const apiUrl = process.env.EXPO_PUBLIC_API_URL;
@@ -78,6 +78,7 @@ export default function HomeScreen() {
             points: flightData.data.points,
           })
         );
+        dispatch(addFlightId(flightData.data._id))
 
         const flightId = flightData.data._id;
         const planeId = flightData.data.planes._id;

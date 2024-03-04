@@ -29,6 +29,7 @@ import { addBadge } from "../reducers/badge";
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { addFlight, addFlightId } from "../reducers/flight";
 
 //Définition de la navigation indépendante
 const Tab = createMaterialTopTabNavigator();
@@ -42,7 +43,9 @@ export default function MyPlaneScreen() {
   const userId = user._id;
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
   const flightRedux = useSelector((state) => state.flights.value);
-  console.log('flightRedux is :',flightRedux)
+  const flightIds = useSelector(state => state.flights.flightIds);
+  console.log('flight', flightIds)
+  console.log('flightRedux is :', flightRedux)
   const dispatch = useDispatch();
 
   //State pour suivre l'onglet actif & stocker l'image de départ
@@ -83,9 +86,52 @@ export default function MyPlaneScreen() {
       console.error("Error fetching latest badge:", error);
     }
   };
+
+  const updatePointsFromPlanes = async () => {
+    try {
+      const idCounts = {};
+      for (const id of flightIds) {
+        idCounts[id] = (idCounts[id] || 0) + 1;
+        console.log(idCounts)
+      }
+  
+      for (const id in idCounts) {
+        if (idCounts[id] < 2) {
+          // Effectuez la mise à jour des points de l'utilisateur pour ce vol
+          const response = await fetch(`${apiUrl}/users/updatePoints/${user._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pointsToAdd: flightRedux[0].points })
+          });
+  
+          if (!response.ok) {
+            throw new Error('Erreur lors de la mise à jour des points de l\'utilisateur');
+          }
+  
+          const data = await response.json();
+          console.log(data); // Afficher la réponse du serveur
+        } else {
+          console.log('Déjà scanné:', id);
+        }
+      }
+    } catch (error) {
+      console.error('Erreur :', error);
+    }
+  }
+  
+
+
+
+
+
+
+
   useFocusEffect(
     React.useCallback(() => {
       fetchLatestBadge();
+      updatePointsFromPlanes();
     }, [])
   );
 
