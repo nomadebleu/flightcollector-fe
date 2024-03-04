@@ -43,9 +43,9 @@ export default function MyPlaneScreen() {
   const userId = user._id;
   const serviceMovie = useSelector((state) => state.services.serviceMovie);
   const flightRedux = useSelector((state) => state.flights.value);
-  const flightIds = useSelector(state => state.flights.flightIds);
-  console.log('flight', flightIds)
-  console.log('flightRedux is :', flightRedux)
+  const flightIds = useSelector((state) => state.flights.flightIds);
+  console.log("flight", flightIds);
+  console.log("flightRedux is :", flightRedux);
   const dispatch = useDispatch();
 
   //State pour suivre l'onglet actif & stocker l'image de départ
@@ -92,44 +92,43 @@ export default function MyPlaneScreen() {
       const idCounts = {};
       for (const id of flightIds) {
         idCounts[id] = (idCounts[id] || 0) + 1;
-        console.log(idCounts)
+        console.log(idCounts);
       }
-  
+
       for (const id in idCounts) {
         if (idCounts[id] < 2) {
           // Effectuez la mise à jour des points de l'utilisateur pour ce vol
-          const response = await fetch(`${apiUrl}/users/updatePoints/${user._id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ pointsToAdd: flightRedux[0].points })
-          });
-  
+          const response = await fetch(
+            `${apiUrl}/users/updatePoints/${user._id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ pointsToAdd: flightRedux[0].points }),
+            }
+          );
+
           if (!response.ok) {
-            throw new Error('Erreur lors de la mise à jour des points de l\'utilisateur');
+            throw new Error(
+              "Erreur lors de la mise à jour des points de l'utilisateur"
+            );
           }
-  
+
           const data = await response.json();
           console.log(data); // Afficher la réponse du serveur
         } else {
-          console.log('Déjà scanné:', id);
+          console.log("Déjà scanné:", id);
         }
       }
     } catch (error) {
-      console.error('Erreur :', error);
+      console.error("Erreur :", error);
     }
-  }
-  
-
-
-
-
-
-
+  };
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log("hey");
       fetchLatestBadge();
       updatePointsFromPlanes();
     }, [])
@@ -273,7 +272,9 @@ export default function MyPlaneScreen() {
 
       {/* Bloc Points & Nav */}
       <View style={styles.blocPoints}>
-        <Text style={styles.text}>{`This scan will give you ${flightRedux[0].points} pts`}</Text>
+        <Text
+          style={styles.text}
+        >{`This scan will give you ${flightRedux[0].points} pts`}</Text>
         <TouchableOpacity onPress={() => handleClickToHome()}>
           <FontAwesome5 name="chevron-circle-left" size={50} color="#002C82" />
         </TouchableOpacity>
