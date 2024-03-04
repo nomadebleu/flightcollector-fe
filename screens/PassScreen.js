@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 //Redux
 import { useDispatch, useSelector } from "react-redux";
-import { addFlight } from "../reducers/flight";
+import { addFlight, addFlightId } from "../reducers/flight";
 
 const apiKeyFlight = process.env.API_KEY_FLIGHTS;
 //Local address
@@ -92,6 +92,7 @@ export default function PassScreen() {
               points: flightData.data.points,
             })
           );
+          dispatch(addFlightId(flightData.data._id));
 
           const flightId = flightData.data._id;
           const planeId = flightData.data.planes._id;

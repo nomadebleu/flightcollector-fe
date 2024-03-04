@@ -90,7 +90,7 @@ export default function FlightBlock() {
     }
   };
 
-  // Fetch pour le calcul des points et l'affectation au vol
+  //Fetch pour le calcul des points et l'affectation au vol
   // const handleUpDatePoints = async () => {
   //   try {
   //     const response = await fetch(`${apiUrl}/flights/points`, {
