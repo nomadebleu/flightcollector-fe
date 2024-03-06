@@ -94,10 +94,11 @@ export default function MyPlaneScreen() {
         idCounts[id] = (idCounts[id] || 0) + 1;
         console.log(idCounts);
       }
-
-      for (const id in idCounts) {
-        if (idCounts[id] < 2) {
-          // Effectuez la mise à jour des points de l'utilisateur pour ce vol
+        if (idCounts[flightIds[flightIds.length -1]] > 1) {
+          console.log('deja scan')
+          return   
+        }
+        // Effectuez la mise à jour des points de l'utilisateur pour ce vol
           const response = await fetch(
             `${apiUrl}/users/updatePoints/${user._id}`,
             {
@@ -117,10 +118,6 @@ export default function MyPlaneScreen() {
 
           const data = await response.json();
           console.log(data); // Afficher la réponse du serveur
-        } else {
-          console.log("Déjà scanné:", id);
-        }
-      }
     } catch (error) {
       console.error("Erreur :", error);
     }
