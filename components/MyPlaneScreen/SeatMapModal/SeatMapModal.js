@@ -49,7 +49,7 @@ export default function SeatMapModal() {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <TouchableOpacity
-                style={styles.icone}
+                style={styles.iconeClose}
                 onPress={() => handleCloseModal()}
               >
                 <Icon name="close" size={30} color="#002C82" />
@@ -58,7 +58,7 @@ export default function SeatMapModal() {
                 {/* Photo Seat Map*/}
                 <Image
                   source={{ uri: seatMap }}
-                  style={{ width: 100, height: 100, resizeMode: "stretch" }}
+                  style={{ width: 200, height: 620, resizeMode: "cover" }}
                 />
               </View>
             </View>
@@ -82,14 +82,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    width: "100%",
-    height: "70%",
+    width: "45%",
+    height: "80%",
 
     backgroundColor: "#F1F1F1",
     borderRadius: 30,
-    padding: 10,
+    padding: 5,
 
-    justifyContent: "space-around",
     alignItems: "center",
     shadowColor: "#002C82",
     shadowOffset: {
@@ -128,24 +127,15 @@ const styles = StyleSheet.create({
   size: {
     width: 200,
   },
-  //Icone
-  icone: {
-    width: "100%",
+  //Icones Close
+  iconeClose: {
+    width: 340,
     alignItems: "flex-end",
-    position: "absolute",
-    top: 20,
   },
   //Modal Password
   modal: {
     position: "absolute",
     right: 0,
     top: 135,
-  },
-  plane: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignContent: "center",
   },
 });
