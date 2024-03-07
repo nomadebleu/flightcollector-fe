@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { LogBox } from "react-native";
 //Navigation
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -18,11 +19,11 @@ import MyPlaneScreen from "./screens/MyPlaneScreen";
 //Fonts
 import { useFonts } from "expo-font";
 //Redux
-import { Provider} from "react-redux";
+import { Provider } from "react-redux";
 import user from "./reducers/user";
 import badge from "./reducers/badge";
-import services from './reducers/services';
-import flights from './reducers/flight';
+import services from "./reducers/services";
+import flights from "./reducers/flight";
 
 //Redux Persist
 import { persistStore, persistReducer } from "redux-persist";
@@ -34,10 +35,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // const reducers = combineReducers({ user,badge });
 // const persistConfig = { key: 'flightCollector', storage: AsyncStorage };
 
+//cacher warnings d'expo
+LogBox.ignoreAllLogs();
 const store = configureStore({
-  reducer:{user,badge,services, flights},
+  reducer: { user, badge, services, flights },
 });
-
 
 //Définition des navigations (Nested)
 const Stack = createNativeStackNavigator();
@@ -94,7 +96,6 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-
   //Chargement de la font dans le composant racine
   let [fontsLoaded] = useFonts({
     "DancingScript-Regular": require("./assets/fonts/DancingScript-Regular.ttf"),
@@ -108,35 +109,34 @@ export default function App() {
   }
 
   return (
-      <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen
-              name="TabNavigator"
-              component={TabNavigator}
-              options={{ gestureEnabled: false }} //Bloque le slide arrière
-            />
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ gestureEnabled: true }}
-            />
-            <Stack.Screen
-              name="Scan"
-              component={ScanScreen}
-              options={{ gestureEnabled: false }}
-            />
-            <Stack.Screen
-              name="Pass"
-              component={PassScreen}
-              options={{ gestureEnabled: false }}
-            />
-            <Stack.Screen name="MyPlane" component={MyPlaneScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-   
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            options={{ gestureEnabled: false }} //Bloque le slide arrière
+          />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ gestureEnabled: true }}
+          />
+          <Stack.Screen
+            name="Scan"
+            component={ScanScreen}
+            options={{ gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="Pass"
+            component={PassScreen}
+            options={{ gestureEnabled: false }}
+          />
+          <Stack.Screen name="MyPlane" component={MyPlaneScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 const styles = StyleSheet.create({
