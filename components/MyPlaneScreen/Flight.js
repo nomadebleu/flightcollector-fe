@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 export default function Flight() {
   //Utilisation du Redux
   const flightRedux = useSelector((state) => state.flights.value);
-
+  const user = useSelector((state) => state.user.value);
   //Conversion des heures
   const timeDScheduled = flightRedux[0].departureScheduled; //Departure Scheduled
   const departureScheduled = new Date(timeDScheduled);
@@ -59,20 +59,41 @@ export default function Flight() {
             longitudeDelta: 0.01,
           }}
         />
-        <View style={styles.info}>
-          <View style={styles.dep}>
-            <Text style={styles.title}>DEPARTURE</Text>
-            <Text style={styles.item}>Scheduled {timeDepartureScheduled}</Text>
-            <Text style={styles.item}>Estimated {timeDepartureEstimated}</Text>
+        {user.isConnected ? (
+          <View>
+            <View style={styles.info}>
+              <View style={styles.dep}>
+                <Text style={styles.title}>DEPARTURE</Text>
+                <Text style={styles.item}>
+                  Scheduled {timeDepartureScheduled}
+                </Text>
+                <Text style={styles.item}>
+                  Estimated {timeDepartureEstimated}
+                </Text>
+              </View>
+              <View style={styles.arr}>
+                <Text style={styles.title}>ARRIVAL</Text>
+                <Text style={styles.item}>
+                  Scheduled {timeArrivalScheduled}
+                </Text>
+                <Text style={styles.item}>
+                  Estimated {timeArrivalEstimated}
+                </Text>
+              </View>
+            </View>
+            {/*<View style={styles.progressBar}></View>*/}
+            <ProgressBar progress={0.5} width={300} style={styles.bar} />
           </View>
-          <View style={styles.arr}>
-            <Text style={styles.title}>ARRIVAL</Text>
-            <Text style={styles.item}>Scheduled {timeArrivalScheduled}</Text>
-            <Text style={styles.item}>Estimated {timeArrivalEstimated}</Text>
+        ) : (
+          <View></View>
+        )}
+        {!user.isConnected ? (
+          <View style={styles.info}>
+            <Text style={styles.title}>SIGN UP TO GET FLIGHT INFO</Text>
           </View>
-        </View>
-        {/*<View style={styles.progressBar}></View>*/}
-        <ProgressBar progress={0.5} width={300} style={styles.bar} />
+        ) : (
+          <View></View>
+        )}
       </View>
     </View>
   );
