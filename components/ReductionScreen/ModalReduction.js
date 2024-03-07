@@ -34,7 +34,7 @@ export default function ModalReduction() {
 
 
   //Modifier les points après réductions 
-  const updateUserPoints = async ( pointsToRemove) => {
+  const updateUserPoints = async (pointsToRemove) => {
     try {
       const response = await fetch(`${apiUrl}/users/updatePoints/${userId}`, {
         method: 'PUT',
@@ -43,12 +43,12 @@ export default function ModalReduction() {
         },
         body: JSON.stringify({ pointsToRemove })
       });
-  
+
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Update points request failed: ${errorMessage}`);
       }
-      
+
       const data = await response.json();
       console.log(data)
       dispatch(addPoints(data.newTotalPoints))
@@ -58,7 +58,7 @@ export default function ModalReduction() {
       throw error;
     }
   };
-  
+
   //fonction pour redistribué les points de Réductions 
   const handleUseReduction = async () => {
     let pointsToRemove = 0;
@@ -66,20 +66,23 @@ export default function ModalReduction() {
       pointsToRemove = 20000;
       setCouponMessage(20)
     }
-    
+
     else if (totalPoints >= 10000) {
       pointsToRemove = 10000;
       setCouponMessage(15)
-    } 
+    }
     else if (totalPoints >= 5000) {
       pointsToRemove = 5000;
       setCouponMessage(10)
     }
-    
+    if (totalPoints <= 5000){
+      setCouponMessage(0)
+    }
+
     console.log(pointsToRemove);
-    
+
     try {
-      await updateUserPoints(pointsToRemove); 
+      await updateUserPoints(pointsToRemove);
       toggleModal();
     } catch (error) {
       console.error('Failed to use reduction:', error);
@@ -121,19 +124,22 @@ export default function ModalReduction() {
 
               <Text style={styles.modalText}>Your Code Reduction {couponMessage} %</Text>
               {/* Si le totalPoints est à 0 le code est switché par NOT YET */}
-              {user.totalPoints === 0 ? (
-                <Text>NOT YET</Text>
+              {couponMessage ? (
+                <View>
+                  <Text style={styles.couponMessage}>{couponMessage}% OFF</Text>
+                  <Text style={styles.couponCode}>{coupon}</Text>
+                </View>
               ) : (
-                <Text style={styles.couponCode}>{coupon}</Text>
+                <Text>NOT YET</Text>
               )}
               <FontAwesome5
                 name='money-bill-wave'
                 size={80}
                 color='#002C82'
               />
+              </View>
             </View>
           </View>
-        </View>
       </Modal>
       <FormButton
         onPress={() => handleUseReduction()}
