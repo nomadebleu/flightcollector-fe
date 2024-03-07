@@ -121,7 +121,7 @@ export default function ModalReduction() {
 
               <Text style={styles.modalText}>Your Code Reduction {couponMessage} %</Text>
               {/* Si le totalPoints est à 0 le code est switché par NOT YET */}
-              {user.totalPoints < 5000 ? (
+              {user.totalPoints === 0 ? (
                 <Text>NOT YET</Text>
               ) : (
                 <Text style={styles.couponCode}>{coupon}</Text>
